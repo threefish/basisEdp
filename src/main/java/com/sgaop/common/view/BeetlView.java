@@ -38,6 +38,7 @@ public class BeetlView implements View {
             resourceLoader.setCharset("utf-8");
             resourceLoader.setRoot(Mvcs.getSession().getServletContext().getRealPath(_prefix));
             gt = new GroupTemplate(resourceLoader, cfg);
+            gt.registerFunctionPackage("so", new ShiroExt());
         } catch (IOException e) {
             e.printStackTrace();
         }

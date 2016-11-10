@@ -15,8 +15,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,21 +28,35 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("dao:" + dao);
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession(false);
         SimpleAuthorizationInfo authorizationInfo = (SimpleAuthorizationInfo) session.getAttribute(Cons.AUTHORIZATION_INFO);
-        UserAccount user = (UserAccount) session.getAttribute(Cons.SESSION_USER);
         if (!subject.isAuthenticated() || authorizationInfo == null) {
             authorizationInfo = new SimpleAuthorizationInfo();
-//			/* 添加多个角色名 */
-            Set<String> roles = new HashSet<String>();
-//			/* 添加多个权限名 */
-            Set<String> permissions = new HashSet<String>();
-            permissions.add("看帖子");
-
-            authorizationInfo.addRoles(roles);
-            authorizationInfo.addStringPermissions(permissions); // 添加权限名
+            UserAccount user = (UserAccount) session.getAttribute(Cons.SESSION_USER);
+            if (user != null) {
+                try {
+                    Set<String> roles = new HashSet<>();
+                    Set<String> permissions = new HashSet<>();
+                    String sql = "SELECT r.id,r.role_name from useraccountrole as ur,role as r  WHERE ur.role_id=r.id and ur.user_id=?";
+                    List<HashMap<String, Object>> roleList = dao.queryList(sql, user.getId());
+                    String roleids = "";
+                    for (Map mapro : roleList) {
+                        roles.add((String) mapro.get("role_name"));
+                        roleids += (long) mapro.get("id") + ",";
+                    }
+                    sql = "SELECT r.id,r.role_name,p.id,p.permission_name from role as r,rolepermission as rp,permission as p ";
+                    sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
+                    List<HashMap<String, Object>> permissionList = dao.queryList(sql, roleids);
+                    for (Map mappo : permissionList) {
+                        permissions.add((String) mappo.get("permission_name"));
+                    }
+                    authorizationInfo.addRoles(roles);
+                    authorizationInfo.addStringPermissions(permissions);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             session.setAttribute(Cons.AUTHORIZATION_INFO, authorizationInfo);
         }
         return authorizationInfo;
