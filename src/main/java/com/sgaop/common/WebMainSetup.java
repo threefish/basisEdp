@@ -12,6 +12,7 @@ import com.sgaop.common.view.BeetlView;
 import javax.servlet.ServletContextEvent;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Created by IntelliJ IDEA.
@@ -57,6 +58,10 @@ public class WebMainSetup implements WebSetup {
         dataSource.setPoolPreparedStatements(PropertiesManager.getBooleanCache("db.poolPreparedStatements"));
         dataSource.setRemoveAbandoned(true);
         dataSource.setRemoveAbandonedTimeout(60 * 60 * 1000);
+        Properties properties = new Properties();
+        String[] strings = PropertiesManager.getCacheStr("db.connectionProperties").split("=");
+        properties.setProperty(strings[0], strings[1]);
+        dataSource.setConnectProperties(properties);
         try {
             dataSource.setFilters(PropertiesManager.getCacheStr("db.filters"));
         } catch (SQLException e) {
