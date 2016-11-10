@@ -1,16 +1,12 @@
 package com.sgaop.common.shiro.realm;
 
-import com.sgaop.basis.annotation.Inject;
-import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.ioc.BasisIoc;
-import com.sgaop.basis.ioc.IocBeanContext;
+import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.entity.UserAccount;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -18,9 +14,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.ByteSource;
 
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,8 +24,6 @@ import java.util.Set;
  * Date Time: 2016/1/22 002216:12
  */
 public class ShiroRealm extends AuthorizingRealm {
-
-    private PasswordService passwordService = new DefaultPasswordService();
 
     private Dao dao;
 
@@ -59,13 +51,13 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        if(dao==null){
+        if (dao == null) {
             dao = (Dao) BasisIoc.getBean("dao");
         }
         UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
         String username = upToken.getUsername();
         String password = String.valueOf(upToken.getPassword());
-        UserAccount userAccount =null;
+        UserAccount userAccount = null;
         if (username == null || password == null) {
             throw new AccountException("参数非法");
         }
@@ -74,18 +66,21 @@ public class ShiroRealm extends AuthorizingRealm {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if(userAccount.isLocked()){
+        if (userAccount == null) {
+            throw new AuthenticationException(String.format("账户[%s]不存在！", username));
+        }
+        if (userAccount.isLocked()) {
             throw new AuthenticationException("账户已被锁定无法登陆，请联系管理员解锁！");
         }
         Sha256Hash sha = new Sha256Hash(password, userAccount.getSalt());
-        if (!sha.toHex().equals(userAccount.getUserPass())){
+        if (!sha.toHex().equals(userAccount.getUserPass())) {
             throw new AuthenticationException("用户名或密码错误");
         } else {
             //登录成功保存session信息
-            Subject subject = SecurityUtils.getSubject();
-            Session session = subject.getSession(false);
-            session.setAttribute(Cons.SESSION_USER, userAccount);
+//            Subject subject = SecurityUtils.getSubject();
+//            Session session = subject.getSession(false);
+//            session.setAttribute(Cons.SESSION_USER, userAccount);
+            Mvcs.getSession().setAttribute(Cons.SESSION_USER, userAccount);
         }
         upToken.setPassword(password.toCharArray());
         return new SimpleAuthenticationInfo(upToken, password, getClass().getName());

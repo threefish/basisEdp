@@ -18,7 +18,6 @@
     </filter-mapping>
 
 
-
     <!--basis框架过滤器-->
     <listener>
         <listener-class>com.sgaop.basis.web.ServletInitListener</listener-class>
@@ -63,8 +62,12 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
-    <!--<error-page>-->
-    <!--<error-code>500</error-code>-->
-    <!--<location>/WEB-INF/jsp/500.jsp</location>-->
-    <!--</error-page>-->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error/500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error/404.jsp</location>
+    </error-page>
 </web-app>

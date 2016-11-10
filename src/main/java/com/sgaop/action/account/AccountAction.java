@@ -37,16 +37,28 @@ public class AccountAction {
     @OK("jsp:login.jsp")
     @GET
     @Path("/login")
-    public void loginPage() {}
+    public void loginPage() {
+    }
+
+    @OK("jsp:login.jsp")
+    @GET
+    @Path("/logout")
+    public void logout() {
+        Subject user = SecurityUtils.getSubject();
+        user.logout();
+        try {
+            session.invalidate();
+        } catch (Exception e) {}
+        session = request.getSession(true);
+    }
+
 
     @OK("json")
     @POST
     @Path("/login")
     public AjaxResult doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("rememberMe") boolean isRememberMe) {
-        // 创建 Token
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(isRememberMe);
-        // 获取当前用户，并进行登录操作
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);
