@@ -1,4 +1,4 @@
-package com.sgaop;
+package com.sgaop.common;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.sgaop.basis.annotation.Setup;
@@ -11,6 +11,7 @@ import com.sgaop.common.view.BeetlView;
 
 import javax.servlet.ServletContextEvent;
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,6 +21,7 @@ import javax.sql.DataSource;
  */
 @Setup
 public class WebMainSetup implements WebSetup {
+
     public void init(ServletContextEvent servletContextEvent) {
         ViewsRegister.registerView("beetl", BeetlView.class);
         //注册数据源
@@ -55,6 +57,11 @@ public class WebMainSetup implements WebSetup {
         dataSource.setPoolPreparedStatements(PropertiesManager.getBooleanCache("db.poolPreparedStatements"));
         dataSource.setRemoveAbandoned(true);
         dataSource.setRemoveAbandonedTimeout(60 * 60 * 1000);
+        try {
+            dataSource.setFilters(PropertiesManager.getCacheStr("db.filters"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return dataSource;
     }
 

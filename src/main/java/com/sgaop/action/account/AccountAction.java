@@ -37,9 +37,7 @@ public class AccountAction {
     @OK("jsp:login.jsp")
     @GET
     @Path("/login")
-    public void loginPage() {
-        System.out.println("前往登录页面");
-    }
+    public void loginPage() {}
 
     @OK("json")
     @POST

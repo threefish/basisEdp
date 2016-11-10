@@ -1,4 +1,4 @@
-package com.sgaop.common.entity;
+package com.sgaop.entity;
 
 import com.sgaop.basis.annotation.Colum;
 import com.sgaop.basis.annotation.Pk;
