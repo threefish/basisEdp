@@ -1,4 +1,4 @@
-package com.sgaop.common.view;
+package com.sgaop.common.shiro.beetl;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;

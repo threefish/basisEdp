@@ -2,6 +2,7 @@ package com.sgaop.common.view;
 
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
+import com.sgaop.common.shiro.beetl.ShiroExt;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
