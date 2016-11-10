@@ -1,6 +1,7 @@
 package com.sgaop.common.shiro.realm;
 
 import com.sgaop.basis.dao.Dao;
+import com.sgaop.basis.dao.entity.Record;
 import com.sgaop.basis.ioc.BasisIoc;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.cons.Cons;
@@ -15,7 +16,9 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,17 +42,17 @@ public class ShiroRealm extends AuthorizingRealm {
                     Set<String> roles = new HashSet<>();
                     Set<String> permissions = new HashSet<>();
                     String sql = "SELECT r.id,r.role_name from useraccountrole as ur,role as r  WHERE ur.role_id=r.id and ur.user_id=?";
-                    List<HashMap<String, Object>> roleList = dao.queryList(sql, user.getId());
+                    List<Record> roleList = dao.queryRecordList(sql, user.getId());
                     String roleids = "";
-                    for (Map mapro : roleList) {
-                        roles.add((String) mapro.get("role_name"));
-                        roleids += (long) mapro.get("id") + ",";
+                    for (Record mapro : roleList) {
+                        roles.add(mapro.getString("role_name"));
+                        roleids += mapro.getInt("id") + ",";
                     }
                     sql = "SELECT r.id,r.role_name,p.id,p.permission_name from role as r,rolepermission as rp,permission as p ";
                     sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
-                    List<HashMap<String, Object>> permissionList = dao.queryList(sql, roleids);
-                    for (Map mappo : permissionList) {
-                        permissions.add((String) mappo.get("permission_name"));
+                    List<Record> permissionList = dao.queryRecordList(sql, roleids);
+                    for (Record mappo : permissionList) {
+                        permissions.add(mappo.getString("permission_name"));
                     }
                     authorizationInfo.addRoles(roles);
                     authorizationInfo.addStringPermissions(permissions);
