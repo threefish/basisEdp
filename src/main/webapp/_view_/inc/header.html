@@ -10,11 +10,40 @@
     <link rel="stylesheet" href="${base}/static/css/skins/skin-blue.min.css">
     <link rel="stylesheet" href="${base}/static/plugins/iCheck/all.css">
     <script src="${base}/static/plugins/jquery/jquery-2.2.3.min.js"></script>
+    <script src="${base}/static/plugins/jquery/pjax/jquery.pjax.js"></script>
     <script src="${base}/static/plugins/layer/layer.js"></script>
-    <script src="${base}/static/plugins/iCheck/icheck.min.js"></script>
+    <script src="${base}/static/plugins/fastclick/fastclick.min.js"></script>
+    <script src="https://nutzwk.wizzer.cn/assets/plugins/fastclick.js"></script>
     <script src="${base}/static/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="${base}/static/js/app.min.js"></script>
     <script>
         var base="${base}";
+        $(document).ready(function () {
+            if ($.support.pjax) {
+
+                $(document).pjax('a[data-pjax]', '#container', {
+                    maxCacheLength: 0,
+                    push: false,
+                    replace: true,
+                    fragment: '#container',
+                    timeout: 8000
+                });
+
+                $('.sidebar-menu a[data-pjax]').on('click', function () {
+                    $.get("${base}/test/index", function (data) {
+                        $("#container").html(data);
+                    }, "html");
+                });
+
+                $(document).on('pjax:send', function () {
+                    console.log("pjax:send")
+                });
+
+                $(document).on('pjax:complete', function () {
+                    console.log("pjax:complete")
+                });
+
+            }
+        });
     </script>
 </head>

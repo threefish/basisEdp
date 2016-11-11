@@ -1,0 +1,17 @@
+<ul class="sidebar-menu">
+    <li class="header">系统菜单</li>
+    <%for(menu in session.sessionMenus){%>
+    <li>
+        <%if(menu.childs.~size>0){%>
+        <a href="#" data-pjax><i class="fa fa-link"></i><span>${menu.menuName}</span></a>
+        <ul class="treeview-menu">
+            <%for(m in menu.childs){%>
+                <li><a href="${base}${m.menuTarget}" data-pjax><i class="fa fa-circle-o"></i>${m.menuName}</a></li>
+            <%}%>
+        </ul>
+        <%}else{%>
+            <a href="${base}${menu.menuTarget}" data-pjax><i class="fa fa-link"></i> <span>${menu.menuName}</span></a></li>
+        <%}%>
+    </li>
+    <%}%>
+</ul>

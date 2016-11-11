@@ -156,33 +156,18 @@
               </span>
                 </div>
             </form>
-            <ul class="sidebar-menu">
-                <li class="header">HEADER</li>
-                <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
-                        <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">Link in level 2</a></li>
-                        <li><a href="#">Link in level 2</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <%include("/inc/menu.html"){}%>
         </section>
     </aside>
 
-    <div class="content-wrapper">
+    <div class="content-wrapper" id="container">
         <section class="content-header">
             <h1>
                 Page Header
                 <small>Optional description</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+                <li><a href="#${base}/test/index" data-pjax> <i class="fa fa-dashboard"></i> Level</a></li>
                 <li class="active">Here</li>
             </ol>
         </section>
