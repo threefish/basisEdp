@@ -38,27 +38,24 @@ public class ShiroRealm extends AuthorizingRealm {
             authorizationInfo = new SimpleAuthorizationInfo();
             UserAccount user = (UserAccount) session.getAttribute(Cons.SESSION_USER);
             if (user != null) {
-                try {
-                    Set<String> roles = new HashSet<>();
-                    Set<String> permissions = new HashSet<>();
-                    String sql = "SELECT r.id,r.role_name from useraccountrole as ur,role as r  WHERE ur.role_id=r.id and ur.user_id=?";
-                    List<Record> roleList = dao.queryRecordList(sql, user.getId());
-                    String roleids = "";
-                    for (Record mapro : roleList) {
-                        roles.add(mapro.getString("role_name"));
-                        roleids += mapro.getInt("id") + ",";
-                    }
-                    sql = "SELECT r.id,r.role_name,p.id,p.permission_name from role as r,rolepermission as rp,permission as p ";
-                    sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
-                    List<Record> permissionList = dao.queryRecordList(sql, roleids);
-                    for (Record mappo : permissionList) {
-                        permissions.add(mappo.getString("permission_name"));
-                    }
-                    authorizationInfo.addRoles(roles);
-                    authorizationInfo.addStringPermissions(permissions);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Set<String> roles = new HashSet<>();
+                Set<String> permissions = new HashSet<>();
+                String sql = "SELECT r.id,r.role_name from useraccountrole as ur,role as r  WHERE ur.role_id=r.id and ur.user_id=?";
+                List<Record> roleList = dao.queryRecordList(sql, user.getId());
+                String roleids = "";
+                for (Record mapro : roleList) {
+                    roles.add(mapro.getString("role_name"));
+                    roleids += mapro.getInt("id") + ",";
                 }
+                sql = "SELECT r.id,r.role_name,p.id,p.permission_name from role as r,rolepermission as rp,permission as p ";
+                sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
+                List<Record> permissionList = dao.queryRecordList(sql, roleids);
+                for (Record mappo : permissionList) {
+                    permissions.add(mappo.getString("permission_name"));
+                }
+                authorizationInfo.addRoles(roles);
+                authorizationInfo.addStringPermissions(permissions);
+
             }
             session.setAttribute(Cons.AUTHORIZATION_INFO, authorizationInfo);
         }
@@ -73,15 +70,11 @@ public class ShiroRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
         String username = upToken.getUsername();
         String password = String.valueOf(upToken.getPassword());
-        UserAccount userAccount = null;
         if (username == null || password == null) {
             throw new AccountException("参数非法");
         }
-        try {
-            userAccount = dao.querySinge(UserAccount.class, "userName=?", username);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UserAccount userAccount = dao.querySinge(UserAccount.class, "userName=?", username);
+
         if (userAccount == null) {
             throw new AuthenticationException(String.format("账户[%s]不存在！", username));
         }
