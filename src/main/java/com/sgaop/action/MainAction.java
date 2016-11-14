@@ -1,6 +1,7 @@
 package com.sgaop.action;
 
 import com.sgaop.basis.annotation.*;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,5 +16,6 @@ public class MainAction {
     @OK("beetl:index")
     @GET
     @Path("/index")
+    @RequiresAuthentication
     public void index(){}
 }

@@ -62,7 +62,7 @@ public class BeetlView implements View {
             webVariable.setRequest(request);
             webVariable.setResponse(response);
             webVariable.setSession(request.getSession());
-            tpl.binding("session", new SessionWrapper(webVariable.getSession()));
+            tpl.binding("session", new SessionWrapper(request,webVariable.getSession()));
             tpl.binding("servlet", webVariable);
             tpl.binding("request", request);
             tpl.binding("ctxPath", request.getContextPath());
