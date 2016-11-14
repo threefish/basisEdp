@@ -1,6 +1,7 @@
 package com.sgaop.action;
 
 import com.sgaop.basis.annotation.*;
+import com.sgaop.task.ApmTask;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,6 +17,7 @@ public class TestAction {
     @GET
     @Path("/index")
     public void index() {
-
+        ApmTask apmTask=new ApmTask();
+        apmTask.main();
     }
 }

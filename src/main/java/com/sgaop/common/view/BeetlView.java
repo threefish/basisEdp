@@ -3,6 +3,7 @@ package com.sgaop.common.view;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.common.shiro.beetl.ShiroExt;
+import com.sun.tools.doclets.standard.Standard;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +30,7 @@ import java.util.Map;
 public class BeetlView implements View {
 
     private static final Logger logger = Logger.getRootLogger();
-    private final static String _prefix = "/_view_/";
+    private final static String _prefix = "/WEB-INF/btl/";
     private final static String _suffix = ".html";
     private static GroupTemplate gt = null;
 
@@ -40,6 +42,11 @@ public class BeetlView implements View {
             resourceLoader.setRoot(Mvcs.getSession().getServletContext().getRealPath(_prefix));
             gt = new GroupTemplate(resourceLoader, cfg);
             gt.registerFunctionPackage("so", new ShiroExt());
+            HashMap sysinfo=new HashMap();
+            sysinfo.put("productName","BasisMVC企业平台");
+            sysinfo.put("productNameMiNi","Basis");
+            sysinfo.put("productUrl","www.sgaop.com");
+            gt.setSharedVars(sysinfo);
         } catch (IOException e) {
             e.printStackTrace();
         }

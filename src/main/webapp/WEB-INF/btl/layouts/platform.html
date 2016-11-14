@@ -11,9 +11,11 @@
     <link rel="stylesheet" href="${base!}/static/plugins/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="${base!}/static/css/AdminLTE.min.css">
     <link rel="stylesheet" href="${base!}/static/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="${base!}/static/plugins/nprogress/nprogress.css">
     <link rel="stylesheet" href="${base!}/static/plugins/iCheck/all.css">
     <script src="${base!}/static/plugins/jquery/jquery-2.2.3.min.js"></script>
     <script src="${base!}/static/plugins/jquery/pjax/jquery.pjax.js"></script>
+    <script src="${base!}/static/plugins/nprogress/nprogress.js"></script>
     <script src="${base!}/static/plugins/layer/layer.js"></script>
     <script src="${base!}/static/plugins/fastclick/fastclick.min.js"></script>
     <script src="${base!}/static/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -25,9 +27,9 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
     <header class="main-header">
-        <a href="index2.html" class="logo">
-            <span class="logo-mini"><b>A</b>LT</span>
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+        <a href="${base!}/main/index" class="logo">
+            <span class="logo-mini">${productNameMiNi}</span>
+            <span class="logo-lg">${productName}</span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -181,24 +183,13 @@
         </section>
     </aside>
     <div class="content-wrapper" id="container">
-        <section class="content-header">
-            <h1>
-                Page Header
-                <small>Optional description</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="${base!}/test/index" data-pjax> <i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol>
-        </section>
-        <section class="content">
-        </section>
+        ${layoutContent}
     </div>
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            Anything you want
+            ${productUrl}
         </div>
-        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a href="${productUrl}">Company</a>.</strong> All rights reserved.
     </footer>
     <aside class="control-sidebar control-sidebar-dark">
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -280,10 +271,12 @@
 
             $(document).on('pjax:send', function () {
                 console.log("pjax:send")
+                NProgress.start();
             });
 
             $(document).on('pjax:complete', function () {
                 console.log("pjax:complete")
+                NProgress.done();
             });
 
         }
