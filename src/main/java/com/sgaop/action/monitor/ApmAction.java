@@ -61,7 +61,7 @@ public class ApmAction {
     }
 
     @OK("json")
-    @GET
+    @POST
     @Path("/data")
     public HashMap index(@Parameter("type") String _type) {
         HashMap result = new HashMap();
@@ -86,7 +86,7 @@ public class ApmAction {
                     result.put("memory", MemoryGather.gather(sigar));
                     break;
                 case ALL:
-                    result.put("all",Gathers.all());
+                    result.put("data",Gathers.all());
                     break;
                 default:
                     result.put("apis", APIType.values());
@@ -97,5 +97,4 @@ public class ApmAction {
         }
         return result;
     }
-
 }
