@@ -14,8 +14,11 @@ import org.beetl.ext.web.WebVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,16 +33,18 @@ import java.util.Map;
 public class BeetlView implements View {
 
     private static final Logger logger = Logger.getRootLogger();
-    private final static String _prefix = "/WEB-INF/btl/";
     private final static String _suffix = ".html";
     private static GroupTemplate gt = null;
 
     static {
         try {
-            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
+            HttpSession  session= Mvcs.getSession();
             Configuration cfg = Configuration.defaultConfiguration();
+            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
             resourceLoader.setCharset("utf-8");
-            resourceLoader.setRoot(Mvcs.getSession().getServletContext().getRealPath(_prefix));
+            resourceLoader.setRoot(session.getServletContext().getRealPath("/"));
+            File file= new File(session.getServletContext().getClassLoader().getResource("/view/beetl.properties").toURI().getPath());
+            cfg.add(file);
             gt = new GroupTemplate(resourceLoader, cfg);
             gt.registerFunctionPackage("so", new ShiroExt());
             HashMap sysinfo=new HashMap();
@@ -49,12 +54,14 @@ public class BeetlView implements View {
             gt.setSharedVars(sysinfo);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
     public void render(String path, HttpServletRequest request, HttpServletResponse response, Object data) {
         try {
-            Template tpl = gt.getTemplate(path + _suffix);
+            Template tpl = gt.getTemplate(path+_suffix);
             if (data instanceof Map) {
                 tpl.binding("data", data, false);
             } else {
