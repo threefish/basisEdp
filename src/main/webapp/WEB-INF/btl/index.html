@@ -7,7 +7,7 @@ layout("/layouts/platform.html",{title:"系统首页"}){
 </section>
 <script type="text/javascript">
     function showEcharts() {
-        $.post('${base!}/monitor/apm/data', {type: "ALL"}, function (result) {
+        $.post('${base!}/monitor/apm/dashboard', {}, function (result) {
             var option = {
                 title: {
                     text: ''
@@ -96,8 +96,9 @@ layout("/layouts/platform.html",{title:"系统首页"}){
     $(function () {
         line = echarts.init($("#line").get(0));
         showEcharts();
+        setInterval(function () {
+            showEcharts()
+        },5000);
     });
-
-
 </script>
 <%}%>

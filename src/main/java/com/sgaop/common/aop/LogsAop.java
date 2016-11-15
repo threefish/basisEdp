@@ -26,7 +26,7 @@ public class LogsAop extends InterceptorProxy {
 
     @Override
     protected void before(Class<?> cls, Method method, Object[] params) throws Throwable {
-        log.debug(String.format("访问了[%s]的[%s]方法", cls.getName(), method.getName()));
+        //log.debug(String.format("访问了[%s]的[%s]方法", cls.getName(), method.getName()));
     }
 
     @Override

@@ -12,39 +12,39 @@ public class APMAlarm {
         SLOW, MEM, DISK, CPU, NETWORK;
 	}
 
-	@Colum("alarm_code")
+	@Colum("code")
 //	@Comment("报警信息编号")
 	private String code = "";
 
-	@Colum("alarm_type")
+	@Colum("alarmType")
 //	@Comment("报警类型")
-	private Type type;
+	private String type;
 
-	@Colum("alarm_time")
+	@Colum("alarmTime")
 //	@Comment("报警时间")
 	private Date alarmTime = new Date();
 
-	@Colum("alarm_msg")
+	@Colum("msg")
 //	@Comment("报警消息")
 	private String msg;
 
-	@Colum("alarm_ip")
+	@Colum("ip")
 //	@Comment("报警 ip")
 	private String ip;
 
-	@Colum("alarm_title")
+	@Colum("title")
 //	@Comment("报警标题")
 	private String title;
 
-	@Colum("alarm_device")
+	@Colum("device")
 //	@Comment("报警设备")
 	private String device;
 
-	@Colum("alarm_usage")
+	@Colum("alarmUsage")
 //	@Comment(" 设备使用情况")
 	private double usage;
 
-	@Colum("alarm_alarm_point")
+	@Colum("point")
 //	@Comment("设备告警点")
 	private int alarm;
 
@@ -76,7 +76,7 @@ public class APMAlarm {
 		return title;
 	}
 
-	public Type getType() {
+	public String getType() {
 		return type;
 	}
 
@@ -113,7 +113,7 @@ public class APMAlarm {
 	}
 
 	public void setType(Type type) {
-		this.type = type;
+		this.type = type.toString();
 	}
 
 	public void setUsage(double usage) {

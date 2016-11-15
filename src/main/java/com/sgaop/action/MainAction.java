@@ -11,7 +11,8 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
  */
 @IocBean
 @Action("/main")
-public class MainAction {
+@RequiresAuthentication
+public class MainAction extends BaseAction{
 
     @OK("beetl:index")
     @GET

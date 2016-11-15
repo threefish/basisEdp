@@ -1,8 +1,9 @@
 package com.sgaop.task;
 
-import com.google.gson.Gson;
+import com.sgaop.basis.annotation.Inject;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.cache.PropertiesManager;
+import com.sgaop.basis.dao.Dao;
 import com.sgaop.common.gather.CPUGather;
 import com.sgaop.common.gather.DISKGather;
 import com.sgaop.common.gather.MemoryGather;
@@ -18,6 +19,7 @@ import org.quartz.JobExecutionException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,6 +31,8 @@ import java.util.List;
 @IocBean
 public class ApmJob implements Job {
 
+    @Inject("dao")
+    protected Dao dao;
 
     private Sigar sigar = new Sigar();
 
@@ -53,22 +57,20 @@ public class ApmJob implements Job {
 
 
     /**
-     * @param type
-     * @param title
-     * @param device
-     * @param usage
-     * @param alarmPoint
+     * 取得临时缓存的最近系统状态信息
+     *
+     * @return
      */
-    private void alarm(APMAlarm.Type type, String title, String device, double usage, int alarmPoint) {
-        final APMAlarm alarm = new APMAlarm();
-        alarm.setType(type);
-        alarm.setIp("127.0.0.1");
-        alarm.setMsg(String.format("%s:当前 %s 使用率 %f,高于预警值 %d", title, device, usage, alarmPoint));
-        alarm.setTitle(title);
-        alarm.setDevice(device);
-        alarm.setUsage(usage);
-        alarm.setAlarm(alarmPoint);
-        System.out.println(new Gson().toJson(alarm));
+    public HashMap getTempAll() {
+        HashMap map = new HashMap();
+        map.put("timePoints", timePoints);
+        map.put("cpuUsages", cpuUsages);
+        map.put("ramUsages", ramUsages);
+        map.put("jvmUsages", jvmUsages);
+        map.put("swapUsages", swapUsages);
+        map.put("niUsages", niUsages);
+        map.put("noUsages", noUsages);
+        return map;
     }
 
 
@@ -87,7 +89,30 @@ public class ApmJob implements Job {
         if (list.size() > monitorCount) {
             list.remove(0);
         }
-        System.out.println(new Gson().toJson(list));
+    }
+
+
+    /**
+     * @param type
+     * @param title
+     * @param device
+     * @param usage
+     * @param alarmPoint
+     */
+    private void alarm(APMAlarm.Type type, String title, String device, double usage, int alarmPoint) {
+        final APMAlarm alarm = new APMAlarm();
+        alarm.setType(type);
+        alarm.setIp("127.0.0.1");
+        alarm.setMsg(String.format("%s:当前 %s 使用率 %f,高于预警值 %d", title, device, usage, alarmPoint));
+        alarm.setTitle(title);
+        alarm.setDevice(device);
+        alarm.setUsage(usage);
+        alarm.setAlarm(alarmPoint);
+        try {
+            dao.insert(alarm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

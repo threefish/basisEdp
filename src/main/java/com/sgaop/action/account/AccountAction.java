@@ -1,6 +1,7 @@
 package com.sgaop.action.account;
 
 import com.google.gson.Gson;
+import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.mvc.AjaxResult;
@@ -25,19 +26,10 @@ import java.util.List;
  */
 @IocBean
 @Action("/account")
-public class AccountAction {
-
-    private HttpServletRequest request;
-
-    private HttpServletResponse response;
-
-    private HttpSession session;
-
-    private ServletContext context;
+public class AccountAction extends BaseAction {
 
     @Inject("dao")
-    private Dao dao;
-
+    protected Dao dao;
 
     @OK("jsp:login.jsp")
     @GET

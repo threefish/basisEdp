@@ -109,6 +109,7 @@ public class WebMainSetup implements WebSetup {
                     qjob.setJobStatus(triggerState.name());
                 } else {
                     qjob.setJobStatus("NONE");
+                    qjob.setJobType(1);
                 }
                 dao.update(qjob);
             }
