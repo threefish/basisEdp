@@ -1,8 +1,6 @@
 package com.sgaop.common.gather;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -16,7 +14,7 @@ public class Gathers {
 	public static HashMap all() throws SigarException {
         Sigar sigar = new Sigar();
 		HashMap data = new HashMap();
-
+		List<Date> timePoints = new ArrayList();
 		CPUGather cpu = CPUGather.gather(sigar);
 		data.put("cpu", cpu);
 		data.put("cpuUsage", cpu.getPerc().getCombined() * 100);

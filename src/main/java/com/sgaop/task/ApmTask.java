@@ -144,6 +144,7 @@ public class ApmTask {
         if (list.size() > monitorCount) {
             list.remove(0);
         }
+        System.out.println(new Gson().toJson(list));
     }
 
 
