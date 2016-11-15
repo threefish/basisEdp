@@ -1,6 +1,7 @@
 package com.sgaop.task;
 
 import com.google.gson.Gson;
+import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.common.gather.CPUGather;
 import com.sgaop.common.gather.DISKGather;
@@ -10,6 +11,9 @@ import com.sgaop.common.util.Numbers;
 import com.sgaop.entity.sys.APMAlarm;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,10 +26,11 @@ import java.util.List;
  * Date: 2016/11/14 0014
  * To change this template use File | Settings | File Templates.
  */
-public class ApmTask {
+@IocBean
+public class ApmJob implements Job {
+
 
     private Sigar sigar = new Sigar();
-
 
     /**
      * 时间点
@@ -45,7 +50,6 @@ public class ApmTask {
     private List<Double> noUsages = new ArrayList();
 
     private int monitorCount = 25;
-
 
 
     /**
@@ -68,7 +72,26 @@ public class ApmTask {
     }
 
 
-    public void main() {
+    /**
+     * 添加数据
+     *
+     * @param list 列表
+     * @param obj  待添加数据
+     */
+    private void add(List list, Object obj) {
+        if (obj instanceof Number) {
+            list.add(Numbers.keepPrecision((Number) obj, 2));
+        } else {
+            list.add(obj);
+        }
+        if (list.size() > monitorCount) {
+            list.remove(0);
+        }
+        System.out.println(new Gson().toJson(list));
+    }
+
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
 
             MemoryGather memory = MemoryGather.gather(sigar);
@@ -124,27 +147,6 @@ public class ApmTask {
             e.printStackTrace();
         }
 
-    }
-
-
-
-
-    /**
-     * 添加数据
-     *
-     * @param list 列表
-     * @param obj  待添加数据
-     */
-    private void add(List list, Object obj) {
-        if (obj instanceof Number) {
-            list.add(Numbers.keepPrecision((Number) obj, 2));
-        } else {
-            list.add(obj);
-        }
-        if (list.size() > monitorCount) {
-            list.remove(0);
-        }
-        System.out.println(new Gson().toJson(list));
     }
 
 

@@ -2,7 +2,7 @@ package com.sgaop.common.shiro.realm;
 
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.entity.Record;
-import com.sgaop.basis.ioc.BasisIoc;
+import com.sgaop.basis.ioc.Ioc;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.entity.UserAccount;
@@ -65,7 +65,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         if (dao == null) {
-            dao = (Dao) BasisIoc.getBean("dao");
+            dao = (Dao) Ioc.getBean("dao");
         }
         UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
         String username = upToken.getUsername();

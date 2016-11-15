@@ -36,6 +36,18 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        TestPassword();
+
+
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("scheduler:{type : \'org.quartz.Scheduler\',\n");
+        sb.append("factory:\'org.quartz.impl.StdSchedulerFactory#getDefaultScheduler\',events:{\n");
+        sb.append("create:\'start\',depose:\'shutdown\',},\n");
+        sb.append("fields:{jobFactory:{refer:\'jobFactory\'}}},");
+        sb.append("jobFactory:{type:\'org.nutz.integration.quartz.NutQuartzJobFactory\', args:[{refer:\'$ioc\'}]},");
+        sb.append("nutQuartzCronJobFactory:{type:\'org.nutz.integration.quartz.NutQuartzCronJobFactory\',");
+        sb.append("events:{create:\'init\'}, fields:{\'scheduler\':{refer:\'scheduler\'},ioc:{refer:\'$ioc\'},conf:{refer:\'123\'}}}");
+        sb.append("}");
+        String json = sb.toString();
+        System.out.println(json);
     }
 }

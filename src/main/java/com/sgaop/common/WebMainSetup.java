@@ -3,15 +3,27 @@ package com.sgaop.common;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.sgaop.basis.annotation.Setup;
 import com.sgaop.basis.cache.PropertiesManager;
+import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.DaosRegister;
 import com.sgaop.basis.dao.impl.DaoImpl;
+import com.sgaop.basis.ioc.IocBeanContext;
 import com.sgaop.basis.mvc.view.ViewsRegister;
+import com.sgaop.basis.quartz.BasisJobFactory;
+import com.sgaop.basis.quartz.QuartzRegister;
 import com.sgaop.basis.web.WebSetup;
 import com.sgaop.common.view.BeetlView;
+import com.sgaop.entity.sys.QuartzJob;
+import com.sgaop.task.TestJob;
+import org.apache.log4j.Logger;
+import org.quartz.*;
+import org.quartz.impl.JobDetailImpl;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.servlet.ServletContextEvent;
 import javax.sql.DataSource;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -23,18 +35,92 @@ import java.util.Properties;
 @Setup
 public class WebMainSetup implements WebSetup {
 
+    private static final Logger log = Logger.getRootLogger();
+
+    private Dao dao;
+
+    private Scheduler scheduler;
+
     public void init(ServletContextEvent servletContextEvent) {
+        DataSource dataSource = getDsA();
+        //注册视图
         ViewsRegister.registerView("beetl", BeetlView.class);
         //注册数据源
-        DaosRegister.registerDao("dao", DaoImpl.class, getDsA());
+        dao = DaosRegister.registerDao("dao", DaoImpl.class, dataSource);
+        //注册任务管理器
+        scheduler = QuartzRegister.registerScheduler("schedulder");
+        //初始化任务
+        initQuartz();
     }
 
-    public void destroy(ServletContextEvent servletContextEvent) {
 
+    /**
+     * 销毁
+     *
+     * @param servletContextEvent
+     */
+    public void destroy(ServletContextEvent servletContextEvent) {
+        destroyQuartz();
     }
 
     /**
-     * 数据源
+     * 销毁任务
+     *
+     * @throws Exception
+     */
+    private void destroyQuartz() {
+        try {
+            scheduler.shutdown();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 初始化任务
+     *
+     * @throws Exception
+     */
+    private void initQuartz() {
+        try {
+            List<QuartzJob> jobList = dao.queryAll(QuartzJob.class);
+            for (QuartzJob qjob : jobList) {
+                if (qjob.getJobType() == 0) {
+                    String jobKlass = qjob.getJobKlass();
+                    String jobCron = qjob.getJobCorn();
+                    log.debug(String.format("job define jobKlass=%s jobCron=%s", jobKlass, jobCron));
+                    Class<?> klass =  Class.forName(jobKlass);
+                    JobDetail job = JobBuilder.newJob((Class<? extends Job>) klass).build();
+                    CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobKlass)
+                            .withSchedule(CronScheduleBuilder.cronSchedule(jobCron))
+                            .build();
+                    scheduler.scheduleJob(job, trigger);
+                    /**
+                     * 启动任务
+                     */
+                    scheduler.start();
+                    /**
+                     * 更新状态
+                     */
+                    JobKey jobKey = trigger.getJobKey();
+                    qjob.setJobRunName(jobKey.getName());
+                    qjob.setJobGroup(jobKey.getGroup());
+                    Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
+                    qjob.setJobStatus(triggerState.name());
+                } else {
+                    qjob.setJobStatus("NONE");
+                }
+                dao.update(qjob);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.debug(e);
+        }
+    }
+
+
+    /**
+     * 取得数据源
      *
      * @return
      */
