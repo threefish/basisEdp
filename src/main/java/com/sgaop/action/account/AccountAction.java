@@ -59,9 +59,11 @@ public class AccountAction extends BaseAction {
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);
-            List<Menu> menus=dao.queryAll(Menu.class);
+            List<Menu> menus=dao.queryAll(Menu.class,"order by short_no asc");
+            if(menus==null){
+                return new AjaxResult(false, "没有菜单权限");
+            }
             menus= Tree.createTree(menus, 0);
-            System.out.println(new Gson().toJson(menus));
             session.setAttribute(Cons.SESSION_MENUS, menus);
         } catch (Exception e) {
             e.printStackTrace();

@@ -25,7 +25,6 @@ public class ApmAction extends BaseAction {
     @OK("beetl:apm.index")
     @GET
     @Path("/index")
-    @RequiresAuthentication
     public void index() {
 
     }

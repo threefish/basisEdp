@@ -18,6 +18,22 @@
     </filter-mapping>
 
 
+    <!--druid监控过滤器-->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,/static/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
     <!--basis框架过滤器-->
     <listener>
         <listener-class>com.sgaop.basis.web.ServletInitListener</listener-class>
@@ -35,18 +51,10 @@
         <dispatcher>INCLUDE</dispatcher>
     </filter-mapping>
 
-    <!--druid监控过滤器-->
+    <!--druid 状态监控-->
     <servlet>
         <servlet-name>DruidStatView</servlet-name>
         <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
-        <init-param>
-            <param-name>allow</param-name>
-            <param-value>127.0.0.1</param-value>
-        </init-param>
-        <init-param>
-            <param-name>exclusions</param-name>
-            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,/static/*</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>DruidStatView</servlet-name>

@@ -35,6 +35,9 @@ public class Menu {
     @Colum("description")
     private String description;
 
+    @Colum("short_no")
+    private int shortNo;
+
     @Colum("ct")
     private Timestamp createTime;
 
@@ -109,6 +112,14 @@ public class Menu {
 
     public List<Menu> getChilds() {
         return childs;
+    }
+
+    public int getShortNo() {
+        return shortNo;
+    }
+
+    public void setShortNo(int shortNo) {
+        this.shortNo = shortNo;
     }
 
     public void setChilds(List<Menu> childs) {

@@ -1,0 +1,56 @@
+<%
+layout("/layouts/platform.html",{title:"用户管理"}){
+%>
+<style type="text/css">
+   .dataTbleBox{
+       background: #ffffff;
+       margin: 15px 0px;
+       padding: 15px;
+   }
+</style>
+<section class="content-header">
+    <h1>
+        用户管理
+        <small>控制面板</small>
+    </h1>
+</section>
+<section class="content">
+    <div class="row dataTbleBox">
+        <table id="menusTable" class="table table-bordered table-striped">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script type="text/javascript">
+    var userlistTable;
+    $(function () {
+        userlistTable = $('#menusTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base + '/userAccount/grid',
+                type: 'POST'
+            },
+            "columns": [
+                {"data": "id", "title": "序号", width: "30px"},
+                {"data": "userName", "title": "用户名"},
+                {"data": "locked", "title": "状态","render": function (data, type, row) {
+                    return row.locked?"<span style='color: orangered'>已冻结</span>":"启用中";
+                }},
+                {"data": "createTime", "title": "创建时间", width: "180px"} ,
+                {"title": "操作", width: "180px", "render": function (data, type, row) {
+                    return  "";
+                }}
+            ],
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true,
+            language: {url: base + '/static/plugins/datatables/chinese.json'}
+        });
+    });
+</script>
+<%}%>
