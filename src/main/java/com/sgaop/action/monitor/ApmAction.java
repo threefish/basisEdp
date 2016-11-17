@@ -22,6 +22,15 @@ import java.util.HashMap;
 public class ApmAction extends BaseAction {
 
 
+    @OK("beetl:apm.index")
+    @GET
+    @Path("/index")
+    @RequiresAuthentication
+    public void index() {
+
+    }
+
+
     @OK("json")
     @POST
     @Path("/data")

@@ -264,9 +264,12 @@
             });
 
             $('.sidebar-menu a[data-pjax]').on('click', function () {
-                $.get("${base!}"+$(this).attr("href"), function (data) {
-                    $("#container").html(data);
-                }, "html");
+                var href= $(this).attr("href");
+                if(href!=""&&href!="#"){
+                    $.get("${base!}" + $(this).attr("href"), function (data) {
+                        $("#container").html(data);
+                    }, "html");
+                }
             });
 
             $(document).on('pjax:send', function () {

@@ -1,104 +1,71 @@
 <%
-layout("/layouts/platform.html",{title:"系统首页"}){
+layout("/layouts/platform.html",{title:"后台管理主页"}){
 %>
 <script type="text/javascript" src="${base!}/static/plugins/echarts/echarts.js"></script>
-<section class="content">
-    <div id="line" style="width: 800px;height:400px;"></div>
+<section class="content-header">
+    <h1>
+        主机状态监控
+        <small>控制面板</small>
+    </h1>
 </section>
-<script type="text/javascript">
-    function showEcharts() {
-        $.post('${base!}/monitor/apm/dashboard', {}, function (result) {
-            var option = {
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        animation: false
-                    }
-                },
-                legend: {
-                    data: ['CPU', 'JVM', 'RAM', 'SWAP', 'NETWORK IN', 'NETWORK OUT']
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        restore: {},
-                        saveAsImage: {}
-                    }
-                },
-                dataZoom: {
-                    show: false,
-                    start: 0,
-                    end: 100
-                },
-                xAxis: [{
-                    type: 'category',
-                    boundaryGap: true,
-                    data: result.data.timePoints
-                }],
-                yAxis: [{
-                    type: 'value',
-                    scale: true,
-                    name: '百分比',
-                    max: 100,
-                    min: 0,
-                    boundaryGap: [0.2, 0.2]
-                }, {
-                    type: 'value',
-                    scale: true,
-                    max: 5000,
-                    min: 0,
-                    name: ' k/s',
-                    boundaryGap: [0.2, 0.2]
-                }],
-                series: [{
-                    name: 'CPU',
-                    type: 'line',
-                    smooth: true,
-                    data: result.data.cpuUsages
-                }, {
-                    name: 'JVM',
-                    type: 'line',
-                    smooth: true,
-                    data: result.data.jvmUsages
-                }, {
-                    name: 'RAM',
-                    type: 'line',
-                    smooth: true,
-                    data: result.data.ramUsages
-                }, {
-                    name: 'SWAP',
-                    type: 'line',
-                    smooth: true,
-                    yAxisIndex: 0,
-                    data: result.data.swapUsages
-                }, {
-                    name: 'NETWORK IN',
-                    type: 'line',
-                    smooth: true,
-                    yAxisIndex: 1,
-                    data: result.data.niUsages
-                }, {
-                    name: 'NETWORK OUT',
-                    type: 'line',
-                    smooth: true,
-                    yAxisIndex: 1,
-                    data: result.data.noUsages
-                }]
-            };
-            console.log(result.data)
-            line.setOption(option);
-        }, 'json');
-    }
-    var line;
-    $(function () {
-        line = echarts.init($("#line").get(0));
-        showEcharts();
-        setInterval(function () {
-            showEcharts()
-        },5000);
-    });
-</script>
+<section class="content">
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>150</h3>
+                    <p>新订单</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <p>跳出率</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>44</h3>
+                    <p>用户注册数</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+                <a href="#" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <h3>65</h3>
+                    <p>独立访客</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+</section>
 <%}%>

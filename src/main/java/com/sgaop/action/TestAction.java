@@ -12,12 +12,13 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
  */
 @IocBean
 @Action("/test")
-@RequiresAuthentication
+//@RequiresAuthentication
 public class TestAction extends BaseAction{
 
     @OK("beetl:test")
     @GET
     @Path("/index")
     public void index() {
+        Integer.parseInt("xxxx");
     }
 }

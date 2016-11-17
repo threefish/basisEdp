@@ -61,7 +61,7 @@ public class BeetlView implements View {
 
     public void render(String path, HttpServletRequest request, HttpServletResponse response, Object data) {
         try {
-            Template tpl = gt.getTemplate(path+_suffix);
+            Template tpl = gt.getTemplate(path.replace(".",File.separator)+_suffix);
             if (data instanceof Map) {
                 tpl.binding("data", data, false);
             } else {

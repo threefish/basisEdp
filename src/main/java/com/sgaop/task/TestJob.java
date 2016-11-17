@@ -22,7 +22,5 @@ public class TestJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("dao>>>>>"+dao);
-        System.out.println("TestJob>>>>>>>>>>>>>>>>>>>"+ DateUtil.date2string(new Date(),DateUtil.YYYY_MM_DD_HH_MM_SS));
     }
 }

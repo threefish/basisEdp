@@ -10,6 +10,7 @@ import com.sgaop.common.gather.MemoryGather;
 import com.sgaop.common.gather.NetInterfaceGather;
 import com.sgaop.common.util.Numbers;
 import com.sgaop.entity.sys.APMAlarm;
+import org.apache.log4j.Logger;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.quartz.Job;
@@ -30,6 +31,9 @@ import java.util.List;
  */
 @IocBean
 public class ApmJob implements Job {
+
+    protected static final Logger log = Logger.getRootLogger();
+
 
     @Inject("dao")
     protected Dao dao;
@@ -118,9 +122,8 @@ public class ApmJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
-
+            log.debug("执行系统性能曲线监测与收集任务");
             MemoryGather memory = MemoryGather.gather(sigar);
-
             // 内存
             double jvmUsage, ramUsage, swapUsage = 0;
             if ((jvmUsage = memory.getJvm().getUsedPercent()) > PropertiesManager.getInt("jvm.alarm.percent")) {

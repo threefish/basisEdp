@@ -4,6 +4,7 @@ import com.sgaop.basis.annotation.Action;
 import com.sgaop.basis.annotation.Aspect;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.aop.InterceptorProxy;
+import com.sgaop.basis.error.ShiroAutcException;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AccountException;
@@ -29,6 +30,9 @@ import java.util.Collection;
 public class ShiroAuthcAop extends InterceptorProxy {
 
     private static final Logger log = Logger.getRootLogger();
+
+    private static final String redirectUrl="/account/login";
+
 
     /**
      * 定义一个基于授权功能的注解类数组
@@ -75,7 +79,7 @@ public class ShiroAuthcAop extends InterceptorProxy {
     }
 
     @SuppressWarnings("unchecked")
-    private void handleAuth(Annotation annotation) {
+    private void handleAuth(Annotation annotation) throws ShiroAutcException {
         if (annotation.annotationType().equals(RequiresAuthentication.class)) {
             handleAuthenticated();
         } else if (annotation.annotationType().equals(RequiresUser.class)) {
@@ -89,30 +93,30 @@ public class ShiroAuthcAop extends InterceptorProxy {
         }
     }
 
-    private void handleAuthenticated() {
+    private void handleAuthenticated() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
-            throw new AuthorizationException("当前用户尚未认证");
+            throw new ShiroAutcException("当前用户尚未认证", redirectUrl);
         }
     }
 
-    private void handleUser() {
+    private void handleUser() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         PrincipalCollection principals = currentUser.getPrincipals();
         if (principals == null || principals.isEmpty()) {
-            throw new AccountException("当前用户尚未登录");
+            throw new ShiroAutcException("当前用户尚未登录", redirectUrl);
         }
     }
 
-    private void handleGuest() {
+    private void handleGuest() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         PrincipalCollection principals = currentUser.getPrincipals();
         if (principals != null && !principals.isEmpty()) {
-            throw new AuthorizationException("当前用户不是访客");
+            throw new ShiroAutcException("当前用户不是访客", redirectUrl);
         }
     }
 
-    private void handleHasRoles(RequiresRoles hasRoles) {
+    private void handleHasRoles(RequiresRoles hasRoles) throws ShiroAutcException {
         String[] roleName = hasRoles.value();
         Collection<String> roles = new ArrayList<String>();
         for (String role : roleName) {
@@ -121,16 +125,16 @@ public class ShiroAuthcAop extends InterceptorProxy {
         Subject currentUser = SecurityUtils.getSubject();
         //必须匹配全部角色
         if (!currentUser.hasAllRoles(roles)) {
-            throw new AccountException("当前用户角色不符");
+            throw new ShiroAutcException("当前用户角色不符", redirectUrl);
         }
     }
 
-    private void handleHasPermissions(RequiresPermissions hasPermissions) {
+    private void handleHasPermissions(RequiresPermissions hasPermissions) throws ShiroAutcException {
         String[] permissionName = hasPermissions.value();
         Subject currentUser = SecurityUtils.getSubject();
         //必须匹配全部权限
         if (!currentUser.isPermittedAll(permissionName)) {
-            throw new AuthorizationException("当前用户权限不符");
+            throw new ShiroAutcException("当前用户权限不符", redirectUrl);
         }
     }
 
