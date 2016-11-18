@@ -60,7 +60,7 @@ public class ApmAction extends BaseAction {
                 }
             }
         } catch (Exception e) {
-            log.warn(e);
+            log.error(e);
             return new AjaxResult(false, e.getMessage());
         }
         return new AjaxResult(true, "", result);
