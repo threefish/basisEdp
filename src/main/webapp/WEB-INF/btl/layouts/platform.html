@@ -11,19 +11,21 @@
     <link rel="stylesheet" href="${base!}/static/plugins/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="${base!}/static/css/AdminLTE.min.css">
     <link rel="stylesheet" href="${base!}/static/css/skins/skin-blue.min.css">
-    <link rel="stylesheet" href="${base!}/static/plugins/nprogress/nprogress.css">
+    <link rel="stylesheet" href="${base!}/static/plugins/ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="${base!}/static/plugins/iCheck/all.css">
     <link rel="stylesheet" href="${base!}/static/plugins/datatables/dataTables.bootstrap.css">
     <script type="text/javascript" src="${base!}/static/plugins/jquery/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="${base!}/static/plugins/echarts/echarts.js"></script>
+    <script type="text/javascript" src="${base!}/static/plugins/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="${base!}/static/plugins/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="${base!}/static/plugins/iCheck/icheck.min.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
-    <script type="text/javascript" src="${base!}/static/plugins/jquery/pjax/jquery.pjax.js"></script>
-    <script type="text/javascript" src="${base!}/static/plugins/nprogress/nprogress.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/layer/layer.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/fastclick/fastclick.min.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${base!}/static/js/app.min.js"></script>
+    <script type="text/javascript" src="${base!}/static/plugins/sugarTpl/sugarTpl.js"></script>
+    <script type="text/javascript" src="${base!}/static/js/form.js"></script>
     <script>
         var base = "${base!}";
     </script>
@@ -256,37 +258,12 @@
 </div>
 </body>
 <script type="text/javascript">
-    $(document).ready(function () {
-        if ($.support.pjax) {
-
-            $(document).pjax('a[data-pjax]', '#container', {
-                maxCacheLength: 0,
-                push: false,
-                replace: true,
-                fragment: '#container',
-                timeout: 8000
-            });
-
-            $('.sidebar-menu a[data-pjax]').on('click', function () {
-                var href = $(this).attr("href");
-                if (href != "" && href != "#") {
-                    $.get("${base!}" + href, function (data) {
-                        $("#container").html(data);
-                    }, "html");
-                }
-            });
-
-            $(document).on('pjax:send', function () {
-                console.log("pjax:send")
-                NProgress.start();
-            });
-
-            $(document).on('pjax:complete', function () {
-                console.log("pjax:complete")
-                NProgress.done();
-            });
-
-        }
-    });
+    function setiCheckAll() {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });
+    }
 </script>
 </html>

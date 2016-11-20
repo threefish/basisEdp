@@ -107,7 +107,7 @@ public class ApmJob implements Job {
         final APMAlarm alarm = new APMAlarm();
         alarm.setType(type);
         alarm.setIp("127.0.0.1");
-        alarm.setMsg(String.format("%s:当前 %s 使用率 %f,高于预警值 %d", title, device, usage, alarmPoint));
+        alarm.setMsg(String.format("%s:当前 %s 使用率 %f %,高于预警值 %d", title, device, usage, alarmPoint));
         alarm.setTitle(title);
         alarm.setDevice(device);
         alarm.setUsage(usage);
@@ -151,7 +151,7 @@ public class ApmJob implements Job {
             List<DISKGather> disks = DISKGather.gather(sigar);
             for (DISKGather disk : disks) {
                 if (disk.getStat() != null && disk.getStat().getUsePercent() * 100 > PropertiesManager.getInt("disk.alarm.percent")) {
-                    alarm(APMAlarm.Type.DISK, "磁盘警告", "DISK", disk.getStat().getUsePercent(), PropertiesManager.getInt("disk.alarm.percent"));
+                    alarm(APMAlarm.Type.DISK, "磁盘警告", "DISK", disk.getStat().getUsePercent() * 100, PropertiesManager.getInt("disk.alarm.percent"));
                 }
             }
 

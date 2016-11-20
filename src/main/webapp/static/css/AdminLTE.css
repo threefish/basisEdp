@@ -4930,3 +4930,28 @@ table.text-center th {
     white-space: normal !important;
   }
 }
+
+::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 20px;
+  background-clip: content-box;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

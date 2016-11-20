@@ -59,7 +59,7 @@ public class AccountAction extends BaseAction {
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);
-            List<Menu> menus=dao.queryAll(Menu.class,"order by short_no asc");
+            List<Menu> menus=dao.querySqlList(Menu.class,"select * from sys_menu where locked=? order by short_no asc",false);
             if(menus==null){
                 return new AjaxResult(false, "没有菜单权限");
             }

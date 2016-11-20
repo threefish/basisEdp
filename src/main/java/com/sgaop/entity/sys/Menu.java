@@ -32,6 +32,9 @@ public class Menu {
     @Colum("menu_type")
     private int menuType;
 
+    @Colum("locked")
+    private boolean locked;
+
     @Colum("description")
     private String description;
 
@@ -48,6 +51,14 @@ public class Menu {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public void setId(int id) {

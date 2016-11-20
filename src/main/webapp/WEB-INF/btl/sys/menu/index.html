@@ -2,10 +2,20 @@
 layout("/layouts/platform.html",{title:"系统菜单管理"}){
 %>
 <style type="text/css">
-    .dataTbleBox {
+    .box {
         background: #ffffff;
         margin: 15px 0px;
         padding: 15px;
+    }
+
+    .leftBox {
+        width: 50%;
+        float: left;
+    }
+
+    .rightBox {
+        width: 50%;
+        float: left;
     }
 </style>
 <section class="content-header">
@@ -15,39 +25,242 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
     </h1>
 </section>
 <section class="content">
-    <div class="row dataTbleBox">
-        <table id="menusTable" class="table table-bordered table-striped">
-            <tbody>
-            </tbody>
-        </table>
+    <div class="row box box-warning">
+        <div style="display: block;margin: 5px">
+            <button class="btn btn-danger btn-sm " disabled id="add">增加</button>
+            <button class="btn btn-info btn-sm " disabled id="update">修改</button>
+            <button class="btn btn-warning btn-sm " disabled id="del">删除</button>
+        </div>
+        <div class="leftBox">
+            <div id="menusTree" class="ztree"></div>
+        </div>
+        <div class="rightBox" id="menuBox">
+
+        </div>
     </div>
 </section>
+<script type="text/plain" id="menuFormTpl">
+    <form action="arg{data.action}" method="post" id="menuForm">
+        <div style="display: none">
+            <input type="text" class="form-control input-sm"  name="data.id" value="arg{data.id}">
+            <input type="text" class="form-control input-sm" id="menuPid" name="data.pid" value="arg{data.pid}">
+            <input type="text" class="form-control input-sm" name="data.shortNo" value="arg{data.shortNo}">
+            <input type="text" class="form-control input-sm" name="data.menuType" value="arg{data.menuType}">
+        </div>
+        <div class="form-grou" id="menuPName" style="display:arg{(data.menuPName==""?"none":"initial")};">
+        <label>上级菜单</label>
+        <div class="input-group" style="width: 100%;">
+            <input type="text" class="form-control input-sm" id="menuPidDesc" readonly value="arg{data.menuPName}" disabled>
+            <div class="input-group-addon" onclick="ckMenus()" id="ckMenus" style="display: none">
+                <i class="fa fa-edit"></i>
+            </div>
+        </div>
+        </div>
+        <div class="form-grou">
+            <label>菜单名称</label>
+            <input type="text" class="form-control input-sm" name="data.menuName" value="arg{data.menuName}"
+                   placeholder="菜单名称" disabled>
+        </div>
+        <div class="form-grou">
+            <label>菜单地址</label>
+            <input type="text" class="form-control input-sm" name="data.menuTarget" value="arg{data.menuTarget}"
+                   placeholder="菜单地址" disabled>
+        </div>
+        <div style="padding-top:  10px">
+            <label>
+                <input type="checkbox" name="data.locked" arg{(data.locked?'checked':'')} disabled />
+                冻结
+            </label>
+        </div>
+        <div class="form-grou">
+            <label>描述</label>
+            <textarea class="form-control" rows="3" name="data.description"
+                      placeholder="描述" disabled>arg{data.description}</textarea>
+        </div>
+        <div style="margin-top: 10px;text-align: center;display: none;" id="sbBtnGroup">
+            <div class="btn btn-success" id="ok">提交</div>
+        </div>
+    </form>
+
+</script>
 <script type="text/javascript">
-    var menusTable;
-    $(function () {
-        menusTable = $('#menusTable').DataTable({
-            serverSide: true,
-            processing: true,
-            ajax: {
-                url: base + '/sysMenu/grid',
-                type: 'POST'
+    var setting = {
+        async: {
+            enable: true,
+            type: "post",
+            url: base + "/sysMenu/tree",
+            autoParam: ["id", "name"]
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootPId: 0
             },
-            "columns": [
-                {"data": "id", "title": "序号", width: "30px"},
-                {"data": "menuName", "title": "菜单名称", width: "180px"},
-                {"data": "description", "title": "描述", width: "180px"},
-                {"title": "操作", width: "180px", "render": function (data, type, row) {
-                    return "";
-                }}
-            ],
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": false,
-            "info": true,
-            "autoWidth": true,
-            language: {url: base + '/static/plugins/datatables/chinese.json'}
+            key: {
+                name: "menuName"
+            }
+        }, view: {
+            showIcon: true
+        },
+        callback: {
+            beforeClick: zTreeBeforeClick,
+            onAsyncSuccess: zTreeOnAsyncSuccess
+        }
+    };
+
+    var selectId;
+    function zTreeOnAsyncSuccess(treeId, data, clickFlag) {
+        var rootNode = menuTree.getNodesByParam("id", 0)[0];
+        menuTree.expandNode(rootNode, true, false, true);
+        if (selectId) {
+            var node = menuTree.getNodesByParam("id", selectId)[0];
+            menuTree.selectNode(node);
+        }
+    }
+
+    function zTreeBeforeClick(treeId, data, clickFlag) {
+        if (data.id != 0) {
+            $("#update").removeAttr("disabled");
+            $("#del").removeAttr("disabled");
+        } else {
+            $("#update").attr("disabled", "");
+            $("#del").attr("disabled", "");
+        }
+        $("#add").removeAttr("disabled");
+        var pnode = data.getParentNode();
+        data.action = "update";
+        data.menuPName = "";
+        if (pnode) {
+            data.menuPName = pnode.menuName;
+        }
+        new jsTpl({
+            temlplateSrc: 'menuFormTpl',
+            viewTarget: 'menuBox',
+            arg: 'arg',
+            data: data,
+            onSuccess: function () {
+                setiCheckAll();
+                $("#ok").on("click", submitFrom);
+            }
+        });
+    }
+
+    function addFrom() {
+        $("#update").attr("disabled", "");
+        $("#del").attr("disabled", "");
+        $("#ckMenus").show();
+        var data = new Object();
+        data.action = "add";
+        data.id = 0;
+        data.menuName = "";
+        data.menuTarget = "";
+        data.menuPName = "";
+        data.description = "";
+        data.shortNo = 0;
+        data.menuType = 1;
+
+        var node = menuTree.getSelectedNodes();
+        if (node.length > 0) {
+            data.pid = node[0].id;
+            data.menuPName = node[0].menuName;
+        } else {
+            data.pid = 0;
+        }
+
+        new jsTpl({
+            temlplateSrc: 'menuFormTpl',
+            viewTarget: 'menuBox',
+            arg: 'arg',
+            data: data,
+            onSuccess: function () {
+                formResum();
+                $("#ok").on("click", submitFrom);
+            }
+        });
+    }
+
+    function formResum() {
+        $("#ckMenus").show();
+        $("#menuForm :disabled").each(function () {
+            if (!$(this).attr("readonly")) {
+                $(this).removeAttr("disabled");
+            }
+            setiCheckAll();
+            $("#sbBtnGroup").show();
+        });
+    }
+
+
+    function submitFrom(type) {
+        var menuForm = $("#menuForm");
+        var update = base + "/sysMenu/update";
+        var addurl = base + "/sysMenu/add";
+        var url = ""
+        if (menuForm.attr("action") == "add") {
+            url = addurl;
+        } else {
+            url = update;
+        }
+        if (type == "del") {
+            url = base + "/sysMenu/del";
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data: menuForm.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    selectId = data.data.id;
+                    menuTree.reAsyncChildNodes(null, "refresh");
+                    layer.msg(data.msg, {icon: 1});
+                    if(data.msg=="删除成功"){
+                        $("#menuBox").html("");
+                    }
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                layer.msg("网络连接出错", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
+    var menuTree;
+    $(function () {
+        menuTree = $.fn.zTree.init($("#menusTree"), setting);
+        $("#add").on("click", addFrom);
+        $("#update").on("click", updateFrom);
+        $("#del").on("click", function () {
+            layer.confirm('确定删除？删除后将无法恢复！请谨慎操作！', {
+                btn: ['确定删除','我再想想']
+            }, function(){
+                submitFrom("del");
+            });
         });
     });
+
+
+    function ckMenus() {
+        new showCkTree({
+            title: "修改上级菜单",
+            url: "/sysMenu/tree",
+            isCheckbox: false,
+            target: ['menuPid', 'menuPidDesc'],
+            data: {id: "id", pid: "pid", name: "menuName"},
+            onSelect: function (data) {
+                console.log(data)
+            },
+            onOk: function (data) {
+                console.log(data)
+            }
+        });
+    }
+
+    function updateFrom() {
+        $("#menuForm :disabled").each(formResum);
+    }
 </script>
 <%}%>
