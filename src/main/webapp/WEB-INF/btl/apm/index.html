@@ -1,6 +1,30 @@
 <%
 layout("/layouts/platform.html",{title:"主机状态监控"}){
 %>
+<style>
+    .textCenter {
+        text-align: center;
+    }
+
+    .percentInput {
+        width: 20px;
+        background: #DD4B39;
+        border: none;
+        text-align: center;
+        height: 15px;
+    }
+
+    .percentInput:hover {
+        border: 1px #ffffff solid;
+        height: 13px;
+    }
+
+    .progress-bar-span{
+        font-size: 12px;
+        display: inline-block;
+        width: 30px;
+    }
+</style>
 <section class="content-header">
     <h1>
         主机状态监控
@@ -70,29 +94,98 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
         </div>
         <!-- ./col -->
     </div>
-
-    <div class="box box-solid">
-        <div class="box-header">
-            <i class="fa fa-th"></i>
-            <h3 class="box-title">主机实时性能曲线</h3>
-            <div class="box-tools pull-right">
-                <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
+    <div class="row">
+        <div class=col-md-6>
+            <div class="box box-solid">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+                    <h3 class="box-title">主机实时性能曲线</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="chart" id="line-chart">
+                        <div id="line" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="box-body border-radius-none">
-            <div class="chart" id="line-chart" >
-                <div id="line" style="width: 100%;height:400px;"></div>
+        <div class="col-md-6">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+                    <h3 class="box-title">告警设置</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 70px;" class="textCenter">项目</th>
+                            <th style="width: 200px;" class="textCenter">当前值</th>
+                            <th style="width: 100px;" class="textCenter">告警值</th>
+                            <th class="textCenter" style="width: 150px;">告警方式</th>
+                            <th class="textCenter" style="width: 100px;">通知人员</th>
+                        </tr>
+                        </thead>
+                        <tbody id="alarmTable">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">保存修改</a>
+                </div>
             </div>
         </div>
     </div>
-
-
-
 </section>
+<script type="text/html" id="alarmTableTpl">
+    {@for(var i = 0,l = data.length; i < l; i += 1){
+    <tr code="arg{data[i].alarmType}">
+        <td class="textCenter">arg{data[i].alarmType}</td>
+        <td class="textCenter">
+            {@if(data[i].alarmType=="NetWork"){
+            <span class="ni">0</span>&<span class="no">0</span>M/s
+            }@/if}{@else{
+            <div class="progress progress-xs progress-striped active" style="width:150px;display:inline-block;">
+                <div class="progress-bar progress-bar-primary" style="width:0%"></div>
+            </div>
+            <span class="progress-bar-span">0%</span>
+            }@/else}
+        </td>
+        <td class="textCenter"><span class="badge bg-red">
+            <input type="text" class="percentInput" value="arg{data[i].percent}">%</span>
+        </td>
+        <td class="textCenter">
+            <lable>邮件<input class='minimal' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,1))}></lable>
+            &nbsp;
+            <lable>短信<input class='minimal' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,2))}></lable>
+            &nbsp;
+        </td>
+        <td class="textCenter">arg{data[i].listeners}</td>
+    </tr>
+    }@/for}
+</script>
 <script type="text/javascript">
-    function showEcharts() {
-        $.post('${base!}/monitor/apm/dashboard', {}, function (result) {
+    function alarmTyperender(listenerTypes, val) {
+        var data = listenerTypes.split(",");
+        for (var i in data) {
+            if (data[i] == val) {
+                return "checked";
+            }
+        }
+        return "";
+    }
+    function showDashboard() {
+        $.post('${base!}/monitor/apm/lineDashboard', {}, function (result) {
             var option = {
                 title: {
                     text: ''
@@ -176,19 +269,68 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             console.log(result.data)
             line.setOption(option);
         }, 'json');
+
+
+        $.post('${base!}/monitor/apm/tableDashboard', {}, function (result) {
+            if (tableDashboardInit && result.ok) {
+                var data = result.data;
+                reSetTr($("[code='CPU']"), data['CPU']);
+                reSetTr($("[code='JVM']"), data['JVM']);
+                reSetTr($("[code='RAM']"), data['RAM']);
+                reSetTr($("[code='SWAP']"), data['SWAP']);
+                reSetTr($("[code='DISK']"), data['DISK']);
+                reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'],data['NoNetWork']);
+            }
+        }, 'json')
     }
+
+    function reSetTr(el, val) {
+        var persent = val + "%";
+        el.find(".progress-bar").css({width: persent});
+        el.find(".progress-bar-span").html(persent);
+    }
+    function reSetTrNetWork(el, ni,no) {
+        el.find(".ni").html(ni);
+        el.find(".no").html(no);
+    }
+    var tableDashboardInit = false;
+    function showAlarmOptions() {
+        $.ajax({
+            type: "post",
+            url: "${base!}/monitor/apm/alarmOptions",
+            dataType: "json",
+            success: function (data) {
+                new jsTpl({
+                    temlplateSrc: 'alarmTableTpl',
+                    viewTarget: 'alarmTable',
+                    arg: 'arg',
+                    data: data.data,
+                    onSuccess: function () {
+                        setiCheckAll();
+                        tableDashboardInit = true;
+                    }
+                });
+            }, error: function (status) {
+                layer.msg("网络连接出错", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
+
     var line;
     $(function () {
         line = echarts.init($("#line").get(0));
-        showEcharts();
+        showDashboard();
 
         setInterval(function () {
-            showEcharts()
-        },5000);
+            showDashboard()
+        }, 5000);
 
         $(window).resize(function () {
             line.resize();
         });
+
+        showAlarmOptions();
     });
 </script>
 <%}%>

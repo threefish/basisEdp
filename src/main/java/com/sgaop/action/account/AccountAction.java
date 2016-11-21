@@ -1,10 +1,9 @@
 package com.sgaop.action.account;
 
-import com.google.gson.Gson;
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Dao;
-import com.sgaop.basis.mvc.AjaxResult;
+import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.common.util.Tree;
 import com.sgaop.entity.sys.Menu;
@@ -12,10 +11,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -45,7 +40,8 @@ public class AccountAction extends BaseAction {
         user.logout();
         try {
             session.invalidate();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         session = request.getSession(true);
     }
 
@@ -53,22 +49,22 @@ public class AccountAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/login")
-    public AjaxResult doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("rememberMe") boolean isRememberMe) {
+    public Result doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("rememberMe") boolean isRememberMe) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(isRememberMe);
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);
-            List<Menu> menus=dao.querySqlList(Menu.class,"select * from sys_menu where locked=? order by short_no asc",false);
-            if(menus==null){
-                return new AjaxResult(false, "没有菜单权限");
+            List<Menu> menus = dao.querySqlList(Menu.class, "select * from sys_menu where locked=? order by short_no asc", false);
+            if (menus == null) {
+                return Result.error("没有菜单权限");
             }
-            menus= Tree.createTree(menus, 0);
+            menus = Tree.createTree(menus, 0);
             session.setAttribute(Cons.SESSION_MENUS, menus);
         } catch (Exception e) {
             e.printStackTrace();
-            return new AjaxResult(false, e.getMessage());
+            return Result.error(e.getMessage());
         }
-        return new AjaxResult(true, "登录成功");
+        return Result.sucess("登录成功");
     }
 }

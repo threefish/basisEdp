@@ -2,8 +2,11 @@ package com.sgaop.action.monitor;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.mvc.AjaxResult;
+import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.gather.*;
+import com.sgaop.entity.sys.AlarmOption;
 import com.sgaop.task.ApmJob;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.hyperic.sigar.Sigar;
@@ -25,10 +28,7 @@ public class ApmAction extends BaseAction {
     @OK("beetl:apm.index")
     @GET
     @Path("/index")
-    public void index() {
-
-    }
-
+    public void index() {}
 
     @OK("json")
     @POST
@@ -67,13 +67,37 @@ public class ApmAction extends BaseAction {
     }
 
     @Inject
-    ApmJob apmJob;
+    private ApmJob apmJob;
+
+    @Inject("dao")
+    protected Dao dao;
 
     @OK("json")
     @POST
-    @Path("/dashboard")
-    public AjaxResult dashboard() {
-        HashMap data = apmJob.getTempAll();
-        return new AjaxResult(true, "", data);
+    @Path("/lineDashboard")
+    public Result lineDashboard() {
+        return Result.sucess(apmJob.getMoreTempAll());
+    }
+
+    @OK("json")
+    @POST
+    @Path("/tableDashboard")
+    public Result tableDashboard() {
+        return Result.sucess(apmJob.getOneTempAll());
+    }
+
+    @OK("json")
+    @POST
+    @Path("/alarmOptions")
+    public Result AlarmOption(){
+        return Result.sucess(dao.queryAll(AlarmOption.class));
+    }
+
+    @OK("json")
+    @POST
+    @Path("/updateAlarmOptions")
+    public Result updateAlarmOptions(@Parameter("AlarmOptions")String jsonStr){
+        apmJob.setAlarmOptions(dao.queryAll(AlarmOption.class));
+        return Result.sucess("");
     }
 }

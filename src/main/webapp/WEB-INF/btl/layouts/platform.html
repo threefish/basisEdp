@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${base!}/static/plugins/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="${base!}/static/plugins/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="${base!}/static/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="${base!}/static/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="${base!}/static/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="${base!}/static/plugins/ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="${base!}/static/plugins/iCheck/all.css">
     <link rel="stylesheet" href="${base!}/static/plugins/datatables/dataTables.bootstrap.css">
@@ -259,10 +259,17 @@
 </body>
 <script type="text/javascript">
     function setiCheckAll() {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%'
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
         });
     }
 </script>
