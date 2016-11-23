@@ -271,7 +271,11 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             line.setOption(option);
         }, 'json');
 
+        updateTableDashboard();
 
+    }
+
+    function updateTableDashboard() {
         $.post('${base!}/monitor/apm/tableDashboard', {}, function (result) {
             if (tableDashboardInit && result.ok) {
                 var data = result.data;
@@ -282,8 +286,9 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                 reSetTr($("[code='DISK']"), data['DISK']);
                 reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'], data['NoNetWork']);
             }
-        }, 'json')
+        }, 'json');
     }
+
 
     function reSetTr(el, val) {
         var persent = val + "%";
@@ -310,6 +315,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                         setiCheckAll();
                         tableDashboardInit = true;
                         $(".updatealarm").show();
+                        updateTableDashboard();
                     }
                 });
             }, error: function (status) {
