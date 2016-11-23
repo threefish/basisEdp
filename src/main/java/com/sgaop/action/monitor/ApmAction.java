@@ -28,7 +28,8 @@ public class ApmAction extends BaseAction {
     @OK("beetl:apm.index")
     @GET
     @Path("/index")
-    public void index() {}
+    public void index() {
+    }
 
     @OK("json")
     @POST
@@ -89,15 +90,30 @@ public class ApmAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/alarmOptions")
-    public Result AlarmOption(){
+    public Result AlarmOption() {
         return Result.sucess(dao.queryAll(AlarmOption.class));
     }
 
     @OK("json")
     @POST
-    @Path("/updateAlarmOptions")
-    public Result updateAlarmOptions(@Parameter("AlarmOptions")String jsonStr){
-        apmJob.setAlarmOptions(dao.queryAll(AlarmOption.class));
-        return Result.sucess("");
+    @Path("/updateAlarmOption")
+    public Result updateAlarmOptions(@Parameter("alarmType") String alarmType,
+                                     @Parameter("percent") double percent,
+                                     @Parameter("listenerTypes") String listenerTypes) {
+        try {
+            AlarmOption option=new AlarmOption();
+            option.setAlarmType(alarmType);
+            option.setPercent(percent);
+            option.setListenerTypes(listenerTypes);
+            if (dao.update(option, " alarmType=?  ", option.getAlarmType())) {
+                apmJob.setAlarmOptions(dao.queryAll(AlarmOption.class));
+                return Result.sucess("更新成功");
+            } else {
+                return Result.error("更新失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(e.getMessage());
+        }
     }
 }

@@ -7,13 +7,6 @@ import java.util.Date;
 @Table("apm_alarm")
 public class APMAlarm {
 
-	public static enum Type {
-        SLOW, MEM, DISK, CPU, NETWORK;
-	}
-
-	@Colum("code")
-	private String code = "";
-
 	@Colum("alarmType")
 	private String type;
 
@@ -36,18 +29,14 @@ public class APMAlarm {
 	private double usage;
 
 	@Colum("point")
-	private int alarm;
+	private double alarm;
 
-	public int getAlarm() {
+	public double getAlarm() {
 		return alarm;
 	}
 
 	public Date getAlarmTime() {
 		return alarmTime;
-	}
-
-	public String getCode() {
-		return code;
 	}
 
 	public String getDevice() {
@@ -74,7 +63,7 @@ public class APMAlarm {
 		return usage;
 	}
 
-	public void setAlarm(int alarm) {
+	public void setAlarm(double alarm) {
 		this.alarm = alarm;
 	}
 
@@ -82,9 +71,7 @@ public class APMAlarm {
 		this.alarmTime = alarmTime;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+
 
 	public void setDevice(String device) {
 		this.device = device;
@@ -102,8 +89,8 @@ public class APMAlarm {
 		this.title = title;
 	}
 
-	public void setType(Type type) {
-		this.type = type.toString();
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public void setUsage(double usage) {

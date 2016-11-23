@@ -3230,14 +3230,14 @@ table.text-center th {
 }
 .login-box,
 .register-box {
-  width: 360px;
-  margin: 7% auto;
+  max-width: 360px;
+  margin: 200px auto;
 }
 @media (max-width: 768px) {
   .login-box,
   .register-box {
     width: 90%;
-    margin-top: 20px;
+    margin-top: 80px;
   }
 }
 .login-box-body,

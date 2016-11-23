@@ -161,11 +161,11 @@ public class ApmJob implements Job {
      * @param usage
      * @param alarmPoint
      */
-    private void alarm(APMAlarm.Type type, String title, String device, double usage, int alarmPoint) {
+    private void alarm(String type, String title, String device, double usage, double alarmPoint) {
         final APMAlarm alarm = new APMAlarm();
         alarm.setType(type);
         alarm.setIp("127.0.0.1");
-        alarm.setMsg(String.format("%s:当前 %s 使用率 %f %,高于预警值 %d", title, device, usage, alarmPoint));
+        alarm.setMsg(String.format("%s:当前 %s 使用率 %s,高于预警值 %s", title, device, decimalFormat.format(usage), decimalFormat.format(alarmPoint)));
         alarm.setTitle(title);
         alarm.setDevice(device);
         alarm.setUsage(usage);
@@ -190,41 +190,59 @@ public class ApmJob implements Job {
             }
             if (listenerStatus) {
                 MemoryGather memory = MemoryGather.gather(sigar);
-                // 内存
-                double jvmUsage, ramUsage, swapUsage = 0;
-                if ((jvmUsage = memory.getJvm().getUsedPercent()) > PropertiesManager.getInt("jvm.alarm.percent")) {
-                    alarm(APMAlarm.Type.MEM, "内存警告", "JVM", jvmUsage, PropertiesManager.getInt("jvm.alarm.percent"));
-                }
-                if ((ramUsage = memory.getMem().getUsedPercent()) > PropertiesManager.getInt("ram.alarm.percent")) {
-                    alarm(APMAlarm.Type.MEM, "内存警告", "RAM", ramUsage, PropertiesManager.getInt("ram.alarm.percent"));
-                }
-                if (memory.getSwap().getTotal() != 0) {
-                    if ((swapUsage = memory.getSwap().getUsed() * 100 / memory.getSwap().getTotal()) > PropertiesManager.getInt("swap.alarm.percent")) {
-                        alarm(APMAlarm.Type.MEM, "内存警告", "SWAP", swapUsage, PropertiesManager.getInt("swap.alarm.percent"));
-                    }
-                }
                 CPUGather cpu = CPUGather.gather(sigar);
-                // CPU
-                double cpuUsage;
-                if ((cpuUsage = 100 - cpu.getPerc().getIdle() * 100) > PropertiesManager.getInt("cpu.alarm.percent")) {
-                    alarm(APMAlarm.Type.MEM, "CPU警告", "CPU", cpuUsage, PropertiesManager.getInt("cpu.alarm.percent"));
-                }
-                // 磁盘
+                NetInterfaceGather ni = NetInterfaceGather.gather(sigar);
                 List<DISKGather> disks = DISKGather.gather(sigar);
-                for (DISKGather disk : disks) {
-                    if (disk.getStat() != null && disk.getStat().getUsePercent() * 100 > PropertiesManager.getInt("disk.alarm.percent")) {
-                        alarm(APMAlarm.Type.DISK, "磁盘警告", "DISK", disk.getStat().getUsePercent() * 100, PropertiesManager.getInt("disk.alarm.percent"));
+
+                double jvmUsage = 0, ramUsage = 0, swapUsage = 0;
+                // CPU
+                double cpuUsage = 0;
+                // 网络流量
+                double niUsage = 0, noUsage = 0;
+                for (AlarmOption option : alarmOptions) {
+                    switch (option.getAlarmType()) {
+                        case "JVM":
+                            // 内存
+                            if ((jvmUsage = memory.getJvm().getUsedPercent()) > option.getPercent()) {
+                                alarm("JVM", "内存警告", "JVM", jvmUsage, option.getPercent());
+                            }
+                            break;
+                        case "RAM":
+                            if ((ramUsage = memory.getMem().getUsedPercent()) > option.getPercent()) {
+                                alarm("RAM", "内存警告", "RAM", ramUsage, option.getPercent());
+                            }
+                            break;
+                        case "SWAP":
+                            if (memory.getSwap().getTotal() != 0) {
+                                if ((swapUsage = memory.getSwap().getUsed() * 100 / memory.getSwap().getTotal()) > option.getPercent()) {
+                                    alarm("SWAP", "内存警告", "SWAP", swapUsage, option.getPercent());
+                                }
+                            }
+                            break;
+                        case "CPU":
+                            if ((cpuUsage = 100 - cpu.getPerc().getIdle() * 100) > option.getPercent()) {
+                                alarm("CPU", "CPU警告", "CPU", cpuUsage, option.getPercent());
+                            }
+                            break;
+                        case "DISK":
+                            for (DISKGather disk : disks) {
+                                if (disk.getStat() != null && disk.getStat().getUsePercent() * 100 > option.getPercent()) {
+                                    alarm("DISK", "磁盘警告", "DISK", disk.getStat().getUsePercent() * 100, option.getPercent());
+                                }
+                            }
+                            break;
+                        case "NetWork":
+                            if ((niUsage = ni.getRxbps() * 100 / ni.getStat().getSpeed()) > option.getPercent()) {
+                                alarm("NetWork", "流量警告", "NetWork", niUsage, PropertiesManager.getInt("network.alarm.percent"));
+                            }
+                            if ((noUsage = ni.getTxbps() * 100 / ni.getStat().getSpeed()) > option.getPercent()) {
+                                alarm("NetWork", "流量警告", "NetWork", noUsage, option.getPercent());
+                            }
+                            break;
                     }
                 }
-                // 网络流量
-                double niUsage, noUsage;
-                NetInterfaceGather ni = NetInterfaceGather.gather(sigar);
-                if ((niUsage = ni.getRxbps() * 100 / ni.getStat().getSpeed()) > PropertiesManager.getInt("network.alarm.percent")) {
-                    alarm(APMAlarm.Type.NETWORK, "流量警告", "NETWORK", niUsage, PropertiesManager.getInt("network.alarm.percent"));
-                }
-                if ((noUsage = ni.getTxbps() * 100 / ni.getStat().getSpeed()) > PropertiesManager.getInt("network.alarm.percent")) {
-                    alarm(APMAlarm.Type.NETWORK, "流量警告", "NETWORK", noUsage, PropertiesManager.getInt("network.alarm.percent"));
-                }
+
+
                 add(timePoints, new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 add(jvmUsages, jvmUsage);
                 add(ramUsages, ramUsage);
@@ -245,8 +263,8 @@ public class ApmJob implements Job {
                     }
                 }
                 usaGes.put("DISK", decimalFormat.format(diskPercent * 100));
-                usaGes.put("NiNetWork",niUsage);
-                usaGes.put("NoNetWork",noUsage);
+                usaGes.put("NiNetWork", niUsage);
+                usaGes.put("NoNetWork", noUsage);
             }
         } catch (SigarException e) {
             e.printStackTrace();

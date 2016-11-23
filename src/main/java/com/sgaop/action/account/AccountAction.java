@@ -12,6 +12,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,13 +27,14 @@ public class AccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
-    @OK("jsp:login.jsp")
+    @OK("beetl:login")
     @GET
     @Path("/login")
     public void loginPage() {
+        request.setAttribute("randomInt",new Random().nextInt(4));
     }
 
-    @OK("jsp:login.jsp")
+    @OK("beetl:login")
     @GET
     @Path("/logout")
     public void logout() {
@@ -43,6 +45,7 @@ public class AccountAction extends BaseAction {
         } catch (Exception e) {
         }
         session = request.getSession(true);
+        request.setAttribute("randomInt", new Random().nextInt(4));
     }
 
 

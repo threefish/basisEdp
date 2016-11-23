@@ -83,7 +83,7 @@ public class MenuAction extends BaseAction {
         uMenu.setUpdateTime(new Timestamp(new Date().getTime()));
         try {
             dao.update(uMenu);
-            return Result.sucess(menu, "添加成功");
+            return Result.sucess(menu, "修改成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }

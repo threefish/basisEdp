@@ -19,7 +19,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
         height: 13px;
     }
 
-    .progress-bar-span{
+    .progress-bar-span {
         font-size: 12px;
         display: inline-block;
         width: 30px;
@@ -129,7 +129,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                         <thead>
                         <tr>
                             <th style="width: 70px;" class="textCenter">项目</th>
-                            <th style="width: 200px;" class="textCenter">当前值</th>
+                            <th style="min-width: 200px;" class="textCenter">当前值</th>
                             <th style="width: 100px;" class="textCenter">告警值</th>
                             <th class="textCenter" style="width: 150px;">告警方式</th>
                             <th class="textCenter" style="width: 100px;">通知人员</th>
@@ -141,13 +141,14 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">保存修改</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left updatealarm"
+                       style="display: none;">保存修改</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<script type="text/html" id="alarmTableTpl">
+<script type="text/plain" id="alarmTableTpl">
     {@for(var i = 0,l = data.length; i < l; i += 1){
     <tr code="arg{data[i].alarmType}">
         <td class="textCenter">arg{data[i].alarmType}</td>
@@ -165,14 +166,15 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             <input type="text" class="percentInput" value="arg{data[i].percent}">%</span>
         </td>
         <td class="textCenter">
-            <lable>邮件<input class='minimal' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,1))}></lable>
+            <lable>邮件<input class='minimal' name='listenerTypes' value='1' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,1))}></lable>
             &nbsp;
-            <lable>短信<input class='minimal' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,2))}></lable>
+            <lable>短信<input class='minimal' name='listenerTypes' value='2' type='checkbox' arg{(alarmTyperender(data[i].listenerTypes,2))}></lable>
             &nbsp;
         </td>
         <td class="textCenter">arg{data[i].listeners}</td>
     </tr>
     }@/for}
+
 </script>
 <script type="text/javascript">
     function alarmTyperender(listenerTypes, val) {
@@ -266,7 +268,6 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                     data: result.data.noUsages
                 }]
             };
-            console.log(result.data)
             line.setOption(option);
         }, 'json');
 
@@ -279,7 +280,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                 reSetTr($("[code='RAM']"), data['RAM']);
                 reSetTr($("[code='SWAP']"), data['SWAP']);
                 reSetTr($("[code='DISK']"), data['DISK']);
-                reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'],data['NoNetWork']);
+                reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'], data['NoNetWork']);
             }
         }, 'json')
     }
@@ -289,7 +290,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
         el.find(".progress-bar").css({width: persent});
         el.find(".progress-bar-span").html(persent);
     }
-    function reSetTrNetWork(el, ni,no) {
+    function reSetTrNetWork(el, ni, no) {
         el.find(".ni").html(ni);
         el.find(".no").html(no);
     }
@@ -308,6 +309,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                     onSuccess: function () {
                         setiCheckAll();
                         tableDashboardInit = true;
+                        $(".updatealarm").show();
                     }
                 });
             }, error: function (status) {
@@ -330,6 +332,35 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             line.resize();
         });
 
+        $(".updatealarm").on("click", function () {
+            $("[code]").each(function () {
+                var t = $(this);
+                var alarmType = t.attr("code");
+                var percent = t.find(".percentInput").val();
+                var listenerTypes = "";
+                t.find("[name='listenerTypes']:checked").each(function () {
+                    listenerTypes += $(this).val() + ",";
+                });
+                $.ajax({
+                    type: "post",
+                    url: "${base!}/monitor/apm/updateAlarmOption",
+                    dataType: "json",
+                    data: {alarmType: alarmType, percent: percent, listenerTypes: listenerTypes},
+                    success: function (data) {
+                        if(data.ok){
+                            layer.tips(data.data, "[code='"+ alarmType+"']", {
+                                tips: [2, '#3595CC'],
+                                tipsMore: true,
+                                time: 2000
+                            });
+                        }
+                    }, error: function (status) {
+                        layer.msg("网络连接出错", {icon: 5, time: 1000});
+                        console.log(status);
+                    }
+                });
+            });
+        });
         showAlarmOptions();
     });
 </script>
