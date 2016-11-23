@@ -26,10 +26,10 @@ public class UserAccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
-    @OK("beetl:sys.user.index")
+    @OK("beetl:sys.user.manager")
     @GET
-    @Path("/index")
-    public void index() {}
+    @Path("/manager")
+    public void manager() {}
 
 
     @OK("json:{locked:'userPass|salt',ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
