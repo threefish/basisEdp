@@ -182,7 +182,7 @@ public class ApmJob implements Job {
         try {
             log.debug("执行系统性能曲线监测与收集任务");
             if (alarmOptions.size() == 0) {
-                alarmOptions = dao.queryAll(AlarmOption.class);
+                alarmOptions = dao.query(AlarmOption.class);
                 //如果还是为0,就不监控了
                 if (alarmOptions.size() == 0) {
                     listenerStatus = false;

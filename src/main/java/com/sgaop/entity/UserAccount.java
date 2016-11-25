@@ -1,6 +1,7 @@
 package com.sgaop.entity;
 
 import com.sgaop.basis.annotation.Colum;
+import com.sgaop.basis.annotation.ID;
 import com.sgaop.basis.annotation.Pk;
 import com.sgaop.basis.annotation.Table;
 
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 @Table("UserAccount")
 public class UserAccount {
 
-    @Pk
+    @ID
     @Colum
     private int id;
 

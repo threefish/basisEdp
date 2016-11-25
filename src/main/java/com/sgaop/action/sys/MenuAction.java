@@ -2,6 +2,7 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.mvc.Mvcs;
@@ -43,8 +44,8 @@ public class MenuAction extends BaseAction {
     public DataTableResult grid() {
         DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(Mvcs.getReq());
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
-        List<Menu> menuList = dao.queryCndList(Menu.class, pager);
-        int count = dao.queryCndListCount(Menu.class);
+        List<Menu> menuList = dao.query(Menu.class, pager);
+        int count = dao.count(Menu.class);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);
@@ -58,7 +59,9 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/tree")
     public List<Menu> tree() {
-        List<Menu> menus = dao.queryAll(Menu.class, "order by short_no asc");
+        Condition condition=new Condition();
+        condition.asc("short_no");
+        List<Menu> menus = dao.query(Menu.class, condition);
         Menu menu = new Menu();
         menu.setId(0);
         menu.setPid(0);
@@ -74,7 +77,7 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/update")
     public Result update(@Parameter("data>>") Menu menu) {
-        Menu uMenu = dao.querySingePK(Menu.class, menu.getId());
+        Menu uMenu = dao.fetch(Menu.class, menu.getId());
         uMenu.setMenuName(menu.getMenuName());
         uMenu.setLocked(menu.isLocked());
         uMenu.setPid(menu.getPid());
@@ -113,11 +116,11 @@ public class MenuAction extends BaseAction {
     @Path("/del")
     public Result del(@Parameter("data>>") Menu menu) {
         try {
-            Menu uMenu = dao.querySingePK(Menu.class, menu.getId());
+            Menu uMenu = dao.fetch(Menu.class, menu.getId());
             if(uMenu.getMenuType()==0){
                 return Result.error("系统菜单不允许删除");
             }else{
-                boolean flag = dao.delect(menu);
+                boolean flag = dao.delete(menu);
                 return Result.sucess(menu, flag ? "删除成功" : "删除成功");
             }
         } catch (Exception e) {

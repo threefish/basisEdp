@@ -1,6 +1,7 @@
 package com.sgaop.entity.sys;
 
 import com.sgaop.basis.annotation.Colum;
+import com.sgaop.basis.annotation.ID;
 import com.sgaop.basis.annotation.Pk;
 import com.sgaop.basis.annotation.Table;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Table("sys_menu")
 public class Menu {
 
-    @Pk
+    @ID
     @Colum
     private int id;
 

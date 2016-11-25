@@ -41,7 +41,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 Set<String> roles = new HashSet<>();
                 Set<String> permissions = new HashSet<>();
                 String sql = "SELECT r.id,r.role_name from useraccountrole as ur,role as r  WHERE ur.role_id=r.id and ur.user_id=?";
-                List<Record> roleList = dao.queryRecordList(sql, user.getId());
+                List<Record> roleList = dao.query(sql, user.getId());
                 String roleids = "";
                 for (Record mapro : roleList) {
                     roles.add(mapro.getString("role_name"));
@@ -49,7 +49,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 }
                 sql = "SELECT r.id,r.role_name,p.id,p.permission_name from role as r,rolepermission as rp,permission as p ";
                 sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
-                List<Record> permissionList = dao.queryRecordList(sql, roleids);
+                List<Record> permissionList = dao.query(sql, roleids);
                 for (Record mappo : permissionList) {
                     permissions.add(mappo.getString("permission_name"));
                 }
@@ -73,8 +73,7 @@ public class ShiroRealm extends AuthorizingRealm {
         if (username == null || password == null) {
             throw new AccountException("参数非法");
         }
-        UserAccount userAccount = dao.querySinge(UserAccount.class, "userName=?", username);
-
+        UserAccount userAccount = dao.fetch(UserAccount.class, "userName", username);
         if (userAccount == null) {
             throw new AuthenticationException(String.format("账户[%s]不存在！", username));
         }

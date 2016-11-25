@@ -6,22 +6,16 @@ import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.DaosRegister;
 import com.sgaop.basis.dao.impl.DaoImpl;
-import com.sgaop.basis.ioc.IocBeanContext;
 import com.sgaop.basis.mvc.view.ViewsRegister;
-import com.sgaop.basis.quartz.BasisJobFactory;
 import com.sgaop.basis.quartz.QuartzRegister;
 import com.sgaop.basis.web.WebSetup;
 import com.sgaop.common.view.BeetlView;
 import com.sgaop.entity.sys.QuartzJob;
-import com.sgaop.task.TestJob;
 import org.apache.log4j.Logger;
 import org.quartz.*;
-import org.quartz.impl.JobDetailImpl;
-import org.quartz.impl.StdSchedulerFactory;
 
 import javax.servlet.ServletContextEvent;
 import javax.sql.DataSource;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
@@ -70,7 +64,9 @@ public class WebMainSetup implements WebSetup {
      */
     private void destroyQuartz() {
         try {
-            scheduler.shutdown();
+            if (scheduler != null) {
+                scheduler.shutdown();
+            }
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
@@ -83,13 +79,13 @@ public class WebMainSetup implements WebSetup {
      */
     private void initQuartz() {
         try {
-            List<QuartzJob> jobList = dao.queryAll(QuartzJob.class);
+            List<QuartzJob> jobList = dao.query(QuartzJob.class);
             for (QuartzJob qjob : jobList) {
                 if (qjob.getJobType() == 0) {
                     String jobKlass = qjob.getJobKlass();
                     String jobCron = qjob.getJobCorn();
                     log.debug(String.format("job define jobKlass=%s jobCron=%s", jobKlass, jobCron));
-                    Class<?> klass =  Class.forName(jobKlass);
+                    Class<?> klass = Class.forName(jobKlass);
                     JobDetail job = JobBuilder.newJob((Class<? extends Job>) klass).build();
                     CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobKlass)
                             .withSchedule(CronScheduleBuilder.cronSchedule(jobCron))

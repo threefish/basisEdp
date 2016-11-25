@@ -91,7 +91,7 @@ public class ApmAction extends BaseAction {
     @POST
     @Path("/alarmOptions")
     public Result AlarmOption() {
-        return Result.sucess(dao.queryAll(AlarmOption.class));
+        return Result.sucess(dao.query(AlarmOption.class));
     }
 
     @OK("json")
@@ -105,8 +105,8 @@ public class ApmAction extends BaseAction {
             option.setAlarmType(alarmType);
             option.setPercent(percent);
             option.setListenerTypes(listenerTypes);
-            if (dao.update(option, " alarmType=?  ", option.getAlarmType())) {
-                apmJob.setAlarmOptions(dao.queryAll(AlarmOption.class));
+            if (dao.update(option, "alarmType", option.getAlarmType())) {
+                apmJob.setAlarmOptions(dao.query(AlarmOption.class));
                 return Result.sucess("更新成功");
             } else {
                 return Result.error("更新失败");

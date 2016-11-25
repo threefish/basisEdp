@@ -38,8 +38,8 @@ public class UserAccountAction extends BaseAction {
     public DataTableResult grid() {
         DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(Mvcs.getReq());
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
-        List<UserAccount> userAccounts = dao.queryCndList(UserAccount.class, pager);
-        int count = dao.queryCndListCount(UserAccount.class);
+        List<UserAccount> userAccounts = dao.query(UserAccount.class, pager);
+        int count = dao.count(UserAccount.class);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);

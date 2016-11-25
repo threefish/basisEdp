@@ -2,6 +2,7 @@ package com.sgaop.action.account;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.cons.Cons;
@@ -31,7 +32,7 @@ public class AccountAction extends BaseAction {
     @GET
     @Path("/login")
     public void loginPage() {
-        request.setAttribute("randomInt",new Random().nextInt(4));
+        request.setAttribute("randomInt", new Random().nextInt(4));
     }
 
     @OK("beetl:login")
@@ -58,7 +59,10 @@ public class AccountAction extends BaseAction {
         Subject user = SecurityUtils.getSubject();
         try {
             user.login(token);
-            List<Menu> menus = dao.querySqlList(Menu.class, "select * from sys_menu where locked=? order by short_no asc", false);
+            Condition condition = new Condition();
+            condition.and("locked", "=", false);
+            condition.asc("short_no");
+            List<Menu> menus = dao.query(Menu.class, condition);
             if (menus == null) {
                 return Result.error("没有菜单权限");
             }
