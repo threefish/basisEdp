@@ -69,7 +69,7 @@ public class AccountAction extends BaseAction {
             menus = Tree.createTree(menus, 0);
             session.setAttribute(Cons.SESSION_MENUS, menus);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e);
             return Result.error(e.getMessage());
         }
         return Result.sucess("登录成功");

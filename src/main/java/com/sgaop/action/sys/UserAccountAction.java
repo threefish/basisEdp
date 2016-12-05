@@ -7,8 +7,7 @@ import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
-import com.sgaop.entity.UserAccount;
-import com.sgaop.entity.sys.Menu;
+import com.sgaop.entity.sys.UserAccount;
 
 import java.util.List;
 

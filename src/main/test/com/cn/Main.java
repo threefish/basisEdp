@@ -1,11 +1,10 @@
 package com.cn;
 
-import com.sgaop.entity.UserAccount;
+import com.sgaop.entity.sys.UserAccount;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * Created by IntelliJ IDEA.

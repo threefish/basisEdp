@@ -5,6 +5,7 @@ import com.sgaop.basis.annotation.ID;
 import com.sgaop.basis.annotation.Pk;
 import com.sgaop.basis.annotation.Table;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Table("sys_menu")
-public class Menu {
+public class Menu implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @ID
     @Colum
     private int id;

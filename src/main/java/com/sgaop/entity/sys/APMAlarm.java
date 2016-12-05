@@ -2,10 +2,13 @@ package com.sgaop.entity.sys;
 
 import com.sgaop.basis.annotation.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@Table("apm_alarm")
-public class APMAlarm {
+@Table("sys_apm_alarm")
+public class APMAlarm implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Colum("alarmType")
 	private String type;

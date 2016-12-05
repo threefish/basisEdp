@@ -3,6 +3,8 @@ package com.sgaop.entity.sys;
 import com.sgaop.basis.annotation.Colum;
 import com.sgaop.basis.annotation.Table;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: 306955302@qq.com
@@ -10,7 +12,9 @@ import com.sgaop.basis.annotation.Table;
  * To change this template use File | Settings | File Templates.
  */
 @Table("sys_alarm_option")
-public class AlarmOption {
+public class AlarmOption implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Colum("alarmType")
     private String alarmType;
