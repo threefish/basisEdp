@@ -233,7 +233,7 @@ public class ApmJob implements Job {
                             break;
                         case "NetWork":
                             if ((niUsage = ni.getRxbps() * 100 / ni.getStat().getSpeed()) > option.getPercent()) {
-                                alarm("NetWork", "流量警告", "NetWork", niUsage, PropertiesManager.getInt("network.alarm.percent"));
+                                alarm("NetWork", "流量警告", "NetWork", niUsage, option.getPercent());
                             }
                             if ((noUsage = ni.getTxbps() * 100 / ni.getStat().getSpeed()) > option.getPercent()) {
                                 alarm("NetWork", "流量警告", "NetWork", noUsage, option.getPercent());
@@ -262,7 +262,7 @@ public class ApmJob implements Job {
                         diskPercent += disk.getStat().getUsePercent();
                     }
                 }
-                usaGes.put("DISK", decimalFormat.format(diskPercent * 100));
+                usaGes.put("DISK", decimalFormat.format(diskPercent));
                 usaGes.put("NiNetWork", niUsage);
                 usaGes.put("NoNetWork", noUsage);
             }

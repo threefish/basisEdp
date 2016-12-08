@@ -70,6 +70,10 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/error/500.jsp</location>
