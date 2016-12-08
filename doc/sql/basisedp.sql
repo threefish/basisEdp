@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2016-12-05 18:10:34
+Date: 2016-12-08 17:36:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,7 +52,7 @@ CREATE TABLE `sys_apm_alarm` (
   `alarmUsage` double DEFAULT NULL,
   `point` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=915 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_apm_alarm
@@ -74,12 +74,12 @@ CREATE TABLE `sys_menu` (
   `ct` datetime DEFAULT NULL,
   `ut` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1', '0', '主机监控', '', '\0', '0', '1', '服务器监控', null, null);
+INSERT INTO `sys_menu` VALUES ('1', '0', '运维监控', '', '\0', '0', '1', '服务器监控', null, '2016-12-08 10:33:11');
 INSERT INTO `sys_menu` VALUES ('2', '1', '主机性能监控', '/monitor/apm/index', '\0', '0', '2', '主机性能监控', null, null);
 INSERT INTO `sys_menu` VALUES ('3', '1', '服务监控', '/druid', '\0', '0', '3', '服务器监控', null, null);
 INSERT INTO `sys_menu` VALUES ('5', '8', '用户管理', '/userAccount/manager', '\0', '0', '7', '消息类型', null, null);
@@ -87,7 +87,8 @@ INSERT INTO `sys_menu` VALUES ('6', '8', '角色管理', '/userRole/inde', '\0',
 INSERT INTO `sys_menu` VALUES ('8', '0', '系统控制', '', '\0', '0', '4', '新闻类型', null, null);
 INSERT INTO `sys_menu` VALUES ('12', '8', '菜单管理', '/sysMenu/index', '\0', '0', '5', '菜单管理', null, null);
 INSERT INTO `sys_menu` VALUES ('14', '8', '组织机构管理', '/org/index', '\0', '0', '6', '组织机构管理', null, '2016-11-20 14:55:49');
-INSERT INTO `sys_menu` VALUES ('15', '8', '后台定时任务管理', '/admin/jobs', '\0', '1', '0', '任务监控', '2016-11-25 17:14:47', null);
+INSERT INTO `sys_menu` VALUES ('15', '1', '定时任务管理', '/admin/jobs', '\0', '1', '0', '任务监控', '2016-11-25 17:14:47', '2016-12-08 10:34:52');
+INSERT INTO `sys_menu` VALUES ('16', '1', '数据库状态监控', '', '\0', '1', '0', '', '2016-12-08 10:35:13', null);
 
 -- ----------------------------
 -- Table structure for sys_permission
@@ -130,7 +131,7 @@ CREATE TABLE `sys_quartzjob` (
 -- Records of sys_quartzjob
 -- ----------------------------
 INSERT INTO `sys_quartzjob` VALUES ('1', '测试任务', 'com.sgaop.task.TestJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NONE', '1', '6da64b5bd2ee-705ea7b7-1054-420a-9538-56bc518bbaac');
-INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-f1dba367-3a7b-4970-aae9-9a238c8c734c');
+INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-c9145a30-8f07-4af7-929f-dfbf2779be62');
 
 -- ----------------------------
 -- Table structure for sys_role
