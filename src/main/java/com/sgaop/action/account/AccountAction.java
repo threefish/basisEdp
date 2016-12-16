@@ -28,14 +28,14 @@ public class AccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
-    @OK("beetl:login")
+    @OK("btl:login")
     @GET
     @Path("/login")
     public void loginPage() {
         request.setAttribute("randomInt", new Random().nextInt(4));
     }
 
-    @OK("beetl:login")
+    @OK("btl:login")
     @GET
     @Path("/logout")
     public void logout() {

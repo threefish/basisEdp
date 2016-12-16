@@ -25,7 +25,7 @@ public class UserAccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
-    @OK("beetl:sys.user.manager")
+    @OK("btl:sys.user.manager")
     @GET
     @Path("/manager")
     public void manager() {}

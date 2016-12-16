@@ -210,10 +210,4 @@ public class ShiroExt {
 		return SecurityUtils.getSubject();
 	}
 
-	public static void main(String[] args) {
-		GroupTemplate gt = new GroupTemplate();
-		gt.registerFunctionPackage("shiro", new ShiroExt());
-
-	}
-
 }

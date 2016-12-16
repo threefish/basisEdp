@@ -8,6 +8,7 @@ import com.sgaop.basis.dao.DaosRegister;
 import com.sgaop.basis.dao.impl.DaoImpl;
 import com.sgaop.basis.mvc.view.ViewsRegister;
 import com.sgaop.basis.quartz.QuartzRegister;
+import com.sgaop.basis.register.Registers;
 import com.sgaop.basis.web.WebSetup;
 import com.sgaop.common.view.BeetlView;
 import com.sgaop.entity.sys.QuartzJob;
@@ -38,11 +39,11 @@ public class WebMainSetup implements WebSetup {
     public void init(ServletContextEvent servletContextEvent) {
         DataSource dataSource = getDsA();
         //注册视图
-        ViewsRegister.registerView("beetl", BeetlView.class);
+        Registers.view("btl", BeetlView.class);
         //注册数据源
-        dao = DaosRegister.registerDao("dao", DaoImpl.class, dataSource);
-        //注册任务管理器
-        scheduler = QuartzRegister.registerScheduler("schedulder");
+        dao = Registers.dao("dao", DaoImpl.class, dataSource);
+        //注册quartz任务管理器
+        scheduler = Registers.Scheduler("schedulder");
         //初始化任务
         initQuartz();
     }

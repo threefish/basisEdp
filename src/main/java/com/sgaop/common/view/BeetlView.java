@@ -1,5 +1,6 @@
 package com.sgaop.common.view;
 
+import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.common.shiro.beetl.ShiroExt;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,20 +39,15 @@ public class BeetlView implements View {
 
     static {
         try {
-            HttpSession  session= Mvcs.getSession();
+            HttpSession session = Mvcs.getSession();
+            ClassLoader classLoader = session.getServletContext().getClassLoader();
             Configuration cfg = Configuration.defaultConfiguration();
             WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
             resourceLoader.setCharset("utf-8");
             resourceLoader.setRoot(session.getServletContext().getRealPath("/"));
-            File file= new File(session.getServletContext().getClassLoader().getResource("/view/beetl.properties").toURI().getPath());
-            cfg.add(file);
+            cfg.add(Paths.get(classLoader.getResource("/view/beetl.properties").toURI()).toFile());
             gt = new GroupTemplate(resourceLoader, cfg);
             gt.registerFunctionPackage("so", new ShiroExt());
-            HashMap sysinfo=new HashMap();
-            sysinfo.put("productName","BasisMVC企业平台");
-            sysinfo.put("productNameMiNi","Basis");
-            sysinfo.put("productUrl","www.sgaop.com");
-            gt.setSharedVars(sysinfo);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
@@ -58,14 +55,18 @@ public class BeetlView implements View {
         }
     }
 
+
     public void render(String path, HttpServletRequest request, HttpServletResponse response, Object data) {
         try {
-            Template tpl = gt.getTemplate(path.replace(".",File.separator)+_suffix);
+            Template tpl = gt.getTemplate(path.replace(".", File.separator) + _suffix);
             if (data instanceof Map) {
                 tpl.binding("data", data, false);
             } else {
                 tpl.binding("data", data, true);
             }
+            HashMap<String, String> langMap = LanguageManager.get(Mvcs.getI18nLang());
+            tpl.binding("i18n",langMap);
+
             Enumeration<String> attrs = request.getAttributeNames();
             while (attrs.hasMoreElements()) {
                 String attrName = attrs.nextElement();
@@ -75,7 +76,7 @@ public class BeetlView implements View {
             webVariable.setRequest(request);
             webVariable.setResponse(response);
             webVariable.setSession(request.getSession());
-            tpl.binding("session", new SessionWrapper(request,webVariable.getSession()));
+            tpl.binding("session", new SessionWrapper(request, webVariable.getSession()));
             tpl.binding("servlet", webVariable);
             tpl.binding("request", request);
             tpl.binding("ctxPath", request.getContextPath());
@@ -87,6 +88,11 @@ public class BeetlView implements View {
         } catch (IOException e) {
             handleClientError(e);
         }
+    }
+
+    @Override
+    public void afterProcess(HttpServletRequest request, HttpServletResponse response) {
+
     }
 
     /**

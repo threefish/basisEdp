@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class ApmAction extends BaseAction {
 
 
-    @OK("beetl:apm.index")
+    @OK("btl:apm.index")
     @GET
     @Path("/index")
     public void index() {

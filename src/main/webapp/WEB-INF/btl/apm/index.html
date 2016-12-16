@@ -27,12 +27,12 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
 </style>
 <section class="content-header">
     <h1>
-        主机状态监控
-        <small>控制面板</small>
+        ${i18n.apmMonitor}
+        <small>${i18n.controlPanel}</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-        <li class="active">仪表板</li>
+        <li><a href="${base!}"><i class="fa fa-dashboard"></i> ${i18n.home}</a></li>
+        <li class="active">${i18n.apmDashboard}</li>
     </ol>
 </section>
 <section class="content">
@@ -174,7 +174,6 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
         <td class="textCenter">arg{data[i].listeners}</td>
     </tr>
     }@/for}
-
 </script>
 <script type="text/javascript">
     function alarmTyperender(listenerTypes, val) {

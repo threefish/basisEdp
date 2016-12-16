@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>系统登录</title>
+    <title>${i18n.loginBoxTitle}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <%if(so.isAuthenticated()){%>
     <script type="text/javascript">
@@ -26,34 +26,49 @@
         .login-page {
             background: url("../static/img/login/bg${randomInt!}.jpg") center center #f6f6f6;
         }
+        .lang li a{
+            cursor: default;
+        }
     </style>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a><b>BasisMVC</b>企业平台</a>
+        <a><b>${i18n.productNameMiNi}</b>${i18n.productName}</a>
     </div>
     <div class="login-box-body">
-        <p class="login-box-msg">用户登录</p>
+        <div style="text-align: right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    language <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu lang" role="menu">
+                    <li data="en_US"><a>English</a></li>
+                    <li data="zh_CN"><a>中文简体</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="login-box-msg">${i18n.loginBoxTitle}</p>
+
         <form action="${base}/account/login" method="post" id="loginFrom">
             <div class="form-group has-feedback">
-                <input type="text" name="username" id="username" class="form-control" placeholder="账户">
+                <input type="text" name="username" id="username" class="form-control" placeholder="${i18n.loginUsernamePlac}">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" name="password" id="password" placeholder="密码">
+                <input type="password" class="form-control" name="password" id="password" placeholder="${i18n.loginPasswordPlac}">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">
                         <label>
-                            <input type="checkbox" name="rememberMe" id="rememberMe"> 记住我
+                            <input type="checkbox" name="rememberMe" id="rememberMe">${i18n.loginRememberMe}
                         </label>
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="btn btn-primary btn-block btn-flat">登录系统</button>
+                    <button type="button" class="btn loginBtn btn-primary btn-block btn-flat">${i18n.loginBtn}</button>
                 </div>
             </div>
         </form>
@@ -75,11 +90,18 @@
             }
         }
 
+        function setCookie(name, value) {
+            var Days = 30;
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString()+";path=${base!}";
+        }
+
         function doLogin() {
             var username = $("#username").val();
             var password = $("#password").val();
             if (username.trim() == "" || password.trim() == "") {
-                layer.msg("用户名和密码不能为空！", {icon: 7, time: 2000});
+                layer.msg("${i18n.loginConfirm}！", {icon: 7, time: 2000});
                 return false;
             }
             $.ajax({
@@ -89,7 +111,7 @@
                 dataType: "json",
                 success: function (data) {
                     if (data && data.ok) {
-                        layer.msg('登入成功', {icon: 1});
+                        layer.msg('${i18n.loginSucessMsg}', {icon: 1});
                         setTimeout(function () {
                             window.location.href = base + "/main/index";
                         }, 1000);
@@ -99,14 +121,20 @@
                     }
                 }, error: function (status) {
                     $('button').attr("disabled", false);
-                    layer.msg("网络连接出错", {icon: 5, time: 1000});
+                    layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
                     console.log(status);
                 }
             })
         }
 
-        $('button').click(function () {
+        $('.loginBtn').click(function () {
             doLogin();
+        });
+
+        $('.lang li').click(function () {
+            var lang= $(this).attr("data");
+            setCookie("lang",lang);
+            window.location.reload();
         });
     });
 </script>

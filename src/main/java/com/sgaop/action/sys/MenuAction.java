@@ -31,7 +31,7 @@ public class MenuAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
-    @OK("beetl:sys.menu.index")
+    @OK("btl:sys.menu.index")
     @GET
     @Path("/index")
     public void index() {
@@ -102,7 +102,7 @@ public class MenuAction extends BaseAction {
             int id = dao.insert(menu);
             menu.setId(id);
             if (id > 0) {
-                return Result.sucess(menu, "修改成功");
+                return Result.sucess(menu, "添加成功");
             } else {
                 return Result.error("未知原因");
             }

@@ -30,8 +30,15 @@ import java.util.Collection;
 public class ShiroAuthcAop extends InterceptorProxy {
 
     private static final Logger log = Logger.getRootLogger();
-
+    /**
+     * 用户没有登录跳转登录地址
+     */
     private static final String redirectUrl="/account/login";
+
+    /**
+     * 用户无权限操作跳转地址
+     */
+    private static final String noAuthorityUrl="/shiro/noAuthority";
 
 
     /**
@@ -96,7 +103,7 @@ public class ShiroAuthcAop extends InterceptorProxy {
     private void handleAuthenticated() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
-            throw new ShiroAutcException("当前用户尚未认证", redirectUrl);
+            throw new ShiroAutcException("当前用户尚未认证", noAuthorityUrl);
         }
     }
 
@@ -125,7 +132,7 @@ public class ShiroAuthcAop extends InterceptorProxy {
         Subject currentUser = SecurityUtils.getSubject();
         //必须匹配全部角色
         if (!currentUser.hasAllRoles(roles)) {
-            throw new ShiroAutcException("当前用户角色不符", redirectUrl);
+            throw new ShiroAutcException("当前用户角色不符", noAuthorityUrl);
         }
     }
 
@@ -134,7 +141,7 @@ public class ShiroAuthcAop extends InterceptorProxy {
         Subject currentUser = SecurityUtils.getSubject();
         //必须匹配全部权限
         if (!currentUser.isPermittedAll(permissionName)) {
-            throw new ShiroAutcException("当前用户权限不符", redirectUrl);
+            throw new ShiroAutcException("当前用户权限不符", noAuthorityUrl);
         }
     }
 

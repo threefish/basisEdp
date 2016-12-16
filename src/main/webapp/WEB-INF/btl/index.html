@@ -3,9 +3,12 @@ layout("/layouts/platform.html",{title:"后台管理主页"}){
 %>
 <section class="content-header">
     <h1>
-        主机状态监控
-        <small>控制面板</small>
+        ${i18n.apmMonitor}
+        <small>${i18n.controlPanel}</small>
     </h1>
+    <ol class="breadcrumb">
+        <li><a href="${base!}"><i class="fa fa-dashboard"></i> ${i18n.home}</a></li>
+    </ol>
 </section>
 <section class="content">
     <div class="row">

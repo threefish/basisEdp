@@ -26,16 +26,16 @@
     <script type="text/javascript" src="${base!}/static/js/app.min.js"></script>
     <script type="text/javascript" src="${base!}/static/plugins/sugarTpl/sugarTpl.js"></script>
     <script type="text/javascript" src="${base!}/static/js/form.js"></script>
-    <script>
+    <script type="text/javascript">
         var base = "${base!}";
     </script>
 </head>
-<body class="hold-transition skin-blue sidebar-mini"> <!--layout-boxed 添加该属性改为盒子布局-->
+<body class="hold-transition skin-blue sidebar-mini "> <!--layout-boxed 添加该属性改为盒子布局-->
 <div class="wrapper">
     <header class="main-header">
         <a href="${base!}/main/index" class="logo">
-            <span class="logo-mini">${productNameMiNi}</span>
-            <span class="logo-lg">${productName}</span>
+            <span class="logo-mini">${i18n.productNameMiNi}</span>
+            <span class="logo-lg">${i18n.productName}</span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -120,6 +120,16 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="label">language</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu lang">
+                            <li data="en_US"><a>English</a></li>
+                            <li data="zh_CN"><a>中文简体</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="${base!}/static/img/user2-160x160.jpg" class="user-image" alt="User Image">
@@ -149,11 +159,11 @@
                             <li class="user-footer">
                                 <div class="pull-left">
                                     <%if(so.hasPermission("main.index:logout")){%>
-                                    <a href="#" class="btn btn-default btn-flat">个人资料</a>
+                                    <a href="#" class="btn btn-default btn-flat">${i18n.userProfile}</a>
                                     <%}%>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="${base!}/account/logout" class="btn btn-default btn-flat">退出系統</a>
+                                    <a href="${base!}/account/logout" class="btn btn-default btn-flat">${i18n.userLoginOut}</a>
                                 </div>
                             </li>
                         </ul>
@@ -193,9 +203,9 @@
     </div>
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            ${productUrl}
+            ${i18n.productUrl}
         </div>
-        <strong>Copyright &copy; 2016 <a href="${productUrl}">Company</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a target="_blank" href="//${i18n.productUrl}">Company</a>.</strong> All rights reserved.
     </footer>
     <aside class="control-sidebar control-sidebar-dark">
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -207,7 +217,7 @@
                 <h3 class="control-sidebar-heading">Recent Activity</h3>
                 <ul class="control-sidebar-menu">
                     <li>
-                        <a href="javascript::;">
+                        <a href="javascript:void(0);">
                             <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
                             <div class="menu-info">
@@ -221,7 +231,7 @@
                 <h3 class="control-sidebar-heading">Tasks Progress</h3>
                 <ul class="control-sidebar-menu">
                     <li>
-                        <a href="javascript:;">
+                        <a href="javascript:void(0);">
                             <h4 class="control-sidebar-subheading">
                                 Custom Template Design
                                 <span class="pull-right-container">
@@ -258,6 +268,13 @@
 </div>
 </body>
 <script type="text/javascript">
+    $(function () {
+        $('.lang li').click(function () {
+            var lang = $(this).attr("data");
+            setCookie("lang", lang);
+            window.location.reload();
+        });
+    });
     function setiCheckAll() {
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
@@ -271,6 +288,12 @@
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
         });
+    }
+    function setCookie(name, value) {
+        var Days = 30;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=${base!}";
     }
 </script>
 </html>
