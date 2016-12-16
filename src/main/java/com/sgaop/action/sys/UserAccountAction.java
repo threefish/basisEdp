@@ -12,6 +12,8 @@ import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,6 +82,30 @@ public class UserAccountAction extends BaseAction {
         try {
             dao.update(account);
         }catch (Exception e){
+            return Result.error(e.getMessage());
+        }
+        return Result.sucess(LanguageManager.get("AjaxSuccessMsg"));
+    }
+
+    @OK("json:{ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
+    @POST
+    @Path("/add")
+    public Result add(@Parameter("userName") String UserName) {
+        UserAccount account = dao.fetch(UserAccount.class, "userName", UserName);
+        if (account != null) {
+            return Result.error(LanguageManager.get("userIsExist"));
+        }
+        String salt = UUID.randomUUID().toString().replaceAll("-", "");
+        Sha256Hash sha = new Sha256Hash(defaultPassword, salt);
+        try {
+            account = new UserAccount();
+            account.setUserName(UserName);
+            account.setLocked(false);
+            account.setUserPass(sha.toHex());
+            account.setSalt(salt);
+            account.setCreateTime(new Timestamp(new Date().getTime()));
+            dao.insert(account);
+        } catch (Exception e) {
             return Result.error(e.getMessage());
         }
         return Result.sucess(LanguageManager.get("AjaxSuccessMsg"));

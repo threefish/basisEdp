@@ -10,12 +10,15 @@ layout("/layouts/platform.html",{title:"用户管理"}){
 </style>
 <section class="content-header">
     <h1>
-        用户管理
-        <small>控制面板</small>
+        ${i18n.userManager}
+        <small>${i18n.controlPanel}</small>
     </h1>
 </section>
 <section class="content">
-    <div class="row dataTbleBox">
+    <div class="row dataTbleBox  box box-warning">
+        <div>
+            <button type="button" id="adduser" class="btn margin btn-danger">${i18n.userAdd}</button>
+        </div>
         <table id="menusTable" class="table table-bordered table-striped">
             <tbody>
             </tbody>
@@ -37,7 +40,7 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                 {"data": "userName", "title": "用户名"},
                 {
                     "data": "locked", "title": "状态", "render": function (data, type, row) {
-                    return row.locked ? "<span style='color: orangered'>已冻结</span>" : "启用中";
+                    return row.locked ? "<span style='color: orangered'>已禁用</span>" : "启用中";
                 }
                 },
                 {"data": "createTime", "title": "创建时间", width: "180px"},
@@ -62,6 +65,31 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             "autoWidth": true,
             language: {url: base + '/static/plugins/datatables/chinese.json'}
         });
+
+        $("#adduser").click(function () {
+            layer.prompt({title: '输入新建用户名', formType: 0}, function (userName, index) {
+                $.ajax({
+                    type: "post",
+                    url: "${base}/userAccount/add",
+                    data: {userName: userName},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data && data.ok) {
+                            layer.msg(data.data, {icon: 1});
+                            userlistTable.ajax.reload(null, false);
+                            layer.close(index);
+                        } else {
+                            layer.msg(data.msg, {icon: 7, time: 2000});
+                        }
+                    }, error: function (status) {
+                        layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
+                        console.log(status);
+                    }
+                });
+            });
+
+        });
+
     });
     function userHandle(t){
         var id=$(t).attr("did");
@@ -86,7 +114,8 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             layer.close(index);
         });
     }
-    
+
+
     function updateUserInfo(data) {
         $.ajax({
             type: "post",
@@ -101,7 +130,6 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                     layer.msg(data.msg, {icon: 7, time: 2000});
                 }
             }, error: function (status) {
-                $('button').attr("disabled", false);
                 layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
                 console.log(status);
             }
