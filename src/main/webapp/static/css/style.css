@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.dropdown>.lang li{
+    height: 25px;
+    padding: 5px;
+}
+
+.dropdown > .lang a {
+  cursor: default;
+}
+.ng-flag{
+    width: 38px;
+    height: 20px;
+    display: block;
+}
+.ng-flag.zh_CN{
+    background: url("../img/nationalflag.png") -18px -111px;
+}
+.ng-flag.en_US {
+    background: url("../img/nationalflag.png") -76px -241px;
+}

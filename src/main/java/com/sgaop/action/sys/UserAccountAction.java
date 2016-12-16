@@ -4,12 +4,16 @@ import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
+import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
+import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.UserAccount;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,10 +29,14 @@ public class UserAccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
+    @Inject("java:default.password")
+    private String defaultPassword;
+
     @OK("btl:sys.user.manager")
     @GET
     @Path("/manager")
-    public void manager() {}
+    public void manager() {
+    }
 
 
     @OK("json:{locked:'userPass|salt',ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
@@ -47,5 +55,34 @@ public class UserAccountAction extends BaseAction {
         return dataResult;
     }
 
+    @OK("json:{ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
+    @POST
+    @Path("/update")
+    public Result update(@Parameter("id") int id, @Parameter("action") String action) {
+        UserAccount account = dao.fetch(UserAccount.class, id);
+        if(account==null){
+            return Result.error(LanguageManager.get("userNoFoud"));
+        }
+        switch (action) {
+            case "enable":
+                account.setLocked(false);
+                break;
+            case "disable":
+                account.setLocked(true);
+                break;
+            case "repass":
+                String salt = UUID.randomUUID().toString().replaceAll("-", "");
+                Sha256Hash sha = new Sha256Hash(defaultPassword, salt);
+                account.setUserPass(sha.toHex());
+                account.setSalt(salt);
+                break;
+        }
+        try {
+            dao.update(account);
+        }catch (Exception e){
+            return Result.error(e.getMessage());
+        }
+        return Result.sucess(LanguageManager.get("AjaxSuccessMsg"));
+    }
 
 }

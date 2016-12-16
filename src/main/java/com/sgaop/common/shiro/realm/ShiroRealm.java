@@ -2,6 +2,7 @@ package com.sgaop.common.shiro.realm;
 
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.entity.Record;
+import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.ioc.Ioc;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.cons.Cons;
@@ -70,23 +71,19 @@ public class ShiroRealm extends AuthorizingRealm {
         String username = upToken.getUsername();
         String password = String.valueOf(upToken.getPassword());
         if (username == null || password == null) {
-            throw new AccountException("参数非法");
+            throw new AccountException(LanguageManager.get("illegal"));
         }
         UserAccount userAccount = dao.fetch(UserAccount.class, "userName", username);
         if (userAccount == null) {
-            throw new AuthenticationException(String.format("账户[%s]不存在！", username));
+            throw new AuthenticationException(String.format(LanguageManager.get("loginuserNoFoud"), username));
         }
         if (userAccount.isLocked()) {
-            throw new AuthenticationException("账户已被锁定无法登陆，请联系管理员解锁！");
+            throw new AuthenticationException(LanguageManager.get("loginUserAccountIsLocked"));
         }
         Sha256Hash sha = new Sha256Hash(password, userAccount.getSalt());
         if (!sha.toHex().equals(userAccount.getUserPass())) {
-            throw new AuthenticationException("用户名或密码错误");
+            throw new AuthenticationException(LanguageManager.get("loginPassError"));
         } else {
-            //登录成功保存session信息
-//            Subject subject = SecurityUtils.getSubject();
-//            Session session = subject.getSession(false);
-//            session.setAttribute(Cons.SESSION_USER, userAccount);
             Mvcs.getSession().setAttribute(Cons.SESSION_USER, userAccount);
         }
         upToken.setPassword(password.toCharArray());

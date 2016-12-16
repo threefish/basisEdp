@@ -64,8 +64,10 @@ public class BeetlView implements View {
             } else {
                 tpl.binding("data", data, true);
             }
-            HashMap<String, String> langMap = LanguageManager.get(Mvcs.getI18nLang());
+            HashMap<String, String> langMap = LanguageManager.getMap(Mvcs.getI18nLang());
             tpl.binding("i18n",langMap);
+
+            tpl.binding("lang",Mvcs.getI18nLang());
 
             Enumeration<String> attrs = request.getAttributeNames();
             while (attrs.hasMoreElements()) {

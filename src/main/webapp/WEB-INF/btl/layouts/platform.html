@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${base!}/static/plugins/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="${base!}/static/plugins/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="${base!}/static/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${base!}/static/css/style.css">
     <link rel="stylesheet" href="${base!}/static/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="${base!}/static/plugins/ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="${base!}/static/plugins/iCheck/all.css">
@@ -122,12 +123,11 @@
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="label">language</span>
-                            <span class="caret"></span>
+                            <span class="ng-flag ${lang}"></span>
                         </a>
                         <ul class="dropdown-menu lang">
-                            <li data="en_US"><a>English</a></li>
-                            <li data="zh_CN"><a>中文简体</a></li>
+                            <li data="en_US"><span class="pull-left ng-flag en_US"></span><a style="display: inline">English</a></li>
+                            <li data="zh_CN"><span class="pull-left ng-flag zh_CN"></span><a style="display: inline">中文简体</a></li>
                         </ul>
                     </li>
                     <li class="dropdown user user-menu">

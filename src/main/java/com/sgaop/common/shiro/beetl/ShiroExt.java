@@ -174,7 +174,7 @@ public class ShiroExt {
 		try {
 			BeanInfo bi = Introspector.getBeanInfo(principal.getClass());
 
-			// Loop through the properties to get the string value of the
+			// Loop through the properties to getMap the string value of the
 			// specified property
 			boolean foundProperty = false;
 			for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {

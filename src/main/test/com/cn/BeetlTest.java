@@ -49,7 +49,7 @@ public class BeetlTest {
         } while (dorun);
 
 
-//        HashMap tM = (HashMap) data.get(str);
+//        HashMap tM = (HashMap) data.getMap(str);
 //        if (tM == null) {
 //            tM = new HashMap();
 //            data.put(str, tM);

@@ -2,11 +2,11 @@
 layout("/layouts/platform.html",{title:"用户管理"}){
 %>
 <style type="text/css">
-   .dataTbleBox{
-       background: #ffffff;
-       margin: 15px 0px;
-       padding: 15px;
-   }
+    .dataTbleBox {
+        background: #ffffff;
+        margin: 15px 0px;
+        padding: 15px;
+    }
 </style>
 <section class="content-header">
     <h1>
@@ -35,13 +35,24 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             "columns": [
                 {"data": "id", "title": "序号", width: "30px"},
                 {"data": "userName", "title": "用户名"},
-                {"data": "locked", "title": "状态","render": function (data, type, row) {
-                    return row.locked?"<span style='color: orangered'>已冻结</span>":"启用中";
-                }},
-                {"data": "createTime", "title": "创建时间", width: "180px"} ,
-                {"title": "操作", width: "180px", "render": function (data, type, row) {
-                    return  "";
-                }}
+                {
+                    "data": "locked", "title": "状态", "render": function (data, type, row) {
+                    return row.locked ? "<span style='color: orangered'>已冻结</span>" : "启用中";
+                }
+                },
+                {"data": "createTime", "title": "创建时间", width: "180px"},
+                {
+                    "title": "操作", width: "180px", "render": function (data, type, row) {
+                    var html = "";
+                    if (row.locked) {
+                        html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';
+                    } else {
+                        html += '<button type="button" class="btn btn-xs btn-danger"  did="' + row.id + '" daction="disable"  onclick="userHandle(this)">禁用</button>&nbsp;&nbsp;&nbsp;';
+                    }
+                    html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="repass"  onclick="userHandle(this)">重置密码</button>';
+                    return html;
+                }
+                }
             ],
             "paging": true,
             "lengthChange": true,
@@ -52,5 +63,49 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             language: {url: base + '/static/plugins/datatables/chinese.json'}
         });
     });
+    function userHandle(t){
+        var id=$(t).attr("did");
+        var action=$(t).attr("daction");
+        var data={id:id,action: action};
+        var msg="";
+        switch(action){
+            case "enable":
+                msg="您确定启用该用户吗？";
+                break;
+            case "disable":
+                msg = "您确定冻结该用户吗？";
+                break;
+            case "repass":
+                msg = "您确定重置该用户密码吗？";
+                break;
+        }
+        layer.confirm(msg, {
+            btn: ['确定', '取消'] //按钮
+        }, function (index) {
+            updateUserInfo(data);
+            layer.close(index);
+        });
+    }
+    
+    function updateUserInfo(data) {
+        $.ajax({
+            type: "post",
+            url: "${base}/userAccount/update",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    layer.msg(data.data, {icon: 1});
+                    userlistTable.ajax.reload(null, false);
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                $('button').attr("disabled", false);
+                layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
 </script>
 <%}%>
