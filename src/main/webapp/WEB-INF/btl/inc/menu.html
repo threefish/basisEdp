@@ -3,15 +3,73 @@
     <%for(menu in session.sessionMenus){%>
     <li>
         <%if(menu.childs.~size>0){%>
-        <a href="#" ><i class="fa fa-link"></i><span>${menu.menuName}</span></a>
+        <a href="#"><i class="fa ${menu.menuIcon!}"></i><span>${menu.menuName}</span></a>
         <ul class="treeview-menu">
             <%for(m in menu.childs){%>
-                <li><a href="${base}${m.menuTarget}" ><i class="fa fa-circle-o"></i>${m.menuName}</a></li>
+            <li>
+                <%if(m.childs.~size>0){%>
+                <a href="${base}${m.menuTarget}"><i class="fa ${m.menuIcon!}"></i>${m.menuName}</a>
+                <ul class="treeview-menu">
+                    <%for(m2 in m.childs){%>
+                    <li>
+                        <%if(m2.childs.~size>0){%>
+                        <a href="${base}${m2.menuTarget}"><i class="fa ${m2.menuIcon!}"></i>${m2.menuName}</a>
+                        <div class="menubox">
+                            <%for(m3 in m2.childs){%>
+                            <a href="${base}${m3.menuTarget}"><i class='fa ${m3.menuIcon!"fa-link fa-none"}'></i>&nbsp;&nbsp;${m3.menuName}</a>
+                            <%}%>
+                        </div>
+                        <%}else{%>
+                        <a href="${base}${m2.menuTarget}"><i class="fa ${m2.menuIcon!}"></i>${m2.menuName}</a>
+                        <%}%>
+                    </li>
+                    <%}%>
+                </ul>
+                <%}else{%>
+                <a href="${base}${m.menuTarget}"><i class="fa ${m.menuIcon!}"></i>${m.menuName}</a>
+                <%}%>
+            </li>
             <%}%>
         </ul>
         <%}else{%>
-            <a href="${base}${menu.menuTarget}" ><i class="fa fa-link"></i> <span>${menu.menuName}</span></a></li>
-        <%}%>
+        <a href="${base}${menu.menuTarget}"><i class="fa ${menu.menuIcon!}"></i> <span>${menu.menuName}</span></a></li>
+    <%}%>
     </li>
     <%}%>
 </ul>
+<style>
+
+    .sidebar-menu li .active > .treeview-menu {
+        position: relative;
+    }
+
+    .sidebar-menu li .active > .treeview-menu li :hover {
+        background: #1e282c;
+    }
+
+    .sidebar-menu li > .treeview-menu li > .menubox {
+        display: none;
+    }
+
+    .sidebar-menu li .active > .treeview-menu li:hover > .menubox {
+        display: block;
+        position: absolute;
+        right: -150px;
+        top: 0px;
+        min-width: 150px;
+        min-height: 100px;
+        background: #2c3b41;
+        border: none;
+        border-radius: 3px;
+        padding: 5px;
+    }
+
+    .sidebar-menu li .active > .treeview-menu li:hover > .menubox a {
+        display: block;
+        padding: 8px;
+    }
+
+    .fa-none {
+       visibility: hidden;
+    }
+</style>

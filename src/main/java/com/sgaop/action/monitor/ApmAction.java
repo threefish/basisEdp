@@ -27,8 +27,8 @@ public class ApmAction extends BaseAction {
 
     @OK("btl:apm.index")
     @GET
-    @Path("/index")
-    public void index() {
+    @Path("/dashboard")
+    public void dashboard() {
     }
 
     @OK("json")

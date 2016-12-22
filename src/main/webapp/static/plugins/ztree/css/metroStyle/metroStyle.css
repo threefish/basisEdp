@@ -8,13 +8,13 @@ website:    http://code.google.com/p/jquerytree/
 
 -------------------------------------*/
 
-.ztree * {padding:0; margin:0; font-size:12px; font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif}
+.ztree * {padding:0; margin:0; font-size:14px;}
 .ztree {margin:0; padding:5px; color:#333}
 .ztree li{padding:0; margin:0; list-style:none; line-height:17px; text-align:left; white-space:nowrap; outline:0}
 .ztree li ul{ margin:0; padding:0 0 0 18px}
 .ztree li ul.line{ background:url(./img/line_conn.png) 0 0 repeat-y;}
 
-.ztree li a {padding-right:3px; margin:0; cursor:pointer; height:21px; color:#333; background-color: transparent; text-decoration:none; vertical-align:top; display: inline-block}
+.ztree li a {padding-right:3px; margin:0; cursor:pointer; height:25px; color:#333; background-color: transparent; text-decoration:none; vertical-align:top; display: inline-block}
 .ztree li a:hover {text-decoration:underline}
 .ztree li a.curSelectedNode {padding-top:0px; background-color:#e5e5e5; color:black; height:21px; opacity:0.8;}
 .ztree li a.curSelectedNode_Edit {padding-top:0px; background-color:#e5e5e5; color:black; height:21px; border:1px #666 solid; opacity:0.8;}
@@ -30,6 +30,7 @@ website:    http://code.google.com/p/jquerytree/
   background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
   background-image:url("./img/metro.png"); *background-image:url("./img/metro.gif")}
 
+.ztree li span.fa{background-image: none;height: 0px;width: 22px;text-align: center;font-size: 14px;}
 .ztree li span.button.chk {width:13px; height:13px; margin:0 2px; cursor: auto}
 .ztree li span.button.chk.checkbox_false_full {background-position: -5px -5px;}
 .ztree li span.button.chk.checkbox_false_full_focus {background-position: -5px -26px;}
@@ -52,7 +53,7 @@ website:    http://code.google.com/p/jquerytree/
 .ztree li span.button.chk.radio_true_part_focus {background-position: -68px -68px;}
 .ztree li span.button.chk.radio_true_disable {background-position: -68px -89px;}
 
-.ztree li span.button.switch {width:21px; height:21px}
+.ztree li span.button.switch {width:25px; height:25px}
 .ztree li span.button.root_open{background-position:-105px -63px}
 .ztree li span.button.root_close{background-position:-126px -63px}
 .ztree li span.button.roots_open{background-position: -105px 0;}

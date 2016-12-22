@@ -55,7 +55,7 @@ public class MenuAction extends BaseAction {
     }
 
 
-    @OK("json")
+    @OK("json:{ignoreNull:false,locked:'createTime|updateTime'}")
     @POST
     @Path("/tree")
     public List<Menu> tree() {
@@ -70,6 +70,7 @@ public class MenuAction extends BaseAction {
         menu.setDescription("");
         menu.setMenuTarget("");
         menus.add(menu);
+//        o.put("iconSkin", "phoneTreeIcon ");
         return menus;
     }
 
@@ -82,6 +83,7 @@ public class MenuAction extends BaseAction {
         uMenu.setLocked(menu.isLocked());
         uMenu.setPid(menu.getPid());
         uMenu.setMenuTarget(menu.getMenuTarget());
+        uMenu.setMenuIcon(menu.getMenuIcon());
         uMenu.setDescription(menu.getDescription());
         uMenu.setUpdateTime(new Timestamp(new Date().getTime()));
         try {

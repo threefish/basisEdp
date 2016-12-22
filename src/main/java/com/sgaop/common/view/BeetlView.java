@@ -3,6 +3,7 @@ package com.sgaop.common.view;
 import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
+import com.sgaop.common.beetl.function.DateFunction;
 import com.sgaop.common.shiro.beetl.ShiroExt;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
@@ -48,6 +49,7 @@ public class BeetlView implements View {
             cfg.add(Paths.get(classLoader.getResource("/view/beetl.properties").toURI()).toFile());
             gt = new GroupTemplate(resourceLoader, cfg);
             gt.registerFunctionPackage("so", new ShiroExt());
+            gt.registerFunction("dateTime", new DateFunction());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {

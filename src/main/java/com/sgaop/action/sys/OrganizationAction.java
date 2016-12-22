@@ -10,7 +10,7 @@ import com.sgaop.basis.dao.Dao;
  * To change this template use File | Settings | File Templates.
  */
 @IocBean
-@Action("/sysMenu")
+@Action("/sysOrg")
 public class OrganizationAction {
 
     @Inject("dao")

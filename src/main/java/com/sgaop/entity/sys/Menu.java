@@ -32,6 +32,19 @@ public class Menu implements Serializable {
     @Colum("menu_target")
     private String menuTarget;
 
+    @Colum("menu_icon")
+    private String menuIcon;
+
+    private String iconSkin;
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
+    }
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
     @Colum("menu_type")
     private int menuType;
 
@@ -134,6 +147,15 @@ public class Menu implements Serializable {
 
     public void setShortNo(int shortNo) {
         this.shortNo = shortNo;
+    }
+
+    public String getMenuIcon() {
+        return menuIcon;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
+        this.iconSkin = "fa " + menuIcon + " ";
     }
 
     public void setChilds(List<Menu> childs) {
