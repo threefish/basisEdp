@@ -6,13 +6,15 @@ import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.mvc.Mvcs;
+import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
-import com.sgaop.common.util.DateUtil;
 import com.sgaop.entity.sys.Menu;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/tree")
     public List<Menu> tree() {
-        Condition condition=new Condition();
+        Condition condition = new Condition();
         condition.asc("short_no");
         List<Menu> menus = dao.query(Menu.class, condition);
         Menu menu = new Menu();
@@ -96,6 +98,70 @@ public class MenuAction extends BaseAction {
 
     @OK("json")
     @POST
+    @Path("/move")
+    public Result move(@Parameter("id") int id, @Parameter("type") String type) {
+        if (!StringsTool.isNullorEmpty(type)) {
+            Menu uMenu = dao.fetch(Menu.class, id);
+            //取出同级菜单
+            Condition cnd = new Condition();
+            cnd.and("pid", "=", uMenu.getPid());
+            cnd.asc("short_no");
+            List<Menu> menuList = dao.query(Menu.class, cnd);
+            //重新整理顺序
+            List<Menu> oldMenuList = new ArrayList<>();
+            for (int i = 0; i < menuList.size(); i++) {
+                Menu menu = menuList.get(i);
+                menu.setShortNo(i);
+                oldMenuList.add(menu);
+            }
+            //上移
+            if ("up".equals(type)) {
+                //升级后的菜单
+                List<Menu> upMenuList=new ArrayList<>();
+                for (Menu menu : oldMenuList) {
+                    if (menu.getId() == id) {
+                        if (menu.getShortNo() == 0) {
+                            Result.error("已经是第一位了不能再上移了！");
+                        } else {
+                            menu.setShortNo(menu.getShortNo() - 1);
+                        }
+                    }
+                    upMenuList.add(menu);
+                }
+                Collections.sort(upMenuList, new Menu());
+                //重新整理顺序
+                List<Menu> newMenuList = new ArrayList<>();
+                for (int i = 0; i < upMenuList.size(); i++) {
+                    Menu menu = upMenuList.get(i);
+                    menu.setShortNo(i);
+                    newMenuList.add(menu);
+                }
+                dao.update(newMenuList);
+            } else {//下移
+                //升级后的菜单
+                List<Menu> upMenuList = new ArrayList<>();
+                for (Menu menu : oldMenuList) {
+                    if (menu.getId() == id) {
+                        menu.setShortNo(menu.getShortNo() + 1);
+                    }
+                    upMenuList.add(menu);
+                }
+                Collections.sort(upMenuList, new Menu());
+                //重新整理顺序
+                List<Menu> newMenuList = new ArrayList<>();
+                for (int i = 0; i < upMenuList.size(); i++) {
+                    Menu menu = upMenuList.get(i);
+                    menu.setShortNo(i);
+                    newMenuList.add(menu);
+                }
+                dao.update(newMenuList);
+            }
+        }
+        return Result.sucess("修改成功");
+    }
+
+    @OK("json")
+    @POST
     @Path("/add")
     public Result add(@Parameter("data>>") Menu menu) {
         try {
@@ -119,9 +185,9 @@ public class MenuAction extends BaseAction {
     public Result del(@Parameter("data>>") Menu menu) {
         try {
             Menu uMenu = dao.fetch(Menu.class, menu.getId());
-            if(uMenu.getMenuType()==0){
+            if (uMenu.getMenuType() == 0) {
                 return Result.error("系统菜单不允许删除");
-            }else{
+            } else {
                 boolean flag = dao.delete(menu);
                 return Result.sucess(menu, flag ? "删除成功" : "删除成功");
             }

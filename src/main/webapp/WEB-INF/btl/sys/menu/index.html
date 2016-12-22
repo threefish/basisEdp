@@ -31,6 +31,8 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <button class="btn btn-danger btn-sm " disabled id="add"><i class="fa fa-plus"></i>${i18n.add}</button>
             <button class="btn btn-info btn-sm " disabled id="update">${i18n.modify }</button>
             <button class="btn btn-warning btn-sm " disabled id="del">${i18n.del}</button>
+            <button class="btn btn-warning btn-sm " disabled id="MoveUp">${i18n.MoveUp}</button>
+            <button class="btn btn-warning btn-sm " disabled id="MoveDown">${i18n.MoveDown}</button>
         </div>
         <div class="leftBox">
             <div id="menusTree" class="ztree"></div>
@@ -134,9 +136,13 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         if (data.id != 0) {
             $("#update").removeAttr("disabled");
             $("#del").removeAttr("disabled");
+            $("#MoveUp").removeAttr("disabled");
+            $("#MoveDown").removeAttr("disabled");
         } else {
             $("#update").attr("disabled", "");
             $("#del").attr("disabled", "");
+            $("#MoveUp").attr("disabled", "");
+            $("#MoveDown").attr("disabled", "");
         }
         $("#add").removeAttr("disabled");
         var pnode = data.getParentNode();
@@ -246,6 +252,8 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         menuTree = $.fn.zTree.init($("#menusTree"), setting);
         $("#add").on("click", addFrom);
         $("#update").on("click", updateFrom);
+        $("#MoveUp").on("click", MoveUp);
+        $("#MoveDown").on("click", MoveDown);
         $("#del").on("click", function () {
             layer.confirm('确定删除？删除后将无法恢复！请谨慎操作！', {
                 btn: ['确定删除','我再想想']
@@ -254,6 +262,47 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             });
         });
     });
+
+    function MoveUp() {
+        var node = menuTree.getSelectedNodes()[0];
+        selectId=node.id;
+        $.ajax({
+            type: "post",
+            url: base+"/sysMenu/move",
+            data: {id: node.id,type:"up"},
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    menuTree.reAsyncChildNodes(null, "refresh");
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                layer.msg("网络连接出错", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
+    function MoveDown() {
+        var node = menuTree.getSelectedNodes()[0];
+        selectId = node.id;
+        $.ajax({
+            type: "post",
+            url: base + "/sysMenu/move",
+            data: {id: node.id, type: "down"},
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    menuTree.reAsyncChildNodes(null, "refresh");
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                layer.msg("网络连接出错", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
 
 
     function ckMenus() {
