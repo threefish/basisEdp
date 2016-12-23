@@ -2,6 +2,7 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.i18n.LanguageManager;
@@ -34,10 +35,14 @@ public class UserAccountAction extends BaseAction {
     @Inject("java:default.password")
     private String defaultPassword;
 
+    @Inject("java:default.admin")
+    private String defaultAdmin;
+
     @OK("btl:sys.user.manager")
     @GET
     @Path("/manager")
     public void manager() {
+        request.setAttribute("defaultAdmin", defaultAdmin);
     }
 
 
@@ -70,9 +75,15 @@ public class UserAccountAction extends BaseAction {
                 account.setLocked(false);
                 break;
             case "disable":
+                if (defaultAdmin.equals(account.getUserName())) {
+                    return Result.error(defaultAdmin + "是系统管理员账号，不能对其进行启用禁用操作");
+                }
                 account.setLocked(true);
                 break;
             case "repass":
+                if (defaultAdmin.equals(account.getUserName())) {
+                    return Result.error(defaultAdmin + "是系统管理员账号，不能重置其密码");
+                }
                 String salt = UUID.randomUUID().toString().replaceAll("-", "");
                 Sha256Hash sha = new Sha256Hash(defaultPassword, salt);
                 account.setUserPass(sha.toHex());

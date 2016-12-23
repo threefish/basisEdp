@@ -1,14 +1,23 @@
 <ul class="sidebar-menu">
     <li class="header">系统菜单</li>
+    <li><a href="${base!}"><i class="fa fa-home text-red"></i> <span>桌面首页</span></a></li>
     <%for(menu in session.sessionMenus){%>
     <li>
         <%if(menu.childs.~size>0){%>
-        <a href="#"><i class="fa ${menu.menuIcon!}"></i><span>${menu.menuName}</span></a>
+        <a href="#"><i class="fa ${menu.menuIcon!}"></i><span>${menu.menuName}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
         <ul class="treeview-menu">
             <%for(m in menu.childs){%>
             <li>
                 <%if(m.childs.~size>0){%>
-                <a href="${base}${m.menuTarget}"><i class="fa ${m.menuIcon!}"></i>${m.menuName}</a>
+                <a href="${base}${m.menuTarget}"><i class="fa ${m.menuIcon!}"></i>${m.menuName}
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
                 <ul class="treeview-menu">
                     <%for(m2 in m.childs){%>
                     <li>

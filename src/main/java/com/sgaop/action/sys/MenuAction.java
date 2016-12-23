@@ -117,11 +117,11 @@ public class MenuAction extends BaseAction {
             //上移
             if ("up".equals(type)) {
                 //升级后的菜单
-                List<Menu> upMenuList=new ArrayList<>();
+                List<Menu> upMenuList = new ArrayList<>();
                 for (Menu menu : oldMenuList) {
                     if (menu.getId() == id) {
                         if (menu.getShortNo() == 0) {
-                            Result.error("已经是第一位了不能再上移了！");
+                            return Result.error("已经是置顶了！");
                         } else {
                             menu.setShortNo(menu.getShortNo() - 1);
                         }
@@ -138,12 +138,18 @@ public class MenuAction extends BaseAction {
                 }
                 dao.update(newMenuList);
             } else {//下移
-                //升级后的菜单
+                //降级级后的菜单
                 List<Menu> upMenuList = new ArrayList<>();
+                int last=1;
                 for (Menu menu : oldMenuList) {
                     if (menu.getId() == id) {
-                        menu.setShortNo(menu.getShortNo() + 1);
+                        if(last==oldMenuList.size()) {
+                            return Result.error("已经是置底了！");
+                        }else{
+                            menu.setShortNo(menu.getShortNo() + 1);
+                        }
                     }
+                    last++;
                     upMenuList.add(menu);
                 }
                 Collections.sort(upMenuList, new Menu());

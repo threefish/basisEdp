@@ -47,12 +47,15 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                 {
                     "title": "操作", width: "180px", "render": function (data, type, row) {
                     var html = "";
-                    if (row.locked) {
-                        html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';
-                    } else {
-                        html += '<button type="button" class="btn btn-xs btn-danger"  did="' + row.id + '" daction="disable"  onclick="userHandle(this)">禁用</button>&nbsp;&nbsp;&nbsp;';
+                    console.log(row)
+                    if (row.userName != "${defaultAdmin!}") {
+                        if (row.locked) {
+                            html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';
+                        } else {
+                            html += '<button type="button" class="btn btn-xs btn-danger"  did="' + row.id + '" daction="disable"  onclick="userHandle(this)">禁用</button>&nbsp;&nbsp;&nbsp;';
+                        }
+                        html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="repass"  onclick="userHandle(this)">重置密码</button>';
                     }
-                    html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="repass"  onclick="userHandle(this)">重置密码</button>';
                     return html;
                 }
                 }
@@ -91,14 +94,14 @@ layout("/layouts/platform.html",{title:"用户管理"}){
         });
 
     });
-    function userHandle(t){
-        var id=$(t).attr("did");
-        var action=$(t).attr("daction");
-        var data={id:id,action: action};
-        var msg="";
-        switch(action){
+    function userHandle(t) {
+        var id = $(t).attr("did");
+        var action = $(t).attr("daction");
+        var data = {id: id, action: action};
+        var msg = "";
+        switch (action) {
             case "enable":
-                msg="您确定启用该用户吗？";
+                msg = "您确定启用该用户吗？";
                 break;
             case "disable":
                 msg = "您确定冻结该用户吗？";

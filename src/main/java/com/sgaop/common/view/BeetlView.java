@@ -67,9 +67,9 @@ public class BeetlView implements View {
                 tpl.binding("data", data, true);
             }
             HashMap<String, String> langMap = LanguageManager.getMap(Mvcs.getI18nLang());
-            tpl.binding("i18n",langMap);
+            tpl.binding("i18n", langMap);
 
-            tpl.binding("lang",Mvcs.getI18nLang());
+            tpl.binding("lang", Mvcs.getI18nLang());
 
             Enumeration<String> attrs = request.getAttributeNames();
             while (attrs.hasMoreElements()) {
@@ -96,7 +96,11 @@ public class BeetlView implements View {
 
     @Override
     public void afterProcess(HttpServletRequest request, HttpServletResponse response) {
-
+        //设置盒式布局
+        String layBoxed = Mvcs.getCookie("layBoxed");
+        if (layBoxed != null) {
+            request.setAttribute("layBoxed", "layout-boxed");
+        }
     }
 
     /**
