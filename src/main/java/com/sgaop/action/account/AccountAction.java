@@ -49,6 +49,14 @@ public class AccountAction extends BaseAction {
         request.setAttribute("randomInt", new Random().nextInt(4));
     }
 
+    /**
+     * 无权限提示页面
+     */
+    @OK("btl:unauthorized")
+    @GET
+    @Path("/unauthorized")
+    public void unauthorized() {}
+
 
     @OK("json")
     @POST

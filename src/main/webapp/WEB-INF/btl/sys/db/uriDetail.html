@@ -7,7 +7,7 @@ layout("/layouts/blank.html"){
     <tbody>
     <tr>
         <td class="td_lable lang">URI</td>
-        <td id="URI"></td>
+        <td ></td>
     </tr>
     <tr>
         <td class="td_lable lang">请求次数</td>
@@ -112,10 +112,13 @@ layout("/layouts/blank.html"){
         });
         $.post(base + '/druid/weburi-' + $('#uri').val() + '.json', {}, function (data) {
             layer.close(index);
+            console.log(data)
             if (data.ResultCode == 1) {
                 for (key in data.Content) {
                     $('#' + key).text(data.Content[key]);
                 }
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }

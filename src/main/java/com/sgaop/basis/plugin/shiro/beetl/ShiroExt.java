@@ -1,4 +1,4 @@
-package com.sgaop.common.shiro.beetl;
+package com.sgaop.basis.plugin.shiro.beetl;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.beetl.core.GroupTemplate;
 
 /*gt.registerFunctionPackage("so",new ShiroExt ());
 

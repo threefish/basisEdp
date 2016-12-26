@@ -1,14 +1,11 @@
-package com.sgaop.common.aop;
+package com.sgaop.basis.plugin.shiro.aop;
 
 import com.sgaop.basis.annotation.Action;
 import com.sgaop.basis.annotation.Aspect;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.aop.InterceptorProxy;
 import com.sgaop.basis.error.ShiroAutcException;
-import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AccountException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.*;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -21,24 +18,24 @@ import java.util.Collection;
 /**
  * Created by IntelliJ IDEA.
  * User: 306955302@qq.com
- * Date: 2016/10/9 0009
+ * Date: 2016/12/26 0026
  * To change this template use File | Settings | File Templates.
  * 结合shiro控制用户访问后台方法
  */
 @IocBean
 @Aspect(annotation = Action.class, No = 1)
-public class ShiroAuthcAop extends InterceptorProxy {
-
-    private static final Logger log = Logger.getRootLogger();
-    /**
-     * 用户没有登录跳转登录地址
-     */
-    private static final String redirectUrl="/account/login";
+@SuppressWarnings("all")
+public class BasisShiroInterceptorProxy extends InterceptorProxy {
 
     /**
-     * 用户无权限操作跳转地址
+     * 默认登录地址
      */
-    private static final String noAuthorityUrl="/shiro/noAuthority";
+    public static String DefaultLoginURL;
+
+    /**
+     * 默认权限不符页面
+     */
+    public static String unauthorizedUrl;
 
 
     /**
@@ -54,18 +51,21 @@ public class ShiroAuthcAop extends InterceptorProxy {
         Annotation clasAnn = getAnnotation(cls);
         Annotation methodAnn = getAnnotation(method);
         if (clasAnn != null) {
-            handleAuth(clasAnn);
+            matchAuth(clasAnn);
         }
         if (methodAnn != null) {
-            handleAuth(methodAnn);
+            matchAuth(methodAnn);
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * 取得类上的权限注解
+     *
+     * @param cls
+     * @return
+     */
     private Annotation getAnnotation(Class<?> cls) {
-        // 遍历所有的授权注解
         for (Class<? extends Annotation> annotationClass : annotationClassArray) {
-            // 然后判断目标方法上是否带有授权注解
             if (cls.isAnnotationPresent(annotationClass)) {
                 return cls.getAnnotation(annotationClass);
             }
@@ -73,11 +73,14 @@ public class ShiroAuthcAop extends InterceptorProxy {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * 取得方法上的权限注解
+     *
+     * @param method
+     * @return
+     */
     private Annotation getAnnotation(Method method) {
-        // 遍历所有的授权注解
         for (Class<? extends Annotation> annotationClass : annotationClassArray) {
-            // 然后判断目标方法上是否带有授权注解
             if (method.isAnnotationPresent(annotationClass)) {
                 return method.getAnnotation(annotationClass);
             }
@@ -85,63 +88,93 @@ public class ShiroAuthcAop extends InterceptorProxy {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    private void handleAuth(Annotation annotation) throws ShiroAutcException {
+    /**
+     * 权限验证
+     *
+     * @param annotation
+     * @throws ShiroAutcException
+     */
+    private void matchAuth(Annotation annotation) throws ShiroAutcException {
         if (annotation.annotationType().equals(RequiresAuthentication.class)) {
-            handleAuthenticated();
+            matchAuthenticated();
         } else if (annotation.annotationType().equals(RequiresUser.class)) {
-            handleUser();
+            matchUser();
         } else if (annotation.annotationType().equals(RequiresGuest.class)) {
-            handleGuest();
+            matchGuest();
         } else if (annotation.annotationType().equals(RequiresRoles.class)) {
-            handleHasRoles((RequiresRoles) annotation);
+            matchHasRoles((RequiresRoles) annotation);
         } else if (annotation.annotationType().equals(RequiresPermissions.class)) {
-            handleHasPermissions((RequiresPermissions) annotation);
+            matchHasPermissions((RequiresPermissions) annotation);
         }
     }
 
-    private void handleAuthenticated() throws ShiroAutcException {
+    /**
+     * 是否已认证用户
+     *
+     * @throws ShiroAutcException
+     */
+    private void matchAuthenticated() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
-            throw new ShiroAutcException("当前用户尚未认证", noAuthorityUrl);
+            throw new ShiroAutcException("当前用户尚未认证", unauthorizedUrl);
         }
     }
 
-    private void handleUser() throws ShiroAutcException {
+    /**
+     * 是否是已登录用户
+     *
+     * @throws ShiroAutcException
+     */
+    private void matchUser() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         PrincipalCollection principals = currentUser.getPrincipals();
         if (principals == null || principals.isEmpty()) {
-            throw new ShiroAutcException("当前用户尚未登录", redirectUrl);
+            throw new ShiroAutcException("当前用户尚未登录", DefaultLoginURL);
         }
     }
 
-    private void handleGuest() throws ShiroAutcException {
+    /**
+     * 是否访客
+     *
+     * @throws ShiroAutcException
+     */
+    private void matchGuest() throws ShiroAutcException {
         Subject currentUser = SecurityUtils.getSubject();
         PrincipalCollection principals = currentUser.getPrincipals();
         if (principals != null && !principals.isEmpty()) {
-            throw new ShiroAutcException("当前用户不是访客", redirectUrl);
+            throw new ShiroAutcException("当前用户不是访客", unauthorizedUrl);
         }
     }
 
-    private void handleHasRoles(RequiresRoles hasRoles) throws ShiroAutcException {
+    /**
+     * 必须匹配全部角色
+     *
+     * @param hasRoles
+     * @throws ShiroAutcException
+     */
+    private void matchHasRoles(RequiresRoles hasRoles) throws ShiroAutcException {
         String[] roleName = hasRoles.value();
         Collection<String> roles = new ArrayList<String>();
         for (String role : roleName) {
             roles.add(role);
         }
         Subject currentUser = SecurityUtils.getSubject();
-        //必须匹配全部角色
         if (!currentUser.hasAllRoles(roles)) {
-            throw new ShiroAutcException("当前用户角色不符", noAuthorityUrl);
+            throw new ShiroAutcException("当前用户角色不符", unauthorizedUrl);
         }
     }
 
-    private void handleHasPermissions(RequiresPermissions hasPermissions) throws ShiroAutcException {
+    /**
+     * 必须匹配全部权限
+     *
+     * @param hasPermissions
+     * @throws ShiroAutcException
+     */
+    private void matchHasPermissions(RequiresPermissions hasPermissions) throws ShiroAutcException {
         String[] permissionName = hasPermissions.value();
         Subject currentUser = SecurityUtils.getSubject();
-        //必须匹配全部权限
         if (!currentUser.isPermittedAll(permissionName)) {
-            throw new ShiroAutcException("当前用户权限不符", noAuthorityUrl);
+            throw new ShiroAutcException("当前用户权限不符", unauthorizedUrl);
         }
     }
 

@@ -32,6 +32,8 @@ layout("/layouts/blank.html"){
                                     + '</td><td>' + item.holdability + '</td><td>' + item.transactionIsolation + '</td><td>' + item.autoCommit + '</td><td>' + item.readoOnly
                                     + '</td></tr>');
                         });
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }

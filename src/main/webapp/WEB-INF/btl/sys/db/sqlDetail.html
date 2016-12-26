@@ -67,6 +67,8 @@ layout("/layouts/blank.html"){
                 $('#LastErrorClass').text(data.Content.LastErrorClass);
                 $('#LastErrorTime').text(data.Content.LastErrorTime);
                 $('#LastErrorStackTrace').text(data.Content.LastErrorStackTrace);
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }

@@ -1,4 +1,4 @@
-package com.sgaop.action.monitor;
+package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class ApmAction extends BaseAction {
 
 
-    @OK("btl:apm.index")
+    @OK("btl:sys.apm.index")
     @GET
     @Path("/dashboard")
     public void dashboard() {

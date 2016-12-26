@@ -573,6 +573,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                     }
                 }
                 $('#dataSourceId').val(con.Identity);
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }
@@ -597,6 +599,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                                     + item.ExecuteAndResultHoldTimeHistogram + '</td><td>' + item.FetchRowCountHistogram + '</td><td>' + item.EffectedRowCountHistogram
                                     + '</td></tr>');
                         });
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }
@@ -629,6 +633,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                 $('#app_JdbcExecuteTimeMillis').text(con.JdbcExecuteTimeMillis);
                 $('#app_JdbcFetchRowCount').text(con.JdbcFetchRowCount);
                 $('#app_JdbcUpdateCount').text(con.JdbcUpdateCount);
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }
@@ -652,6 +658,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                                     + item.JdbcCommitCount + '</td><td>' + item.JdbcRollbackCount + '</td><td>' + item.JdbcFetchRowCount + '</td><td>' + item.JdbcUpdateCount
                                     + '</td><td>[' + item.Histogram + ']</td></tr>');
                         });
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }
@@ -675,6 +683,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                                     + '</td><td>' + item.JdbcExecuteCount + '</td><td>' + item.JdbcExecuteTimeMillis + '</td><td>' + item.JdbcCommitCount + '</td><td>'
                                     + item.JdbcRollbackCount + '</td><td>' + item.JdbcFetchRowCount + '</td><td>' + item.JdbcUpdateCount + '</td></tr>');
                         });
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }
@@ -699,6 +709,8 @@ layout("/layouts/platform.html",{title:"数据库监控"}){
                     $('#JavaClassPath').append(item + "<br>");
                 });
                 $('#StartTime').text(data.Content.StartTime);
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
             } else {
                 core.showMsg("调用druid api失败!")
             }

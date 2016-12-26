@@ -102,7 +102,10 @@ layout("/layouts/blank.html"){
                 for (key in data.Content) {
                     $('#' + key).text(data.Content[key]);
                 }
-            } else {
+            } else if (data.msg) {
+                core.showMsg(data.msg, data.ok);
+            }
+            else {
                 core.showMsg("调用druid api失败!")
             }
         }, 'json');

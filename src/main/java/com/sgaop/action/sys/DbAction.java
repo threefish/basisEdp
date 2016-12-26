@@ -1,4 +1,4 @@
-package com.sgaop.action.monitor;
+package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;

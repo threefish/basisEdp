@@ -22,7 +22,11 @@
                     <%for(m2 in m.childs){%>
                     <li>
                         <%if(m2.childs.~size>0){%>
-                        <a href="${base}${m2.menuTarget}"><i class="fa ${m2.menuIcon!}"></i>${m2.menuName}</a>
+                        <a href="${base}${m2.menuTarget}"><i class="fa ${m2.menuIcon!}"></i>${m2.menuName}
+                            <span class="pull-right-container">
+                              <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
                         <div class="menubox">
                             <%for(m3 in m2.childs){%>
                             <a href="${base}${m3.menuTarget}"><i class='fa ${m3.menuIcon!"fa-link fa-none"}'></i>&nbsp;&nbsp;${m3.menuName}</a>
@@ -41,7 +45,11 @@
             <%}%>
         </ul>
         <%}else{%>
-        <a href="${base}${menu.menuTarget}"><i class="fa ${menu.menuIcon!}"></i> <span>${menu.menuName}</span></a></li>
+        <a href="${base}${menu.menuTarget}"><i class="fa ${menu.menuIcon!}"></i> <span>${menu.menuName}</span>
+            <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+        </a></li>
     <%}%>
     </li>
     <%}%>

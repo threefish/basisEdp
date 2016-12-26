@@ -1,0 +1,27 @@
+<%
+layout("/layouts/platform.html",{title:"权限不符"}){
+%>
+<section class="content">
+    <div class="row">
+        权限不符
+    </div>
+    <button onclick="showx()">测试ajax无权提示</button>
+</section>
+<script>
+    function showx() {
+        $.ajax({
+            type: "post",
+            url: "${base}/druid",
+            data: $("#loginFrom").serialize(),
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+            }, error: function (status) {
+                $('button').attr("disabled", false);
+                layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        })
+    }
+</script>
+<%}%>

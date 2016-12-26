@@ -1,4 +1,4 @@
-package com.sgaop.common.shiro.realm;
+package com.sgaop.basis.plugin.shiro.realm;
 
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.entity.Record;
@@ -41,14 +41,14 @@ public class ShiroRealm extends AuthorizingRealm {
             if (user != null) {
                 Set<String> roles = new HashSet<>();
                 Set<String> permissions = new HashSet<>();
-                String sql = "SELECT r.id,r.role_name from sys_useraccountrole as ur,sys_role as r  WHERE ur.role_id=r.id and ur.user_id=?";
+                String sql = "SELECT r.id,r.role_name,r.role_code from sys_useraccountrole as ur,sys_role as r  WHERE ur.role_id=r.id and ur.user_id=?";
                 List<Record> roleList = dao.query(sql, user.getId());
                 String roleids = "";
                 for (Record mapro : roleList) {
-                    roles.add(mapro.getString("role_name"));
+                    roles.add(mapro.getString("role_code"));
                     roleids += mapro.getInt("id") + ",";
                 }
-                sql = "SELECT r.id,r.role_name,p.id,p.permission_name from sys_role as r,sys_rolepermission as rp,sys_permission as p ";
+                sql = "SELECT r.id,r.role_name,r.role_code,p.id,p.permission_name from sys_role as r,sys_rolepermission as rp,sys_permission as p ";
                 sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
                 List<Record> permissionList = dao.query(sql, roleids);
                 for (Record mappo : permissionList) {

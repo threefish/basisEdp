@@ -1,10 +1,10 @@
-package com.sgaop.common.view;
+package com.sgaop.basis.plugin.beetl;
 
 import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.common.beetl.function.DateFunction;
-import com.sgaop.common.shiro.beetl.ShiroExt;
+import com.sgaop.basis.plugin.shiro.beetl.ShiroExt;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
