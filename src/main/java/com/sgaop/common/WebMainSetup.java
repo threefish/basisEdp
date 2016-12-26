@@ -40,7 +40,7 @@ public class WebMainSetup implements WebSetup {
         //注册数据源
         dao = Registers.dao("dao", DaoImpl.class, dataSource);
         //注册quartz任务管理器
-        scheduler = Registers.Scheduler("schedulder");
+        scheduler = Registers.Scheduler("scheduler");
         //初始化任务
         initQuartz();
     }

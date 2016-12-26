@@ -44,14 +44,14 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/grid")
     public DataTableResult grid() {
-        DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(Mvcs.getReq());
+        DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(request);
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
         List<Menu> menuList = dao.query(Menu.class, pager);
         int count = dao.count(Menu.class);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);
-        dataResult.setDraw(Integer.valueOf(Mvcs.getReq().getParameter("draw")));
+        dataResult.setDraw(Integer.valueOf(request.getParameter("draw")));
         dataResult.setData(menuList);
         return dataResult;
     }
@@ -72,7 +72,6 @@ public class MenuAction extends BaseAction {
         menu.setDescription("");
         menu.setMenuTarget("");
         menus.add(menu);
-//        o.put("iconSkin", "phoneTreeIcon ");
         return menus;
     }
 
@@ -80,6 +79,9 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/update")
     public Result update(@Parameter("data>>") Menu menu) {
+        if (menu.getPid() != 0 && menu.getId() == menu.getPid()) {
+            return Result.error("不能选择自己作为自己的上级菜单");
+        }
         Menu uMenu = dao.fetch(Menu.class, menu.getId());
         uMenu.setMenuName(menu.getMenuName());
         uMenu.setLocked(menu.isLocked());

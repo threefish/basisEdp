@@ -3,7 +3,7 @@ layout("/layouts/platform.html",{title:"后台管理主页"}){
 %>
 <section class="content-header">
     <h1>
-        ${i18n.apmMonitor}
+        ${i18n.home}
         <small>${i18n.controlPanel}</small>
     </h1>
     <ol class="breadcrumb">
@@ -12,62 +12,52 @@ layout("/layouts/platform.html",{title:"后台管理主页"}){
 </section>
 <section class="content">
     <div class="row">
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-aqua">
-                <div class="inner">
-                    <h3>150</h3>
-                    <p>新订单</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
-            </div>
+        <div class="col-sm-6">
+            <h1>ReadMe</h1>
+            <hr>
+            <h1>功能</h1>
+            <h2>精确到按钮的权限管理</h2>
+            <ul>
+                <li>集成 Apache Shiro 安全权限框架,可精确到按钮的权限控制</li>
+            </ul>
+            <h2>基于AOP的日志系统</h2>
+            <ul>
+                <li>AOP支持类切面、方法切片（一切由你控制）</li>
+                <li>用户登录日志</li>
+                <li>核心业务操作日志</li>
+            </ul>
+            <h2>应用性能监测(APM)</h2>
+            <ul>
+                <li>基于sigar的应用性能监控</li>
+                <li>应用性能监控提供单机控制台和json数据流(便于集中化监控)</li>
+                <li>集成druid sql性能监控</li>
+                <li>核心业务运行性能监控</li>
+            </ul>
+            <h2>核心技术框架封装</h2>
+            <ul>
+                <li>让你只需要关注业务，将框架底层统统交给BasisMvc吧</li>
+                <li>高灵活度的分页组件</li>
+            </ul>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-                <div class="inner">
-                    <h3>53<sup style="font-size: 20px">%</sup></h3>
-                    <p>跳出率</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
-            </div>
+        <div class="col-sm-6">
+            <h1>待完成</h1>
+            <hr>
+            <ul >
+                <li>增加微信接入示例</li>
+                <li>验证码添加</li>
+                <li>druid 密码加密</li>
+                <li>集成 Lucene 全文检索搜索引擎</li>
+                <li>集成 Email 服务</li>
+            </ul>
+            <h1>运行项目</h1>
+            <hr>
+            <ul >
+                <li>clone 源码 <code>git clone https://github.com/threefish/basisEdp.git</code></li>
+                <li>导入maven项目 <code>mvn eclipse:eclipse</code></li>
+                <li>创建数据库并执行sql脚本 <code>doc/sql/basisedp.sql</code></li>
+                <li>修改数据源 ,修改 db.properties 中的数据源配置</li>
+            </ul>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-                <div class="inner">
-                    <h3>44</h3>
-                    <p>用户注册数</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-                <a href="#" class="small-box-footer">查看详情 <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-                <div class="inner">
-                    <h3>65</h3>
-                    <p>独立访客</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="#" class="small-box-footer">查看详情<i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-        <!-- ./col -->
     </div>
 </section>
 <%}%>

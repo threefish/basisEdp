@@ -50,14 +50,14 @@ public class UserAccountAction extends BaseAction {
     @POST
     @Path("/grid")
     public DataTableResult grid() {
-        DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(Mvcs.getReq());
+        DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(request);
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
         List<UserAccount> userAccounts = dao.query(UserAccount.class, pager);
         int count = dao.count(UserAccount.class);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);
-        dataResult.setDraw(Integer.valueOf(Mvcs.getReq().getParameter("draw")));
+        dataResult.setDraw(Integer.valueOf(request.getParameter("draw")));
         dataResult.setData(userAccounts);
         return dataResult;
     }

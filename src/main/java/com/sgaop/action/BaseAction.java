@@ -1,5 +1,7 @@
 package com.sgaop.action;
 
+import com.sgaop.common.cons.Cons;
+import com.sgaop.entity.sys.UserAccount;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -24,5 +26,9 @@ public class BaseAction {
     protected HttpSession session;
 
     protected ServletContext servletContext;
+
+    protected UserAccount getUserAccount() {
+        return (UserAccount) session.getAttribute(Cons.SESSION_USER);
+    }
 
 }

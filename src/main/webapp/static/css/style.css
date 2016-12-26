@@ -18,3 +18,6 @@
 .ng-flag.en_US {
     background: url("../img/nationalflag.png") -76px -241px;
 }
+.row{
+    background-color: #ffffff;
+}

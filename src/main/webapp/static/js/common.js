@@ -8,9 +8,17 @@ var core = {
         } else {
             layer.msg(msg, {icon: 1});
         }
-    }, tips: function (dom, msg) {
+    },
+    msg: function (msg) {
+        layer.msg(msg, {icon: 1});
+    },
+    error: function (msg) {
+        layer.msg(msg, {icon: 7, time: 2000});
+    },
+    tips: function (dom, msg) {
         layer.tips(msg, dom);
-    }, openUrl: function (url, title, width, height, closeBtn) {
+    },
+    openUrl: function (url, title, width, height, closeBtn) {
         layer.open({
             type: 2,
             shadeClose: false,
@@ -30,7 +38,8 @@ var core = {
             }
             layer.close(index);
         });
-    }, showIcon: function (domid) {
+    },
+    showIcon: function (domid) {
         if (domid) {
             layer.open({
                 type: 2,
@@ -43,7 +52,8 @@ var core = {
         } else {
             core.showMsg("参数不正确");
         }
-    }, closeFrameWindow: function () {
+    },
+    closeFrameWindow: function () {
         parent.layer.close(parent.layer.getFrameIndex(window.name));
     },
     /*
