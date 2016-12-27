@@ -1,5 +1,5 @@
 <%
-layout("/layouts/platform.html",{title:"系统菜单管理"}){
+layout("/layouts/platform.html",{title:"组织架构管理"}){
 %>
 <style type="text/css">
     .box {
@@ -21,7 +21,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 </style>
 <section class="content-header">
     <h1>
-        菜单管理
+        部门管理
         <small>控制面板</small>
     </h1>
 </section>
@@ -48,40 +48,39 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <input type="text" class="form-control input-sm"  name="data.id" value="arg{data.id}">
             <input type="text" class="form-control input-sm" id="menuPid" name="data.pid" value="arg{data.pid}">
             <input type="text" class="form-control input-sm" name="data.shortNo" value="arg{data.shortNo}">
-            <input type="text" class="form-control input-sm" name="data.menuType" value="arg{data.menuType}">
         </div>
-        <div class="form-grou" id="menuPName" style="display:arg{(data.menuPName==""?"none":"initial")};">
-            <label>上级菜单</label>
+        <div class="form-grou" id="menuPName" style="display:arg{(data.PName==""?"none":"initial")};">
+            <label>上级部门</label>
             <div class="input-group" style="width: 100%;">
-                <input type="text" class="form-control input-sm" id="menuPidDesc" readonly value="arg{data.menuPName}" disabled>
+                <input type="text" class="form-control input-sm" id="menuPidDesc" readonly value="arg{data.PName}" disabled>
                 <div class="input-group-addon" onclick="ckMenus()" id="ckMenus" style="display: none">
                     <i class="fa fa-edit"></i>
                 </div>
             </div>
         </div>
         <div class="form-grou">
-            <label>菜单名称</label>
-            <input type="text" class="form-control input-sm" name="data.menuName" value="arg{data.menuName}"
-                   placeholder="菜单名称" disabled>
+            <label>部门名称</label>
+            <input type="text" class="form-control input-sm" name="data.name" value="arg{data.name}"
+                   placeholder="部门名称" disabled>
+        </div>
+         <div class="form-grou">
+            <label>部门短名称</label>
+            <input type="text" class="form-control input-sm" name="data.shortName" value="arg{(data.shortName?data.shortName:"")}"
+                   placeholder="部门短名称" disabled>
         </div>
         <div class="form-grou">
-            <label>菜单图标</label>
+            <label>部门图标</label>
             <div class="input-group" style="width: 100%;">
-                <input type="text" class="form-control input-sm" id='dataMenuIcon' name="data.menuIcon" value="arg{(data.menuIcon?data.menuIcon:"")}"
-                   placeholder="菜单图标" disabled>
+                <input type="text" class="form-control input-sm" id='dataMenuIcon' name="data.deptIcon" value="arg{(data.deptIcon?data.deptIcon:"")}"
+                   placeholder="部门图标" disabled>
                 <div class="input-group-addon" onclick="core.showIcon('dataMenuIcon')" id="iconMenu" style="display: none">
                 <i class="fa fa-edit"></i>
                  </div>
             </div>
         </div>
-        <div class="form-grou">
-            <label>菜单地址</label>
-            <input type="text" class="form-control input-sm" name="data.menuTarget" value="arg{data.menuTarget}"
-                   placeholder="菜单地址" disabled>
-        </div>
         <div style="padding-top:  10px">
             <label>
-                <input type="checkbox" class="flat-red" name="data.locked" value="arg{(data.locked?1:0)}" arg{(data.locked?'checked':'')} disabled />
+                <input type="checkbox" class="flat-red" name="data.locked" value="1" arg{(data.locked?'checked':'')} disabled />
                 冻结
             </label>
         </div>
@@ -101,7 +100,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         async: {
             enable: true,
             type: "post",
-            url: base + "/sysMenu/tree"
+            url: base + "/sysDept/tree"
         },
         data: {
             simpleData: {
@@ -111,7 +110,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
                 rootPId: 0
             },
             key: {
-                name: "menuName"
+                name: "name"
             }
         }, view: {
             showIcon: true
@@ -147,9 +146,9 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         $("#add").removeAttr("disabled");
         var pnode = data.getParentNode();
         data.action = "update";
-        data.menuPName = "";
+        data.PName = "";
         if (pnode) {
-            data.menuPName = pnode.menuName;
+            data.PName = pnode.name;
         }
         new jsTpl({
             temlplateSrc: 'menuFormTpl',
@@ -171,18 +170,17 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         var data = new Object();
         data.action = "add";
         data.id = 0;
-        data.menuName = "";
-        data.menuTarget = "";
-        data.menuPName = "";
+        data.name= "";
+        data.shortName = "";
+        data.PName = "";
         data.description = "";
-        data.menuIcon = "";
+        data.deptIcon = "";
         data.shortNo = 0;
-        data.menuType = 1;
 
         var node = menuTree.getSelectedNodes();
         if (node.length > 0) {
             data.pid = node[0].id;
-            data.menuPName = node[0].menuName;
+            data.PName = node[0].name;
         } else {
             data.pid = 0;
         }
@@ -214,8 +212,8 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 
     function submitFrom(type) {
         var menuForm = $("#menuForm");
-        var update = base + "/sysMenu/update";
-        var addurl = base + "/sysMenu/add";
+        var update = base + "/sysDept/update";
+        var addurl = base + "/sysDept/add";
         var url = ""
         if (menuForm.attr("action") == "add") {
             url = addurl;
@@ -223,7 +221,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             url = update;
         }
         if (type == "del") {
-            url = base + "/sysMenu/del";
+            url = base + "/sysDept/del";
         }
         $.ajax({
             type: "post",
@@ -235,7 +233,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
                     selectId = data.data.id;
                     menuTree.reAsyncChildNodes(null, "refresh");
                     layer.msg(data.msg, {icon: 1});
-                    if(data.msg=="删除成功"){
+                    if (data.msg == "删除成功") {
                         $("#menuBox").html("");
                     }
                 } else {
@@ -256,8 +254,8 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         $("#MoveDown").on("click", MoveDown);
         $("#del").on("click", function () {
             layer.confirm('确定删除？删除后将无法恢复！请谨慎操作！', {
-                btn: ['确定删除','我再想想']
-            }, function(){
+                btn: ['确定删除', '我再想想']
+            }, function () {
                 submitFrom("del");
             });
         });
@@ -265,11 +263,11 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 
     function MoveUp() {
         var node = menuTree.getSelectedNodes()[0];
-        selectId=node.id;
+        selectId = node.id;
         $.ajax({
             type: "post",
-            url: base+"/sysMenu/move",
-            data: {id: node.id,type:"up"},
+            url: base + "/sysDept/move",
+            data: {id: node.id, type: "up"},
             dataType: "json",
             success: function (data) {
                 if (data && data.ok) {
@@ -288,7 +286,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         selectId = node.id;
         $.ajax({
             type: "post",
-            url: base + "/sysMenu/move",
+            url: base + "/sysDept/move",
             data: {id: node.id, type: "down"},
             dataType: "json",
             success: function (data) {
@@ -308,10 +306,10 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
     function ckMenus() {
         core.showMenusTree({
             title: "修改上级菜单",
-            url: "/sysMenu/tree",
+            url: "/sysDept/tree",
             isCheckbox: false,
             target: ['menuPid', 'menuPidDesc'],
-            data: {id: "id", pid: "pid", name: "menuName"},
+            data: {id: "id", pid: "pid", name: "name"},
             onSelect: function (data) {
                 console.log(data)
             },
