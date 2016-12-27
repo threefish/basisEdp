@@ -1,5 +1,5 @@
 <%
-layout("/layouts/platform.html",{title:"用户管理"}){
+layout("/layouts/platform.html",{title:"角色管理"}){
 %>
 <style type="text/css">
     .dataTbleBox {
@@ -10,14 +10,14 @@ layout("/layouts/platform.html",{title:"用户管理"}){
 </style>
 <section class="content-header">
     <h1>
-        ${i18n.userManager}
+        ${i18n.roleManager}
         <small>${i18n.controlPanel}</small>
     </h1>
 </section>
 <section class="content">
     <div class="row dataTbleBox  box box-warning">
         <div>
-            <button type="button" id="adduser" class="btn margin btn-danger">${i18n.userAdd}</button>
+            <button type="button" id="adduser" class="btn margin btn-danger">${i18n.add}</button>
         </div>
         <table id="menusTable" class="table table-bordered table-striped">
             <tbody>

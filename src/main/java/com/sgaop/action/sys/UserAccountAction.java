@@ -2,11 +2,9 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
-import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.i18n.LanguageManager;
-import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
@@ -25,7 +23,7 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 @IocBean
-@Action("/userAccount")
+@Action("/sysAccount")
 public class UserAccountAction extends BaseAction {
 
 
@@ -67,7 +65,7 @@ public class UserAccountAction extends BaseAction {
     @Path("/update")
     public Result update(@Parameter("id") int id, @Parameter("action") String action) {
         UserAccount account = dao.fetch(UserAccount.class, id);
-        if(account==null){
+        if (account == null) {
             return Result.error(LanguageManager.get("userNoFoud"));
         }
         switch (action) {
@@ -92,7 +90,7 @@ public class UserAccountAction extends BaseAction {
         }
         try {
             dao.update(account);
-        }catch (Exception e){
+        } catch (Exception e) {
             return Result.error(e.getMessage());
         }
         return Result.sucess(LanguageManager.get("AjaxSuccessMsg"));

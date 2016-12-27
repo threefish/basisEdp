@@ -2,7 +2,6 @@ package com.sgaop.entity.sys;
 
 import com.sgaop.basis.annotation.Colum;
 import com.sgaop.basis.annotation.ID;
-import com.sgaop.basis.annotation.Pk;
 import com.sgaop.basis.annotation.Table;
 
 import java.sql.Timestamp;
@@ -10,7 +9,7 @@ import java.sql.Timestamp;
 /**
  * Created by 30695 on 2016/9/24 0024.
  */
-@Table("sys_UserAccount")
+@Table("sys_useraccount")
 public class UserAccount {
 
     @ID

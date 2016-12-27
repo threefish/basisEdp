@@ -41,6 +41,9 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 
         </div>
     </div>
+    <div>
+        123
+    </div>
 </section>
 <script type="text/plain" id="menuFormTpl">
     <form action="arg{data.action}" method="post" id="menuForm">
@@ -78,6 +81,18 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <label>菜单地址</label>
             <input type="text" class="form-control input-sm" name="data.menuTarget" value="arg{data.menuTarget}"
                    placeholder="菜单地址" disabled>
+        </div>
+        <div class="form-grou">
+            <label>权限类型</label>
+            <select class="form-control input-sm" name="data.menuType" disabled>
+                   <option value="0">菜单</option>
+                   <option value="1">数据</option>
+            </select>
+        </div>
+         <div class="form-grou">
+            <label>权限标识</label>
+            <input type="text" class="form-control input-sm" name="data.permission" value="arg{(data.permission?data.permission:'')}"
+                   placeholder="权限标识" disabled>
         </div>
         <div style="padding-top:  10px">
             <label>
@@ -159,6 +174,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             onSuccess: function () {
                 setiCheckAll();
                 $("#ok").on("click", submitFrom);
+                $("select[name='data.menuType']").val(data.menuType);
             }
         });
     }

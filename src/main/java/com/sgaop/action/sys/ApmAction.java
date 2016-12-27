@@ -101,7 +101,7 @@ public class ApmAction extends BaseAction {
                                      @Parameter("percent") double percent,
                                      @Parameter("listenerTypes") String listenerTypes) {
         try {
-            AlarmOption option=new AlarmOption();
+            AlarmOption option = new AlarmOption();
             option.setAlarmType(alarmType);
             option.setPercent(percent);
             option.setListenerTypes(listenerTypes);

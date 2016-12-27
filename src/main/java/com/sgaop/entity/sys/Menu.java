@@ -2,7 +2,6 @@ package com.sgaop.entity.sys;
 
 import com.sgaop.basis.annotation.Colum;
 import com.sgaop.basis.annotation.ID;
-import com.sgaop.basis.annotation.Pk;
 import com.sgaop.basis.annotation.Table;
 
 import java.io.Serializable;
@@ -33,6 +32,10 @@ public class Menu implements Serializable, Comparator<Menu> {
     @Colum("menu_target")
     private String menuTarget;
 
+    //权限标识
+    @Colum("permission")
+    private String permission;
+
     @Colum("menu_icon")
     private String menuIcon;
 
@@ -46,11 +49,15 @@ public class Menu implements Serializable, Comparator<Menu> {
         return iconSkin;
     }
 
+    //权限类型 1 菜单  2数据
     @Colum("menu_type")
     private int menuType;
 
     @Colum("locked")
     private boolean locked;
+
+    @Colum("can_delect")
+    private boolean canDelect;
 
     @Colum("description")
     private String description;
@@ -65,6 +72,14 @@ public class Menu implements Serializable, Comparator<Menu> {
     private Timestamp updateTime;
 
     private List<Menu> childs;
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
 
     public int getId() {
         return id;
@@ -108,6 +123,14 @@ public class Menu implements Serializable, Comparator<Menu> {
 
     public int getMenuType() {
         return menuType;
+    }
+
+    public boolean isCanDelect() {
+        return canDelect;
+    }
+
+    public void setCanDelect(boolean canDelect) {
+        this.canDelect = canDelect;
     }
 
     public void setMenuType(int menuType) {
@@ -208,7 +231,7 @@ public class Menu implements Serializable, Comparator<Menu> {
     public int compare(Menu m0, Menu m1) {
         if (m0.getShortNo() > m1.getShortNo()) {
             return 0;
-        }else if (m0.getShortNo() == m1.getShortNo()) {
+        } else if (m0.getShortNo() == m1.getShortNo()) {
             return -1;
         } else {
             return -1;

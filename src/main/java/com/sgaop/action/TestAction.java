@@ -1,8 +1,6 @@
 package com.sgaop.action;
 
 import com.sgaop.basis.annotation.*;
-import com.sgaop.task.ApmJob;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 @IocBean
 @Action("/test")
 //@RequiresAuthentication
-public class TestAction extends BaseAction{
+public class TestAction extends BaseAction {
 
     @OK("btl:test")
     @GET

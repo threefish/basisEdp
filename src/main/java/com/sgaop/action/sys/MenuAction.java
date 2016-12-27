@@ -5,7 +5,6 @@ import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
-import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
@@ -88,6 +87,8 @@ public class MenuAction extends BaseAction {
         uMenu.setPid(menu.getPid());
         uMenu.setMenuTarget(menu.getMenuTarget());
         uMenu.setMenuIcon(menu.getMenuIcon());
+        uMenu.setMenuType(menu.getMenuType());
+        uMenu.setPermission(menu.getPermission());
         uMenu.setDescription(menu.getDescription());
         uMenu.setUpdateTime(new Timestamp(new Date().getTime()));
         try {
@@ -142,12 +143,12 @@ public class MenuAction extends BaseAction {
             } else {//下移
                 //降级级后的菜单
                 List<Menu> upMenuList = new ArrayList<>();
-                int last=1;
+                int last = 1;
                 for (Menu menu : oldMenuList) {
                     if (menu.getId() == id) {
-                        if(last==oldMenuList.size()) {
+                        if (last == oldMenuList.size()) {
                             return Result.error("已经是置底了！");
-                        }else{
+                        } else {
                             menu.setShortNo(menu.getShortNo() + 1);
                         }
                     }
@@ -174,7 +175,6 @@ public class MenuAction extends BaseAction {
     public Result add(@Parameter("data>>") Menu menu) {
         try {
             menu.setCreateTime(new Timestamp(new Date().getTime()));
-            menu.setMenuType(1);
             int id = dao.insert(menu);
             menu.setId(id);
             if (id > 0) {
@@ -193,7 +193,7 @@ public class MenuAction extends BaseAction {
     public Result del(@Parameter("data>>") Menu menu) {
         try {
             Menu uMenu = dao.fetch(Menu.class, menu.getId());
-            if (uMenu.getMenuType() == 0) {
+            if (uMenu.isCanDelect()){
                 return Result.error("系统菜单不允许删除");
             } else {
                 boolean flag = dao.delete(menu);

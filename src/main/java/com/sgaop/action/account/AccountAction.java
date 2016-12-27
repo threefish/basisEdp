@@ -32,7 +32,7 @@ public class AccountAction extends BaseAction {
     @GET
     @Path("/login")
     public void loginPage() {
-        request.setAttribute("randomInt", new Random().nextInt(4));
+        request.setAttribute("randomInt", new Random().nextInt(3));
     }
 
     @OK("btl:login")
@@ -55,7 +55,8 @@ public class AccountAction extends BaseAction {
     @OK("btl:unauthorized")
     @GET
     @Path("/unauthorized")
-    public void unauthorized() {}
+    public void unauthorized() {
+    }
 
 
     @OK("json")
@@ -69,6 +70,7 @@ public class AccountAction extends BaseAction {
             user.login(token);
             Condition condition = new Condition();
             condition.and("locked", "=", false);
+            condition.and("menu_type", "=", 0);
             condition.asc("short_no");
             List<Menu> menus = dao.query(Menu.class, condition);
             if (menus == null) {

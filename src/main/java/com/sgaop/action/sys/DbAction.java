@@ -13,7 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 @IocBean
 @Action("/monitor/db")
 @RequiresAuthentication
-public class DbAction extends BaseAction{
+public class DbAction extends BaseAction {
 
     @OK("btl:sys.db.index")
     @GET

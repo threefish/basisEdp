@@ -2,7 +2,6 @@ package com.sgaop.action.setting;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
-import com.sgaop.basis.mvc.Mvcs;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 /**
@@ -14,12 +13,12 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 @IocBean
 @Action("/setting/icon")
 @RequiresAuthentication
-public class IconAction extends BaseAction{
+public class IconAction extends BaseAction {
 
     @OK("btl:inc.icon")
     @GET
     @Path("/index")
-    public void index(@Parameter("domid")String domid) {
+    public void index(@Parameter("domid") String domid) {
         request.setAttribute("domid", domid);
     }
 }

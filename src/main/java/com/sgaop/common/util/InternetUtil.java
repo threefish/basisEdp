@@ -27,7 +27,6 @@ public class InternetUtil {
     }
 
     /**
-     *
      * @param ip   ip地址
      * @param port 端口
      * @return 当返回值是true时，t是可用的，false则不可用

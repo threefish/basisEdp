@@ -2,10 +2,8 @@ package com.sgaop.common.aop;
 
 import com.sgaop.basis.annotation.Action;
 import com.sgaop.basis.annotation.Aspect;
-import com.sgaop.basis.annotation.Inject;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.aop.InterceptorProxy;
-import com.sgaop.basis.dao.Dao;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;

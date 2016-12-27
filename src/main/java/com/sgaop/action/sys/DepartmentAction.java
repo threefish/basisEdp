@@ -62,9 +62,9 @@ public class DepartmentAction extends BaseAction {
         if (StringsTool.isNullorEmpty(dept.getName())) {
             return Result.error("部门名称不能为空！");
         }
-        Condition condition=new Condition();
-        condition.and("name","=", dept.getName());
-        condition.and("id","!=", dept.getId());
+        Condition condition = new Condition();
+        condition.and("name", "=", dept.getName());
+        condition.and("id", "!=", dept.getId());
         Department department = dao.fetch(Department.class, condition);
         if (department != null) {
             return Result.error("部门名称已经存在，不能重复！");

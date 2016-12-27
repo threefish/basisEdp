@@ -6,7 +6,6 @@ import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
-import com.sgaop.entity.sys.Department;
 import com.sgaop.entity.sys.Organization;
 
 import java.sql.Timestamp;

@@ -2,7 +2,6 @@ package com.sgaop.task;
 
 import com.sgaop.basis.annotation.Inject;
 import com.sgaop.basis.annotation.IocBean;
-import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.common.gather.CPUGather;
 import com.sgaop.common.gather.DISKGather;

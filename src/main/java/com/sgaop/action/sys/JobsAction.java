@@ -8,7 +8,6 @@ import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.QuartzJob;
-import com.sgaop.entity.sys.UserAccount;
 import org.quartz.*;
 
 import java.util.List;

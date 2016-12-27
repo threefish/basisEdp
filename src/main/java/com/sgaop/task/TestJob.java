@@ -3,10 +3,9 @@ package com.sgaop.task;
 import com.sgaop.basis.annotation.Inject;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.dao.Dao;
-import com.sgaop.basis.util.DateUtil;
-import org.quartz.*;
-
-import java.util.Date;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  * Created by IntelliJ IDEA.

@@ -12,11 +12,12 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 @IocBean
 @Action("/main")
 @RequiresAuthentication
-public class MainAction extends BaseAction{
+public class MainAction extends BaseAction {
 
     @OK("btl:index")
     @GET
     @Path("/index")
     @RequiresAuthentication
-    public void index(){}
+    public void index() {
+    }
 }
