@@ -59,6 +59,14 @@
                 <input type="password" class="form-control" name="password" id="password" placeholder="${i18n.loginPasswordPlac}">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
+            <%if(isCaptcha){%>
+            <div class="form-group input-group">
+                <input type="text" class="form-control" name="captcha" id="captcha"
+                       placeholder="${i18n.loginCaptchaPlac}" style="width: 60%;">
+                <img class="input-group-addon" id="yzm" src="${base!}/account/captcha?_=${dateTime()}"
+                     style="height: 34px;width: 40%;padding: 0px;">
+            </div>
+            <%}%>
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">
@@ -77,12 +85,16 @@
 <script>
     $(function () {
         var base = "${base}";
+
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
 
+        $("#yzm").click(function () {
+            $(this).attr("src", "${base!}/account/captcha?_=" + new Date().getTime());
+        })
         document.onkeydown = function (e) {
             var ev = document.all ? window.event : e;
             if (ev.keyCode == 13) {
@@ -118,6 +130,7 @@
                     } else {
                         $('button').attr("disabled", false);
                         layer.msg(data.msg, {icon: 7, time: 2000});
+                        $("#yzm").attr("src", "${base!}/account/captcha?_=" + new Date().getTime());
                     }
                 }, error: function (status) {
                     $('button').attr("disabled", false);

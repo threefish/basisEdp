@@ -15,4 +15,6 @@ public class Cons {
 
     public static final String SESSION_MENUS = "sessionMenus";
 
+    public static final String CAPTCHA_ATTR = "CAPTCHA_ATTR";
+
 }

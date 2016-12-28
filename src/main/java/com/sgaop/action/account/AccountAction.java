@@ -1,9 +1,14 @@
 package com.sgaop.action.account;
 
+import cn.apiclub.captcha.Captcha;
+import cn.apiclub.captcha.backgrounds.GradiatedBackgroundProducer;
+import cn.apiclub.captcha.gimpy.FishEyeGimpyRenderer;
+import cn.apiclub.captcha.noise.CurvedLineNoiseProducer;
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
+import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.common.util.Tree;
@@ -12,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
 
@@ -28,11 +34,33 @@ public class AccountAction extends BaseAction {
     @Inject("dao")
     protected Dao dao;
 
+    @Inject("java:isCaptcha")
+    private boolean isCaptcha;
+
     @OK("btl:login")
     @GET
     @Path("/login")
     public void loginPage() {
         request.setAttribute("randomInt", new Random().nextInt(3));
+        request.setAttribute("isCaptcha", isCaptcha);
+    }
+
+    @OK("raw")
+    @GET
+    @Path("/captcha")
+    public BufferedImage captcha() {
+        int w = 130;
+        int h = 60;
+        Captcha captcha = new Captcha.Builder(w, h)
+                .addText()
+//                .addBackground(new GradiatedBackgroundProducer())
+                .addNoise(new CurvedLineNoiseProducer())
+                .addBorder()
+                .gimp(new FishEyeGimpyRenderer()).addBorder()
+                .build();
+        String text = captcha.getAnswer();
+        session.setAttribute(Cons.CAPTCHA_ATTR, text);
+        return captcha.getImage();
     }
 
     @OK("btl:login")
@@ -46,7 +74,8 @@ public class AccountAction extends BaseAction {
         } catch (Exception e) {
         }
         session = request.getSession(true);
-        request.setAttribute("randomInt", new Random().nextInt(4));
+        request.setAttribute("randomInt", new Random().nextInt(3));
+        request.setAttribute("isCaptcha", isCaptcha);
     }
 
     /**
@@ -62,11 +91,21 @@ public class AccountAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/login")
-    public Result doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("rememberMe") boolean isRememberMe) {
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        token.setRememberMe(isRememberMe);
-        Subject user = SecurityUtils.getSubject();
+    public Result doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("captcha") String captcha, @Parameter("rememberMe") boolean isRememberMe) {
+        if (isCaptcha) {
+            String _captcha = (String) session.getAttribute(Cons.CAPTCHA_ATTR);
+            if (StringsTool.isNullorEmpty(captcha) || StringsTool.isNullorEmpty(_captcha)) {
+                return Result.error("验证码不能为空！");
+            }
+            if (!_captcha.equalsIgnoreCase(captcha)) {
+                session.removeAttribute(Cons.CAPTCHA_ATTR);
+                return Result.error("验证码错误！");
+            }
+        }
         try {
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            token.setRememberMe(isRememberMe);
+            Subject user = SecurityUtils.getSubject();
             user.login(token);
             Condition condition = new Condition();
             condition.and("locked", "=", false);
