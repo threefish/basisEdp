@@ -69,7 +69,7 @@ public class Tree {
      * @return
      */
     public static List<HashMap> createHasMap(List<Menu> menus, int parentId) {
-        menus= Tree.createTree(menus, parentId);
+        menus = Tree.createTree(menus, parentId);
         List<HashMap> list = new ArrayList<>();
         for (Menu menu : menus) {
             HashMap map = new HashMap();

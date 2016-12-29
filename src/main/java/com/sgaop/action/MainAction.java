@@ -17,7 +17,6 @@ public class MainAction extends BaseAction {
     @OK("btl:index")
     @GET
     @Path("/index")
-    @RequiresAuthentication
     public void index() {
     }
 }

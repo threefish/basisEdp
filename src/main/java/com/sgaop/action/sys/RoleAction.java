@@ -7,6 +7,7 @@ import com.sgaop.basis.dao.Pager;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.entity.sys.UserAccount;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysRole")
+@RequiresRoles("admin")
 public class RoleAction extends BaseAction {
 
     @Inject("dao")
@@ -26,7 +28,8 @@ public class RoleAction extends BaseAction {
     @OK("btl:sys.role.manager")
     @GET
     @Path("/manager")
-    public void manager() {}
+    public void manager() {
+    }
 
 
     @OK("json:{locked:'userPass|salt',ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")

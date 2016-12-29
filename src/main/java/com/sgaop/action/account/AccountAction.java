@@ -3,7 +3,6 @@ package com.sgaop.action.account;
 import cn.apiclub.captcha.Captcha;
 import cn.apiclub.captcha.backgrounds.GradiatedBackgroundProducer;
 import cn.apiclub.captcha.gimpy.FishEyeGimpyRenderer;
-import cn.apiclub.captcha.noise.CurvedLineNoiseProducer;
 import cn.apiclub.captcha.noise.StraightLineNoiseProducer;
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;

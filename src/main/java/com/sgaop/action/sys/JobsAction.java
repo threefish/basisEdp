@@ -8,6 +8,7 @@ import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.QuartzJob;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.quartz.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysJobs")
+@RequiresRoles("admin")
 public class JobsAction extends BaseAction {
 
     private final String JOB_GROUP = "DEFAULT";

@@ -49,7 +49,7 @@ public class Menu implements Serializable, Comparator<Menu> {
         return iconSkin;
     }
 
-    //权限类型 1 菜单  2数据
+    //权限类型 0 菜单  1数据
     @Colum("menu_type")
     private int menuType;
 

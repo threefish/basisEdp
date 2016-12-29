@@ -11,6 +11,7 @@ import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.util.Tree;
 import com.sgaop.entity.sys.Menu;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -24,6 +25,7 @@ import java.util.*;
  */
 @IocBean
 @Action("/sysMenu")
+@RequiresRoles("admin")
 public class MenuAction extends BaseAction {
 
 

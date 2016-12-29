@@ -1,11 +1,20 @@
 <%
-layout("/layouts/platform.html",{title:"权限不符"}){
+layout("/layouts/platform.html",{title:"提示:权限不符"}){
 %>
+<style>
+    .unauthorized {
+        margin: 15% 20px 20px 20px;
+        text-align: center;
+    }
+    #container {
+        background: #F9F9F9;
+    }
+</style>
 <section class="content">
-    <div class="row">
-        权限不符
+    <div class="row unauthorized">
+        ${i18n.unauthorized}
     </div>
-    <button onclick="showx()">测试ajax无权提示</button>
+    <!--<button onclick="showx()">测试ajax无权提示</button>-->
 </section>
 <script>
     function showx() {
@@ -15,11 +24,9 @@ layout("/layouts/platform.html",{title:"权限不符"}){
             data: $("#loginFrom").serialize(),
             dataType: "json",
             success: function (data) {
-                console.log(data)
+                core.error(data.msg);
             }, error: function (status) {
-                $('button').attr("disabled", false);
-                layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
-                console.log(status);
+                core.error("${i18n.AjaxNetworkError}");
             }
         })
     }

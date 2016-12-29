@@ -2,7 +2,7 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
  */
 @IocBean
 @Action("/monitor/db")
-@RequiresAuthentication
+@RequiresRoles("admin")
 public class DbAction extends BaseAction {
 
     @OK("btl:sys.db.index")

@@ -7,6 +7,7 @@ import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.Department;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysDept")
+@RequiresRoles("admin")
 public class DepartmentAction extends BaseAction {
 
     @Inject("dao")

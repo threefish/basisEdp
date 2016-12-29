@@ -8,7 +8,7 @@ import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.gather.*;
 import com.sgaop.entity.sys.AlarmOption;
 import com.sgaop.task.ApmJob;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.hyperic.sigar.Sigar;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.HashMap;
  */
 @IocBean
 @Action("/monitor/apm")
-@RequiresAuthentication
+@RequiresRoles("admin")
 public class ApmAction extends BaseAction {
 
 
