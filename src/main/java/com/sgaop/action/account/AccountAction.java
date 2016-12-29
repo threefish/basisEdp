@@ -4,6 +4,7 @@ import cn.apiclub.captcha.Captcha;
 import cn.apiclub.captcha.backgrounds.GradiatedBackgroundProducer;
 import cn.apiclub.captcha.gimpy.FishEyeGimpyRenderer;
 import cn.apiclub.captcha.noise.CurvedLineNoiseProducer;
+import cn.apiclub.captcha.noise.StraightLineNoiseProducer;
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Condition;
@@ -53,13 +54,12 @@ public class AccountAction extends BaseAction {
         int h = 60;
         Captcha captcha = new Captcha.Builder(w, h)
                 .addText()
-//                .addBackground(new GradiatedBackgroundProducer())
-                .addNoise(new CurvedLineNoiseProducer())
+                .addBackground(new GradiatedBackgroundProducer())
+                .addNoise(new StraightLineNoiseProducer())
                 .addBorder()
                 .gimp(new FishEyeGimpyRenderer()).addBorder()
                 .build();
-        String text = captcha.getAnswer();
-        session.setAttribute(Cons.CAPTCHA_ATTR, text);
+        session.setAttribute(Cons.CAPTCHA_ATTR, captcha.getAnswer());
         return captcha.getImage();
     }
 

@@ -18,6 +18,10 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         float: left;
         min-width: 320px;
     }
+
+    #menuTreeTable {
+        background: #fff;
+    }
 </style>
 <section class="content-header">
     <h1>
@@ -27,22 +31,54 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 </section>
 <section class="content">
     <div class="row box box-warning">
-        <div style="display: block;margin: 5px">
-            <button class="btn btn-danger btn-sm " disabled id="add"><i class="fa fa-plus"></i>${i18n.add}</button>
-            <button class="btn btn-info btn-sm " disabled id="update">${i18n.modify }</button>
-            <button class="btn btn-warning btn-sm " disabled id="del">${i18n.del}</button>
-            <button class="btn btn-warning btn-sm " disabled id="MoveUp">${i18n.MoveUp}</button>
-            <button class="btn btn-warning btn-sm " disabled id="MoveDown">${i18n.MoveDown}</button>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#tabTreeTable" role="tab" data-toggle="tab">树表格</a>
+            </li>
+            <li role="presentation">
+                <a href="#tabTree" role="tab" data-toggle="tab">树菜单</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tabTreeTable">
+                <div class="row" style="margin: 15px">
+                    <table id="menuTreeTable" class="table">
+                        <thead>
+                        <tr>
+                            <th class="col-md-2">菜单名称</th>
+                            <th class="col-md-2">路径</th>
+                            <th class="col-md-1">权限类型</th>
+                            <th class="col-md-2">权限标识</th>
+                            <th class="col-md-1">启用状态</th>
+                            <th class="col-md-2">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%include("child.html"){}%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="tabTree">
+                <div class="row" style="margin: 15px">
+                    <div style="margin: 5px">
+                        <button class="btn btn-danger btn-sm " disabled id="add"><i class="fa fa-plus"></i>${i18n.add}
+                        </button>
+                        <button class="btn btn-info btn-sm " disabled id="update">${i18n.modify }</button>
+                        <button class="btn btn-warning btn-sm " disabled id="del">${i18n.del}</button>
+                        <button class="btn btn-warning btn-sm " disabled id="MoveUp">${i18n.MoveUp}</button>
+                        <button class="btn btn-warning btn-sm " disabled id="MoveDown">${i18n.MoveDown}</button>
+                        <button class="btn btn-warning btn-sm " disabled id="enable">${i18n.enable}</button>
+                        <button class="btn btn-warning btn-sm " disabled id="disable">${i18n.disable}</button>
+                    </div>
+                    <div class="leftBox">
+                        <div id="menusTree" class="ztree"></div>
+                    </div>
+                    <div class="rightBox" id="menuBox">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="leftBox">
-            <div id="menusTree" class="ztree"></div>
-        </div>
-        <div class="rightBox" id="menuBox">
-
-        </div>
-    </div>
-    <div>
-        123
     </div>
 </section>
 <script type="text/plain" id="menuFormTpl">
@@ -110,42 +146,100 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         </div>
     </form>
 
+
+
+
+
+
+
+
+
+
+
 </script>
 <script type="text/javascript">
-    var setting = {
-        async: {
-            enable: true,
-            type: "post",
-            url: base + "/sysMenu/tree"
-        },
-        data: {
-            simpleData: {
-                enable: true,
-                idKey: "id",
-                pIdKey: "pid",
-                rootPId: 0
-            },
-            key: {
-                name: "menuName"
-            }
-        }, view: {
-            showIcon: true
-        },
-        callback: {
-            beforeClick: zTreeBeforeClick,
-            onAsyncSuccess: zTreeOnAsyncSuccess
-        }
-    };
-
     var selectId;
+    var menuTree;
+    var menuTreeTable;
+    $(function () {
+        var setting = {
+            async: {
+                enable: true,
+                type: "post",
+                url: base + "/sysMenu/tree"
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid",
+                    rootPId: 0
+                },
+                key: {
+                    name: "menuName"
+                }
+            }, view: {
+                showIcon: true
+            },
+            callback: {
+                beforeClick: zTreeBeforeClick,
+                onAsyncSuccess: zTreeOnAsyncSuccess
+            }
+        };
+        menuTree = $.fn.zTree.init($("#menusTree"), setting);
+        $("#add").on("click", addFrom);
+        $("#update").on("click", updateFrom);
+        $("#MoveUp").on("click", MoveUp);
+        $("#MoveDown").on("click", MoveDown);
+        $("#del").on("click", delFrom);
+        $("#enable").on("click", function () {
+            selectId = $("input[name='data.id']").val();
+            modify(selectId, "unlock");
+        });
+        $("#disable").on("click", function () {
+            selectId = $("input[name='data.id']").val();
+            modify(selectId, "lock");
+        });
+        menuTreeTable = $("#menuTreeTable").treetable({
+            expandable: true,
+            onNodeExpand: function () {
+                var node = this;
+                var rows = "<tr data-tt-id='loading' data-tt-parent-id='" + node.id + "' data-tt-branch='false'><td colspan='5'><img src='" + base + "/static/img/loading.gif' />loading</td></tr>";
+                menuTreeTable.treetable("loadBranch", node, rows);
+                $.post("${base!}/sysMenu/child", {pid: node.id}, function (data) {
+                    menuTreeTable.treetable("unloadBranch", node);
+                    menuTreeTable.treetable("loadBranch", node, data);
+                });
+            }
+        });
+    });
+    function delFrom() {
+        layer.confirm('确定删除？删除后将无法恢复！请谨慎操作！', {
+            btn: ['确定删除', '我再想想']
+        }, function () {
+            submitFrom("del");
+        });
+    }
+
     function zTreeOnAsyncSuccess(treeId, data, clickFlag) {
         var rootNode = menuTree.getNodesByParam("id", 0)[0];
         menuTree.expandNode(rootNode, true, false, true);
         if (selectId) {
-            var node = menuTree.getNodesByParam("id", selectId)[0];
-            menuTree.selectNode(node);
+            selectTreeNode(selectId);
         }
     }
+    /**
+     * 定位tree节点
+     * @param id
+     */
+    function selectTreeNode(id) {
+        if (id) {
+            var node = menuTree.getNodesByParam("id", id)[0];
+            menuTree.selectNode(node);
+            zTreeBeforeClick("", node, "");
+        }
+    }
+
 
     function zTreeBeforeClick(treeId, data, clickFlag) {
         if (data.id != 0) {
@@ -153,11 +247,15 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             $("#del").removeAttr("disabled");
             $("#MoveUp").removeAttr("disabled");
             $("#MoveDown").removeAttr("disabled");
+            $("#enable").removeAttr("disabled");
+            $("#disable").removeAttr("disabled");
         } else {
             $("#update").attr("disabled", "");
             $("#del").attr("disabled", "");
             $("#MoveUp").attr("disabled", "");
             $("#MoveDown").attr("disabled", "");
+            $("#disable").attr("disabled", "");
+            $("#enable").attr("disabled", "");
         }
         $("#add").removeAttr("disabled");
         var pnode = data.getParentNode();
@@ -251,7 +349,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
                     selectId = data.data.id;
                     menuTree.reAsyncChildNodes(null, "refresh");
                     layer.msg(data.msg, {icon: 1});
-                    if(data.msg=="删除成功"){
+                    if (data.msg == "删除成功") {
                         $("#menuBox").html("");
                     }
                 } else {
@@ -263,29 +361,59 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             }
         });
     }
-    var menuTree;
-    $(function () {
-        menuTree = $.fn.zTree.init($("#menusTree"), setting);
-        $("#add").on("click", addFrom);
-        $("#update").on("click", updateFrom);
-        $("#MoveUp").on("click", MoveUp);
-        $("#MoveDown").on("click", MoveDown);
-        $("#del").on("click", function () {
-            layer.confirm('确定删除？删除后将无法恢复！请谨慎操作！', {
-                btn: ['确定删除','我再想想']
-            }, function(){
-                submitFrom("del");
-            });
+
+
+    function modify(id, action) {
+        var data = {};
+        var url = "";
+        if (action == "del") {
+            data = {"data.id": id};
+            url = base + "/sysMenu/del";
+        } else {
+            data = {id: id, action: action};
+            url = base + "/sysMenu/modify";
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    layer.msg(data.msg, {icon: 1});
+                    if (data.msg == "删除成功") {
+                        $("#menuBox").html("");
+                        $("[data-tt-id='" + id + "']").remove();
+                        menuTree.reAsyncChildNodes(null, "refresh");
+                    } else {
+                        var el = $("#disable_" + id);
+                        if (action == "lock") {
+                            el.attr("class", "fa fa-circle text-success");
+                        } else {
+                            el.attr("class", "fa fa-circle text-danger");
+                        }
+                        selectId = id;
+                        menuTree.reAsyncChildNodes(null, "refresh");
+                    }
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                layer.msg("网络连接出错", {icon: 5, time: 1000});
+                console.log(status);
+            }
         });
-    });
+
+    }
+
 
     function MoveUp() {
         var node = menuTree.getSelectedNodes()[0];
-        selectId=node.id;
+        selectId = node.id;
         $.ajax({
             type: "post",
-            url: base+"/sysMenu/move",
-            data: {id: node.id,type:"up"},
+            url: base + "/sysMenu/move",
+            data: {id: node.id, type: "up"},
             dataType: "json",
             success: function (data) {
                 if (data && data.ok) {
@@ -339,6 +467,25 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
 
     function updateFrom() {
         $("#menuForm :disabled").each(formResum);
+    }
+
+
+    function showTabTreeContent(id, action) {
+        $('.content a[href="#tabTree"]').tab('show')
+        if (id) {
+            var node = menuTree.getNodesByParam("id", id)[0];
+            zTreeBeforeClick("", node, "");
+            menuTree.selectNode(node);
+            switch (action) {
+                case "update":
+                    updateFrom();
+                    break;
+                case "addChild":
+                    addFrom();
+                    break;
+            }
+
+        }
     }
 </script>
 <%}%>

@@ -9,13 +9,11 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.util.Tree;
 import com.sgaop.entity.sys.Menu;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,7 +33,21 @@ public class MenuAction extends BaseAction {
     @OK("btl:sys.menu.index")
     @GET
     @Path("/index")
-    public void index() {
+    public List<HashMap> index() {
+        Condition condition = new Condition();
+        condition.asc("short_no");
+        List<Menu> menus = dao.query(Menu.class, condition);
+        return Tree.createHasMap(menus, 0);
+    }
+
+    @OK("btl:sys.menu.child")
+    @POST
+    @Path("/child")
+    public List<HashMap> child(@Parameter("pid") int pid) {
+        Condition condition = new Condition();
+        condition.asc("short_no");
+        List<Menu> menus = dao.query(Menu.class, condition);
+        return Tree.createHasMap(menus, pid);
     }
 
 
@@ -73,6 +85,29 @@ public class MenuAction extends BaseAction {
         menus.add(menu);
         return menus;
     }
+
+    @OK("json")
+    @POST
+    @Path("/modify")
+    public Result modify(@Parameter("id") int id, @Parameter("action") String action) {
+        Menu uMenu = dao.fetch(Menu.class, id);
+        try {
+            switch (action) {
+                case "lock":
+                    uMenu.setLocked(true);
+                    dao.update(uMenu);
+                    return Result.sucess(uMenu, "修改成功");
+                case "unlock":
+                    uMenu.setLocked(false);
+                    dao.update(uMenu);
+                    return Result.sucess(uMenu, "修改成功");
+            }
+            return Result.error("参数不符");
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
 
     @OK("json")
     @POST
@@ -193,11 +228,16 @@ public class MenuAction extends BaseAction {
     public Result del(@Parameter("data>>") Menu menu) {
         try {
             Menu uMenu = dao.fetch(Menu.class, menu.getId());
-            if (uMenu.isCanDelect()){
-                return Result.error("系统菜单不允许删除");
+            if (uMenu.isCanDelect()) {
+                List<Menu> menuList = dao.query(Menu.class, "pid", uMenu.getId());
+                if (menuList.size() == 0) {
+                    boolean flag = dao.delete(menu);
+                    return Result.sucess(menu, flag ? "删除成功" : "删除成功");
+                } else {
+                    return Result.error("当前菜单下还有子菜单不允许删除");
+                }
             } else {
-                boolean flag = dao.delete(menu);
-                return Result.sucess(menu, flag ? "删除成功" : "删除成功");
+                return Result.error("系统菜单不允许删除");
             }
         } catch (Exception e) {
             return Result.error(e.getMessage());

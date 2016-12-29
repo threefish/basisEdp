@@ -3,6 +3,7 @@ package com.sgaop.common.util;
 import com.sgaop.entity.sys.Menu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,6 +58,33 @@ public class Tree {
             }
         }
         return menu;
+    }
+
+
+    /**
+     * 迭代ID,PID树
+     *
+     * @param menus
+     * @param parentId
+     * @return
+     */
+    public static List<HashMap> createHasMap(List<Menu> menus, int parentId) {
+        menus= Tree.createTree(menus, parentId);
+        List<HashMap> list = new ArrayList<>();
+        for (Menu menu : menus) {
+            HashMap map = new HashMap();
+            map.put("id", menu.getId());
+            map.put("pid", menu.getPid());
+            map.put("menuName", menu.getMenuName());
+            map.put("menuTarget", menu.getMenuTarget());
+            map.put("menuType", menu.getMenuType());
+            map.put("menuIcon", menu.getMenuIcon());
+            map.put("permission", menu.getPermission());
+            map.put("locked", menu.isLocked());
+            map.put("hasChild", menu.getChilds().size() > 0);
+            list.add(map);
+        }
+        return list;
     }
 
 }
