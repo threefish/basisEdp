@@ -32,22 +32,22 @@ layout("/layouts/platform.html",{title:"角色管理"}){
             serverSide: true,
             processing: true,
             ajax: {
-                url: base + '/sysAccount/grid',
+                url: base + '/sysRole/grid',
                 type: 'POST'
             },
             "columns": [
                 {"data": "id", "title": "序号", width: "30px"},
-                {"data": "userName", "title": "用户名"},
+                {"data": "roleName", "title": "角色名称"},
+                {"data": "roleCode", "title": "角色编码"},
+                {"data": "shortNo", "title": "排序号"},
                 {
                     "data": "locked", "title": "状态", "render": function (data, type, row) {
                     return row.locked ? "<span style='color: orangered'>已禁用</span>" : "启用中";
                 }
                 },
-                {"data": "createTime", "title": "创建时间", width: "180px"},
                 {
                     "title": "操作", width: "180px", "render": function (data, type, row) {
                     var html = "";
-                    console.log(row)
                     if (row.userName != "${defaultAdmin!}") {
                         if (row.locked) {
                             html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';

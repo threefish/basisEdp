@@ -114,7 +114,7 @@ public class UserAccountAction extends BaseAction {
             account.setLocked(false);
             account.setUserPass(sha.toHex());
             account.setSalt(salt);
-            account.setCreateTime(new Timestamp(new Date().getTime()));
+            account.setCreateTime(new Date());
             dao.insert(account);
         } catch (Exception e) {
             return Result.error(e.getMessage());

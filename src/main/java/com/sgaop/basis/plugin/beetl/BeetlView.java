@@ -4,6 +4,7 @@ import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.basis.plugin.shiro.beetl.ShiroExt;
+import com.sgaop.basis.util.Logs;
 import com.sgaop.common.beetl.function.DateFunction;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
@@ -34,7 +35,7 @@ import java.util.Map;
  */
 public class BeetlView implements View {
 
-    private static final Logger logger = Logger.getRootLogger();
+    private static final Logger logger = Logs.get();
     private final static String _suffix = ".html";
     private static GroupTemplate gt = null;
 

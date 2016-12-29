@@ -4,7 +4,8 @@ import com.sgaop.basis.annotation.Colum;
 import com.sgaop.basis.annotation.ID;
 import com.sgaop.basis.annotation.Table;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
 
 /**
  * Created by 30695 on 2016/9/24 0024.
@@ -26,7 +27,7 @@ public class UserAccount {
     private boolean locked;
 
     @Colum
-    private Timestamp createTime;
+    private Date createTime;
 
     @Colum
     private String salt;
@@ -63,11 +64,11 @@ public class UserAccount {
         this.locked = locked;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

@@ -6,6 +6,7 @@ import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
+import com.sgaop.entity.sys.Role;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
@@ -38,8 +39,8 @@ public class RoleAction extends BaseAction {
     public DataTableResult grid() {
         DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(request);
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
-        List<UserAccount> userAccounts = dao.query(UserAccount.class, pager);
-        int count = dao.count(UserAccount.class);
+        List<Role> userAccounts = dao.query(Role.class, pager);
+        int count = dao.count(Role.class);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);

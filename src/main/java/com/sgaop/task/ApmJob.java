@@ -3,6 +3,7 @@ package com.sgaop.task;
 import com.sgaop.basis.annotation.Inject;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.dao.Dao;
+import com.sgaop.basis.util.Logs;
 import com.sgaop.common.gather.CPUGather;
 import com.sgaop.common.gather.DISKGather;
 import com.sgaop.common.gather.MemoryGather;
@@ -34,7 +35,7 @@ import java.util.List;
 @IocBean
 public class ApmJob implements Job {
 
-    protected static final Logger log = Logger.getRootLogger();
+    protected static final Logger log = Logs.get();
 
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");

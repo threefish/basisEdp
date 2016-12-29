@@ -1,5 +1,6 @@
 package com.sgaop.action;
 
+import com.sgaop.basis.util.Logs;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.log4j.Logger;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
  */
 public class BaseAction {
 
-    protected static final Logger log = Logger.getRootLogger();
+    protected static final Logger log = Logs.get();
 
     protected HttpServletRequest request;
 

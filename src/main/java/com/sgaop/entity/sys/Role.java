@@ -23,8 +23,19 @@ public class Role {
     @Colum("role_code")
     private String roleCode;
 
+    @Colum("locked")
+    private boolean locked;
+
     @Colum("short_no")
     private String shortNo;
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
 
     public int getId() {
         return id;

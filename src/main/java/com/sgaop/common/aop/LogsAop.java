@@ -4,6 +4,7 @@ import com.sgaop.basis.annotation.Action;
 import com.sgaop.basis.annotation.Aspect;
 import com.sgaop.basis.annotation.IocBean;
 import com.sgaop.basis.aop.InterceptorProxy;
+import com.sgaop.basis.util.Logs;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -19,7 +20,7 @@ import java.lang.reflect.Method;
 @Aspect(annotation = Action.class, No = 2)
 public class LogsAop extends InterceptorProxy {
 
-    private static final Logger log = Logger.getRootLogger();
+    private static final Logger log = Logs.get();
 
 
     @Override
