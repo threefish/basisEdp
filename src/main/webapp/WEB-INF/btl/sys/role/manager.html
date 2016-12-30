@@ -17,7 +17,7 @@ layout("/layouts/platform.html",{title:"角色管理"}){
 <section class="content">
     <div class="row dataTbleBox  box box-warning">
         <div>
-            <button type="button" id="adduser" class="btn margin btn-danger">${i18n.add}</button>
+            <button type="button" id="add" class="btn margin btn-danger">${i18n.add}</button>
         </div>
         <table id="menusTable" class="table table-bordered table-striped">
             <tbody>
@@ -25,9 +25,86 @@ layout("/layouts/platform.html",{title:"角色管理"}){
         </table>
     </div>
 </section>
+<script type="text/plain" id="roleTpl">
+    <div class="box-body">
+        <form role="form" method="post" action="arg{data.action}" name="form1" id="form1">
+            <div style="display: none">
+                <input type="text" class="form-control" name="data.id" value="arg{(data.id?data.id:0)}">
+            </div>
+            <div>
+                <label>角色名称</label>
+                <div class="form-group sm-validator">
+                    <input data-rule="required" type="text" class="form-control" name="data.roleName" placeholder="角色名称"
+                           value="arg{(data.roleName?data.roleName:'')}">
+                </div>
+            </div>
+            <div>
+                <label>角色编码</label>
+                <div class="form-group sm-validator">
+                    <input data-rule="required" type="text" class="form-control" name="data.roleCode" placeholder="角色编码"
+                           value="arg{(data.roleName?data.roleCode:'')}">
+                </div>
+            </div>
+            <div>
+                <label>排序号</label>
+                <div class="form-group sm-validator">
+                    <input data-rule="required" type="text" class="form-control" name="data.shortNo" placeholder="排序号"
+                           value="arg{(data.roleName?data.shortNo:'0')}">
+                </div>
+            </div>
+            <div>
+                <label>是否启用</label>
+                <div class="form-group sm-validator">
+                    <select class="form-control" name="data.locked">
+                        <option value="0">启用</option>
+                        <option value="1" arg{(data.locked?"selected":"")}>禁用</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+</script>
+
 <script type="text/javascript">
     var userlistTable;
+    var rolesetting = {
+        tpl: "roleTpl",
+        width: 400,
+        height: 420,
+        onSuccess: function () {
+            core.SMValidator("#form1");
+        },
+        onOk: function (index) {
+            if (core.validate('#form1')) {
+                $.ajax({
+                    type: "post",
+                    url: $("#form1").attr("action"),
+                    data: $("#form1").serialize(),
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        core.msg(data);
+                        if (data.ok) {
+                            userlistTable.ajax.reload(null, false);
+                            layer.close(index);
+                        }
+                    }, error: function (data) {
+                        core.error(data.msg);
+                    }
+                });
+            }
+        },
+    };
     $(function () {
+
+        $("#add").click(function () {
+            core.openTpl(rolesetting, "新增角色", {action: "${base!}/sysRole/add"});
+        });
+
         userlistTable = $('#menusTable').DataTable({
             serverSide: true,
             processing: true,
@@ -36,26 +113,35 @@ layout("/layouts/platform.html",{title:"角色管理"}){
                 type: 'POST'
             },
             "columns": [
-                {"data": "id", "title": "序号", width: "30px"},
+                {"data": "id", "title": "序号", width: "30px", "visible": false},
                 {"data": "roleName", "title": "角色名称"},
                 {"data": "roleCode", "title": "角色编码"},
-                {"data": "shortNo", "title": "排序号"},
+                {"data": "shortNo", width: "50px", "title": "排序号"},
                 {
                     "data": "locked", "title": "状态", "render": function (data, type, row) {
                     return row.locked ? "<span style='color: orangered'>已禁用</span>" : "启用中";
                 }
                 },
                 {
-                    "title": "操作", width: "180px", "render": function (data, type, row) {
+                    "title": "操作", width: "80px", "render": function (data, type, row) {
                     var html = "";
-                    if (row.userName != "${defaultAdmin!}") {
-                        if (row.locked) {
-                            html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';
-                        } else {
-                            html += '<button type="button" class="btn btn-xs btn-danger"  did="' + row.id + '" daction="disable"  onclick="userHandle(this)">禁用</button>&nbsp;&nbsp;&nbsp;';
-                        }
-                        html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="repass"  onclick="userHandle(this)">重置密码</button>';
-                    }
+                    html += '<div class="btn-group">';
+                    html += '      <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">';
+                    html += '          <i class="fa fa-cogs"></i> <span class="fa fa-angle-down"></span>';
+                    html += '      </button>';
+                    html += '      <ul class="dropdown-menu" role="menu">';
+                    html += '          <li><a href="javascript:;" onclick="showRoleInfo(' + row.id + ')">查看权限</a></li>';
+                    html += '          <li class="divider"></li>';
+                    html += '          <li><a href="javascript:;" onclick="grant(' + row.id + ')">分配权限</a></li>';
+                    html += '          <li><a href="javascript:;" onclick="assigned(' + row.id + ')">分配人员</a></li>';
+                    html += '          <li><a href="javascript:;" onclick="modify(' + row.id + ',\'update\')">修改角色</a></li>';
+                    html += '          <li class="divider"></li>';
+                    html += '          <li><a href="javascript:;" onclick="modify(' + row.id + ',\'unlock\')">启用</a></li>';
+                    html += '          <li><a href="javascript:;" onclick="modify(' + row.id + ',\'lock\')">禁用</a></li>';
+                    html += '          <li class="divider"></li>';
+                    html += '          <li><a href="javascript:;" onclick="modify(' + row.id + ',\'del\')">删除</a></li>';
+                    html += '      </ul>';
+                    html += '</div>';
                     return html;
                 }
                 }
@@ -68,75 +154,75 @@ layout("/layouts/platform.html",{title:"角色管理"}){
             "autoWidth": true,
             language: {url: base + '/static/plugins/datatables/chinese.json'}
         });
-
-        $("#adduser").click(function () {
-            layer.prompt({title: '输入新建用户名', formType: 0}, function (userName, index) {
-                $.ajax({
-                    type: "post",
-                    url: "${base}/sysAccount/add",
-                    data: {userName: userName},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data && data.ok) {
-                            layer.msg(data.data, {icon: 1});
-                            userlistTable.ajax.reload(null, false);
-                            layer.close(index);
-                        } else {
-                            layer.msg(data.msg, {icon: 7, time: 2000});
-                        }
-                    }, error: function (status) {
-                        layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
-                        console.log(status);
-                    }
-                });
-            });
-
-        });
-
     });
-    function userHandle(t) {
-        var id = $(t).attr("did");
-        var action = $(t).attr("daction");
-        var data = {id: id, action: action};
-        var msg = "";
-        switch (action) {
-            case "enable":
-                msg = "您确定启用该用户吗？";
-                break;
-            case "disable":
-                msg = "您确定冻结该用户吗？";
-                break;
-            case "repass":
-                msg = "您确定重置该用户密码吗？";
-                break;
-        }
-        layer.confirm(msg, {
-            btn: ['确定', '取消'] //按钮
-        }, function (index) {
-            updateUserInfo(data);
-            layer.close(index);
-        });
+
+    /**
+     * 查看权限
+     * @param roleid
+     */
+    function showRoleInfo(roleid){
+
+    }
+    /**
+     * 分配权限
+     * @param roleid
+     */
+    function grant(roleid){
+
+    }
+    /**
+     * 分配人员
+     * @param roleid
+     */
+    function assigned(roleid){
+
     }
 
 
-    function updateUserInfo(data) {
-        $.ajax({
-            type: "post",
-            url: "${base}/sysAccount/update",
-            data: data,
-            dataType: "json",
-            success: function (data) {
-                if (data && data.ok) {
-                    layer.msg(data.data, {icon: 1});
-                    userlistTable.ajax.reload(null, false);
+    /**
+     * 修改角色
+     * @param id
+     * @param action
+     */
+    function modify(id, action) {
+        if (action == "update") {
+            $.post(base + "/sysRole/info", {id: id}, function (data) {
+                if (data.ok) {
+                    var role = data.data;
+                    role.action = "${base!}/sysRole/update";
+                    core.openTpl(rolesetting, "修改角色", role);
                 } else {
-                    layer.msg(data.msg, {icon: 7, time: 2000});
+                    core.msg(data);
                 }
-            }, error: function (status) {
-                layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
-                console.log(status);
-            }
-        });
+            }, "json");
+        } else if (action == "lock") {
+            core.confirm("确定禁用该角色?", function () {
+                $.post(base + "/sysRole/lock", {id: id}, function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                        userlistTable.ajax.reload(null, false);
+                    }
+                }, "json");
+            });
+        } else if (action == "unlock") {
+            core.confirm("确定启用该角色?", function () {
+                $.post(base + "/sysRole/unlock", {id: id}, function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                        userlistTable.ajax.reload(null, false);
+                    }
+                }, "json");
+            });
+        } else if (action == "del") {
+            core.confirm("确定删除该角色?", function () {
+                $.post(base + "/sysRole/del", {id: id}, function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                        userlistTable.ajax.reload(null, false);
+                    }
+                }, "json");
+            });
+        }
     }
 </script>
 <%}%>

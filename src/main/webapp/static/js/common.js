@@ -10,13 +10,69 @@ var core = {
         }
     },
     msg: function (msg) {
-        layer.msg(msg, {icon: 1});
+        if (typeof msg == "string") {
+            layer.msg(msg, {icon: 1});
+        }
+        if (typeof msg == "object") {
+            if (msg.ok) {
+                layer.msg(msg.msg ? msg.msg : msg.data, {icon: 1});
+            } else {
+                core.error(msg.msg);
+            }
+        }
     },
     error: function (msg) {
         layer.msg(msg, {icon: 7, time: 2000});
     },
     tips: function (dom, msg) {
         layer.tips(msg, dom);
+    },
+    SMValidator: function (selectors, options) {
+        if (options) {
+            new SMValidator(selectors, options);
+        } else {
+            new SMValidator(selectors);
+        }
+    },
+    validate: function (selectors) {
+        return SMValidator.validate(selectors, undefined);
+    },
+    Tpl: function (option) {
+        new jsTpl(option);
+    },
+    openTpl: function (option, title, data) {
+        var opt = {
+            title: title ? title : false,
+            tpl: option.tpl ? option.tpl : (alert("模板来源不能为空")),
+            w: option.width ? option.width : 400,
+            h: option.height ? option.height : 400,
+            onSuccess: option.onSuccess ? option.onSuccess : function () {
+            },
+            onOk: option.onOk ? option.onOk : function () {
+            },
+        };
+        layer.open({
+            scrollbar: false,
+            type: 1,
+            title: opt.title,
+            area: [opt.w + 'px', opt.h + 'px'],
+            content: "<div id='openTplBox'></div>",
+            btn: ['确定', '取消'],
+            yes: function (index) {
+                opt.onOk(index);
+            },
+            success: function (index) {
+                new jsTpl({
+                    temlplateSrc: option.tpl,
+                    viewTarget: 'openTplBox',
+                    arg: 'arg',
+                    data: data,
+                    onSuccess: function () {
+                        opt.onSuccess(data);
+                    }
+                });
+            }
+        });
     },
     openUrl: function (url, title, width, height, closeBtn) {
         layer.open({

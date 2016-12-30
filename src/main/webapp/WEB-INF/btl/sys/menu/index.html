@@ -46,7 +46,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
                         <thead>
                         <tr>
                             <th class="col-md-3">菜单名称</th>
-                            <th class="col-md-2">路径</th>
+                            <th class="col-md-2">访问路径</th>
                             <th class="col-md-1">权限类型</th>
                             <th class="col-md-2">权限标识</th>
                             <th class="col-md-1">启用状态</th>
@@ -145,6 +145,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <div class="btn btn-success" id="ok">${i18n.submit}</div>
         </div>
     </form>
+
 
 
 
@@ -388,7 +389,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
                         menuTree.reAsyncChildNodes(null, "refresh");
                     } else {
                         var el = $("#disable_" + id);
-                        if (action == "lock") {
+                        if (action == "unlock") {
                             el.attr("class", "fa fa-circle text-success");
                         } else {
                             el.attr("class", "fa fa-circle text-danger");

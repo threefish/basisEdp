@@ -5,7 +5,8 @@
         <span class="pd-l-sm"></span><i class="fa ${obj.menuIcon!}"></i> ${obj.menuName!}
     </td>
     <td>${obj.menuTarget!}</td>
-    <td><%if(obj.menuType==0){%>菜单<%}else{%>数据<%}%></td>
+    <td><%if(obj.menuType==0){%><span style="color: #D863A9;">菜单</span><%}else{%><span style="color: #00a7d0">数据</span><%}%>
+    </td>
     <td>${obj.permission!}</td>
     <td>
         <%if(false==obj.locked){%>
@@ -20,7 +21,7 @@
                 <i class="fa fa-cogs"></i> <span class="fa fa-angle-down"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:;" onclick="showTabTreeContent('${obj.id!}','update')" >修改</a></li>
+                <li><a href="javascript:;" onclick="showTabTreeContent('${obj.id!}','update')">修改</a></li>
                 <li><a href="javascript:;" onclick="modify('${obj.id!}','del')">删除</a></li>
                 <li class="divider"></li>
                 <li><a href="javascript:;" onclick="showTabTreeContent('${obj.id!}','addChild')">添加子菜单</a></li>

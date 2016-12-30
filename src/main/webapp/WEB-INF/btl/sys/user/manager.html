@@ -36,7 +36,7 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                 type: 'POST'
             },
             "columns": [
-                {"data": "id", "title": "序号", width: "30px"},
+                {"data": "id", "title": "序号", width: "30px", "visible": false},
                 {"data": "userName", "title": "用户名"},
                 {
                     "data": "locked", "title": "状态", "render": function (data, type, row) {
@@ -50,7 +50,7 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                     console.log(row)
                     if (row.userName != "${defaultAdmin!}") {
                         if (row.locked) {
-                            html += '<button type="button" class="btn btn-xs btn-danger" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >启用</button>&nbsp;&nbsp;&nbsp;';
+                            html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >重新启用</button>&nbsp;&nbsp;&nbsp;';
                         } else {
                             html += '<button type="button" class="btn btn-xs btn-danger"  did="' + row.id + '" daction="disable"  onclick="userHandle(this)">禁用</button>&nbsp;&nbsp;&nbsp;';
                         }
