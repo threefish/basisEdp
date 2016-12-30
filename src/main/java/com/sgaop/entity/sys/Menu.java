@@ -39,16 +39,6 @@ public class Menu implements Serializable, Comparator<Menu> {
     @Colum("menu_icon")
     private String menuIcon;
 
-    private String iconSkin;
-
-    public void setIconSkin(String iconSkin) {
-        this.iconSkin = iconSkin;
-    }
-
-    public String getIconSkin() {
-        return iconSkin;
-    }
-
     //权限类型 0 菜单  1数据
     @Colum("menu_type")
     private int menuType;
@@ -71,7 +61,38 @@ public class Menu implements Serializable, Comparator<Menu> {
     @Colum("ut")
     private Timestamp updateTime;
 
-    private List<Menu> childs;
+    private List<Menu> children;
+
+    /**
+     * ztree支持
+     **/
+    private String iconSkin;
+    public boolean chkDisabled = false;
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
+    }
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
+        this.iconSkin = "fa " + menuIcon + " ";
+    }
+
+    public boolean isChkDisabled() {
+        return chkDisabled;
+    }
+
+    public void setChkDisabled(boolean chkDisabled) {
+        this.chkDisabled = chkDisabled;
+    }
+
+    /**
+     * ztree支持
+     **/
 
     public String getPermission() {
         return permission;
@@ -161,8 +182,8 @@ public class Menu implements Serializable, Comparator<Menu> {
         this.updateTime = updateTime;
     }
 
-    public List<Menu> getChilds() {
-        return childs;
+    public List<Menu> getChildren() {
+        return children;
     }
 
     public int getShortNo() {
@@ -177,13 +198,9 @@ public class Menu implements Serializable, Comparator<Menu> {
         return menuIcon;
     }
 
-    public void setMenuIcon(String menuIcon) {
-        this.menuIcon = menuIcon;
-        this.iconSkin = "fa " + menuIcon + " ";
-    }
 
-    public void setChilds(List<Menu> childs) {
-        this.childs = childs;
+    public void setChildren(List<Menu> children) {
+        this.children = children;
     }
 
 

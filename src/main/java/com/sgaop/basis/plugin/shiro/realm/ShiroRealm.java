@@ -48,8 +48,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     roles.add(mapro.getString("role_code"));
                     roleids += mapro.getInt("id") + ",";
                 }
-                sql = "SELECT r.id,r.role_name,r.role_code,p.id,p.permission_name from sys_role as r,sys_rolepermission as rp,sys_permission as p ";
-                sql += "WHERE r.id=rp.role_id and rp.permission_id=p.id AND FIND_IN_SET(r.id,?);";
+                sql = "SELECT r.id,r.role_name,r.role_code,p.id,p.permission_name from sys_role as r,sys_role_menu as rp,sys_permission as p ";
+                sql += "WHERE r.id=rp.role_id and rp.menu_id=p.id AND FIND_IN_SET(r.id,?);";
                 List<Record> permissionList = dao.query(sql, roleids);
                 for (Record mappo : permissionList) {
                     permissions.add(mappo.getString("permission_name"));

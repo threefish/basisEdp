@@ -3,32 +3,32 @@
     <li><a href="${base!}"><i class="fa fa-home text-red"></i> <span>桌面首页</span></a></li>
     <%for(menu in session.sessionMenus){%>
     <li>
-        <%if(menu.childs.~size>0){%>
+        <%if(menu.children.~size>0){%>
         <a href="#"><i class="fa ${menu.menuIcon!}"></i><span>${menu.menuName}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
         <ul class="treeview-menu">
-            <%for(m in menu.childs){%>
+            <%for(m in menu.children){%>
             <li>
-                <%if(m.childs.~size>0){%>
+                <%if(m.children.~size>0){%>
                 <a href="${base}${m.menuTarget}"><i class="fa ${m.menuIcon!}"></i>${m.menuName}
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <%for(m2 in m.childs){%>
+                    <%for(m2 in m.children){%>
                     <li>
-                        <%if(m2.childs.~size>0){%>
+                        <%if(m2.children.~size>0){%>
                         <a href="${base}${m2.menuTarget}"><i class="fa ${m2.menuIcon!}"></i>${m2.menuName}
                             <span class="pull-right-container">
                               <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <div class="menubox">
-                            <%for(m3 in m2.childs){%>
+                            <%for(m3 in m2.children){%>
                             <a href="${base}${m3.menuTarget}"><i class='fa ${m3.menuIcon!"fa-link fa-none"}'></i>&nbsp;&nbsp;${m3.menuName}</a>
                             <%}%>
                         </div>

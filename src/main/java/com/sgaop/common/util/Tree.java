@@ -28,7 +28,7 @@ public class Tree {
             int pid = c.getPid();
             if (parentId == pid) {
                 List<Menu> childs = Tree.createTree(menus, id);
-                c.setChilds(childs);
+                c.setChildren(childs);
                 childList.add(c);
             }
         }
@@ -50,8 +50,8 @@ public class Tree {
             if (p.getId() == id) {
                 menu = p;
                 break sw;
-            } else if (p.getChilds().size() > 0) {
-                menu = getChilds(p.getChilds(), id);
+            } else if (p.getChildren().size() > 0) {
+                menu = getChilds(p.getChildren(), id);
                 if (menu != null) {
                     break sw;
                 }
@@ -81,7 +81,7 @@ public class Tree {
             map.put("menuIcon", menu.getMenuIcon());
             map.put("permission", menu.getPermission());
             map.put("locked", menu.isLocked());
-            map.put("hasChild", menu.getChilds().size() > 0);
+            map.put("hasChild", menu.getChildren().size() > 0);
             list.add(map);
         }
         return list;

@@ -21,3 +21,9 @@
 .sm-validator{
     position: relative;
 }
+.tree-nodata{
+    margin-top: 50px !important;
+    text-align: center;
+    font-size: 22px !important;
+    line-height: 40px;
+}

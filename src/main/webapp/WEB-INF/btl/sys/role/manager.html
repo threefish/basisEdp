@@ -67,6 +67,7 @@ layout("/layouts/platform.html",{title:"角色管理"}){
 
 
 
+
 </script>
 
 <script type="text/javascript">
@@ -160,21 +161,62 @@ layout("/layouts/platform.html",{title:"角色管理"}){
      * 查看权限
      * @param roleid
      */
-    function showRoleInfo(roleid){
-
+    function showRoleInfo(roleid) {
+        core.showMenusTree({
+            title: "查看权限",
+            url: "/sysRole/menus/showRoleTree?id="+ roleid,
+            isCheckbox: false,
+            w: 600, h: 600,
+            target: ['', ''],
+            data: {id: "id", pid: "pid", name: "menuName"},
+            onSuccess: function (tree) {
+                tree.expandAll(true);
+            }
+        });
     }
+
     /**
      * 分配权限
      * @param roleid
      */
-    function grant(roleid){
-
+    function grant(roleid) {
+        core.showMenusTree({
+            title: "分配权限",
+            url: "/sysRole/menus/tree",
+            isCheckbox: true,
+            w: 600, h: 600,
+            target: ['', ''],
+            data: {id: "id", pid: "pid", name: "menuName"},
+            onSuccess: function (tree) {
+                $.post(base + "/sysRole/roleMenus", {id: roleid}, function (data) {
+                    if (data.ok) {
+                        for (var i in data.data) {
+                            var node = tree.getNodesByParam("id", data.data[i]['menuId'])[0];
+                            tree.checkNode(node, true, false);
+                        }
+                    }
+                }, "json");
+            },
+            onOk: function (data,index) {
+                var idArr=new Array();
+                for(var i in data){
+                    idArr.push(data[i].id);
+                }
+                $.post(base + "/sysRole/roleMenus/update", {id: roleid,ids: idArr.join(",")}, function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                      layer.close(index);
+                    }
+                }, "json");
+            }
+        });
     }
+
     /**
      * 分配人员
      * @param roleid
      */
-    function assigned(roleid){
+    function assigned(roleid) {
 
     }
 
