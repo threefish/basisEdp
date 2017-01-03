@@ -10,21 +10,22 @@ import com.sgaop.basis.annotation.Table;
  * Date: 2016/12/30 0030
  * To change this template use File | Settings | File Templates.
  */
-@Table("sys_role_menu")
-@Pk({"role_id", "menu_id"})
-public class RoleMenus {
+@Table("sys_useraccount_role")
+@Pk({"role_id", "user_id"})
+public class UserAccountRole {
 
     @Colum("role_id")
     private int roleId;
 
-    @Colum("menu_id")
-    private int menuId;
+    @Colum("user_id")
+    private int userId;
 
-    public RoleMenus(){}
+    public UserAccountRole() {
+    }
 
-    public RoleMenus(int roleId, int menuId) {
+    public UserAccountRole(int roleId, int userId) {
         this.roleId = roleId;
-        this.menuId = menuId;
+        this.userId = userId;
     }
 
     public int getRoleId() {
@@ -35,11 +36,11 @@ public class RoleMenus {
         this.roleId = roleId;
     }
 
-    public int getMenuId() {
-        return menuId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

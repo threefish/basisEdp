@@ -41,7 +41,7 @@ public class ShiroRealm extends AuthorizingRealm {
             if (user != null) {
                 Set<String> roles = new HashSet<>();
                 Set<String> permissions = new HashSet<>();
-                String sql = "SELECT r.id,r.role_name,r.role_code from sys_useraccountrole as ur,sys_role as r  WHERE ur.role_id=r.id and ur.user_id=?";
+                String sql = "SELECT r.id,r.role_name,r.role_code from sys_useraccount_role as ur,sys_role as r  WHERE ur.role_id=r.id and ur.user_id=?";
                 List<Record> roleList = dao.query(sql, user.getId());
                 String roleids = "";
                 for (Record mapro : roleList) {

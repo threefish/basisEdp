@@ -7,6 +7,11 @@ layout("/layouts/platform.html",{title:"用户管理"}){
         margin: 15px 0px;
         padding: 15px;
     }
+
+    .searchBox {
+        margin-top: 10px;
+        width: 500px;
+    }
 </style>
 <section class="content-header">
     <h1>
@@ -19,6 +24,36 @@ layout("/layouts/platform.html",{title:"用户管理"}){
         <div>
             <button type="button" id="adduser" class="btn margin btn-danger">${i18n.userAdd}</button>
         </div>
+        <table class="searchBox">
+            <tr>
+                <td class="form-lable">
+                    用户名
+                </td>
+                <td >
+                    <div class="input-group">
+                    <input type="text" class="form-control" id="name" placeholder="用户名/支持模糊查询">
+                    </div>
+                </td>
+                <td class="form-lable">
+                    状&nbsp;&nbsp;态
+                </td>
+                <td >
+                    <div class="input-group">
+                        <select class="form-control" id="status">
+                            <option value="-1">请选择</option>
+                            <option value="0">启用中</option>
+                            <option value="1">禁用中</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <button type="button" id="search" class="btn margin btn-primary">
+                            &nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
         <table id="menusTable" class="table table-bordered table-striped">
             <tbody>
             </tbody>
@@ -33,7 +68,11 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             processing: true,
             ajax: {
                 url: base + '/sysAccount/grid',
-                type: 'POST'
+                type: 'POST',
+                data: function (data) {
+                    data.status = $("#status").val();
+                    data.name = $("#name").val();
+                }
             },
             "columns": [
                 {"data": "id", "title": "序号", width: "30px", "visible": false},
@@ -47,7 +86,6 @@ layout("/layouts/platform.html",{title:"用户管理"}){
                 {
                     "title": "操作", width: "180px", "render": function (data, type, row) {
                     var html = "";
-                    console.log(row)
                     if (row.userName != "${defaultAdmin!}") {
                         if (row.locked) {
                             html += '<button type="button" class="btn btn-xs btn-primary" did="' + row.id + '" daction="enable" onclick="userHandle(this)" >重新启用</button>&nbsp;&nbsp;&nbsp;';
@@ -68,6 +106,12 @@ layout("/layouts/platform.html",{title:"用户管理"}){
             "autoWidth": true,
             language: {url: base + '/static/plugins/datatables/chinese.json'}
         });
+
+
+        $("#search").click(function () {
+            userlistTable.ajax.reload(null, false);
+        });
+
 
         $("#adduser").click(function () {
             layer.prompt({title: '输入新建用户名', formType: 0}, function (userName, index) {

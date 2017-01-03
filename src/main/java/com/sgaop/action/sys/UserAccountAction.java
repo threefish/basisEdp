@@ -2,9 +2,12 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.Pager;
+import com.sgaop.basis.dao.entity.Record;
 import com.sgaop.basis.i18n.LanguageManager;
+import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
@@ -45,15 +48,32 @@ public class UserAccountAction extends BaseAction {
         request.setAttribute("defaultAdmin", defaultAdmin);
     }
 
+    /**
+     * 弹窗选中人员
+     */
+    @OK("btl:inc.accounts")
+    @GET
+    @Path("/showUserAccounts")
+    public void showUserAccounts() {
+    }
+
+
 
     @OK("json:{locked:'userPass|salt',ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
     @POST
     @Path("/grid")
-    public DataTableResult grid() {
+    public DataTableResult RoleUsersGrid(@Parameter("name") String name, @Parameter("status") int status) {
         DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(request);
         Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
-        List<UserAccount> userAccounts = dao.query(UserAccount.class, pager);
-        int count = dao.count(UserAccount.class);
+        Condition cnd = new Condition();
+        if (!StringsTool.isNullorEmpty(name)) {
+            cnd.and("userName", "like", "%" + name + "%");
+        }
+        if (status != -1) {
+            cnd.and("locked", "=", status);
+        }
+        List<UserAccount> userAccounts = dao.query(UserAccount.class, pager, cnd);
+        int count = dao.count(UserAccount.class, cnd);
         DataTableResult dataResult = new DataTableResult();
         dataResult.setRecordsTotal(count);
         dataResult.setRecordsFiltered(count);
@@ -61,6 +81,8 @@ public class UserAccountAction extends BaseAction {
         dataResult.setData(userAccounts);
         return dataResult;
     }
+
+
 
     @OK("json:{ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
     @POST

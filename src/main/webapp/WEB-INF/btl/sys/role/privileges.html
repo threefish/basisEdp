@@ -1,0 +1,172 @@
+<%
+layout("/layouts/platform.html",{title:"分配用户"}){
+%>
+<style type="text/css">
+    .dataTbleBox {
+        background: #ffffff;
+        margin: 15px 0px;
+        padding: 15px;
+    }
+
+    .searchBox {
+        margin-top: 10px;
+        width:500px;
+    }
+</style>
+<section class="content-header">
+    <h1>
+        为【${role.roleName}(${role.roleCode})】分配用户
+        <small>${i18n.controlPanel}</small>
+    </h1>
+</section>
+<section class="content">
+    <div class="row dataTbleBox  box box-warning">
+        <div>
+            <a type="button" href="javascript:history.back()"  class="btn margin btn-danger">
+                返回角色管理
+            </a>
+            <button type="button" id="adduser" class="btn margin btn-primary">
+                添加用户到【${role.roleName}(${role.roleCode})】角色
+            </button>
+            <button type="button" id="deluser" class="btn margin btn-danger">从【${role.roleName}(${role.roleCode})】删除选中用户
+            </button>
+        </div>
+        <div>
+            <div class="box-header with-border">
+                <h3 class="box-title">筛选</h3>
+            </div>
+            <form class="form-horizontal">
+                <table class="searchBox">
+                    <tr>
+                        <td class="form-lable">
+                            用户名
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="name" placeholder="用户名/支持模糊查询">
+                            </div>
+                        </td>
+                        <td class="form-lable">
+                            状&nbsp;&nbsp;态
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <select class="form-control" id="status">
+                                    <option value="-1">请选择</option>
+                                    <option value="0">启用中</option>
+                                    <option value="1">禁用中</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <button type="button" id="search" class="btn margin btn-primary">
+                                    &nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <table id="usersTable" class="table table-bordered table-striped">
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+<script type="text/javascript">
+    var userlistTable;
+    $(function () {
+        var roleId = "${role.id}";
+
+        userlistTable = $('#usersTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base + '/sysRole/roleUsers/RoleUsersGrid',
+                type: 'POST',
+                data: function (data) {
+                    data.roleId = roleId;
+                    data.status = $("#status").val();
+                    data.name = $("#name").val();
+                }
+            },
+            "columns": [
+                {
+                    "data": "id",
+                    width: "30px",
+                    "title": "<div style='width: 55px;'><label for='ck_all'>全选</label><input type='checkbox' class='flat-red' id='ck_all'></div>",
+                    "render": function (data, type, row) {
+                        var html = "";
+                        html += "<input type='checkbox' name='userdatacheckbox' class='flat-red' value='" + data + "'>";
+                        return "<div style='text-align: center'>" + html + "</div>";
+                    }
+                },
+                {"data": "userName", "title": "用户名"},
+                {
+                    "data": "locked", "title": "状态", "render": function (data, type, row) {
+                    return row.locked ? "<span style='color: orangered'>已禁用</span>" : "启用中";
+                }
+                }, {"data": "createTime", "title": "创建时间", width: "180px"}
+            ],
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true,
+            language: {url: base + '/static/plugins/datatables/chinese.json'}
+        }).on('processing.dt', function () {
+            setiCheckAll();
+            $("#ck_all").iCheck('uncheck');
+            $("#ck_all").on('ifChanged', function () {
+                if ($(this).prop("checked")) {
+                    $('input[name="userdatacheckbox"]').each(function () {
+                        $(this).iCheck('check');
+                    });
+                } else {
+                    $('input[name="userdatacheckbox"]').each(function () {
+                        $(this).iCheck('uncheck');
+                    });
+                }
+            });
+        });
+
+        $("#search").click(function () {
+            userlistTable.ajax.reload(null, false);
+        });
+
+
+        $("#deluser").click(function () {
+            var chk_value = [];
+            $('input[name="userdatacheckbox"]:checked').each(function () {
+                chk_value.push($(this).val());
+            });
+            core.confirm("您确定从【${role.roleName}(${role.roleCode})】删除选中用户？",function () {
+                $.post(base + "/sysRole/roleUsers/delUser", {roleId: roleId, ids: chk_value.join(",")}, function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                        userlistTable.ajax.reload(null, false);
+                    }
+                }, "json")
+            });
+        });
+
+        $("#adduser").click(function () {
+            core.showUserAccounts({
+                url: base + "/sysAccount/showUserAccounts",
+                w: 800, h: 700,
+                onOk: function (data, index) {
+                    $.post(base + "/sysRole/roleUsers/addUser", {roleId: roleId,ids: data}, function (data) {
+                        core.msg(data);
+                        if (data.ok) {
+                            userlistTable.ajax.reload(null, false);
+                            layer.close(index);
+                        }
+                    }, "json");
+                }
+            });
+        });
+
+    });
+</script>
+<%}%>

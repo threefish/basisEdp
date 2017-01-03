@@ -68,6 +68,7 @@ layout("/layouts/platform.html",{title:"角色管理"}){
 
 
 
+
 </script>
 
 <script type="text/javascript">
@@ -164,7 +165,7 @@ layout("/layouts/platform.html",{title:"角色管理"}){
     function showRoleInfo(roleid) {
         core.showMenusTree({
             title: "查看权限",
-            url: "/sysRole/menus/showRoleTree?id="+ roleid,
+            url: "/sysRole/menus/showRoleTree?id=" + roleid,
             isCheckbox: false,
             w: 600, h: 600,
             target: ['', ''],
@@ -197,15 +198,15 @@ layout("/layouts/platform.html",{title:"角色管理"}){
                     }
                 }, "json");
             },
-            onOk: function (data,index) {
-                var idArr=new Array();
-                for(var i in data){
+            onOk: function (data, index) {
+                var idArr = new Array();
+                for (var i in data) {
                     idArr.push(data[i].id);
                 }
-                $.post(base + "/sysRole/roleMenus/update", {id: roleid,ids: idArr.join(",")}, function (data) {
+                $.post(base + "/sysRole/roleMenus/update", {id: roleid, ids: idArr.join(",")}, function (data) {
                     core.msg(data);
                     if (data.ok) {
-                      layer.close(index);
+                        layer.close(index);
                     }
                 }, "json");
             }
@@ -217,7 +218,7 @@ layout("/layouts/platform.html",{title:"角色管理"}){
      * @param roleid
      */
     function assigned(roleid) {
-
+        window.location.href = base + "/sysRole/roleMenus/privileges?id=" + roleid;
     }
 
 

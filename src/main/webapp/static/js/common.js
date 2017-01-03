@@ -350,6 +350,37 @@ var core = {
                 treeManager = $.fn.zTree.init($("#yh_class_tree"), treeSetting);
             }
         });
+    },
+    showUserAccounts: function (option) {
+        var opt = {
+            title: option.title ? option.title : "人员选择器",
+            url: option.url ? option.url : "",
+            w: option.w ? option.w : 420,
+            h: option.h ? option.h : 420,
+            target: option.target ? ([option.target[0], option.target[1]]) : (["", ""]),
+            onOk: option.onOk,
+            onSuccess: option.onSuccess,
+        };
+        layer.open({
+            scrollbar: false,
+            type: 2,
+            title: opt.title,
+            area: [opt.w + 'px', opt.h + 'px'],
+            content: opt.url,
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                var body = layer.getChildFrame('body', index);
+                //var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                var val = body.find("#yxz").val();
+                if (opt.onOk) {
+                    opt.onOk(val, index);
+                }
+            }, success: function (layero, index) {
+                if (opt.onSuccess) {
+                    option.onSuccess(index);
+                }
+            }
+        })
     }
 
 };

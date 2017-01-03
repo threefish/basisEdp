@@ -1,0 +1,195 @@
+<%
+layout("/layouts/blank.html",{title:"分配用户"}){
+%>
+<style type="text/css">
+    .dataTbleBox {
+        background: #ffffff;
+        padding: 5px;
+    }
+
+    .searchBox {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+</style>
+<section class="content" id="container">
+    <form>
+        <input type="hidden" id="yxz">
+        <table class="searchBox">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="name" placeholder="用户名/支持模糊查询">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">状&nbsp;&nbsp;态</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="status">
+                                <option value="-1">请选择</option>
+                                <option value="0">启用中</option>
+                                <option value="1">禁用中</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <button type="button" id="search" class="btn margin btn-primary">
+                            &nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="usersTable" class="table table-bordered table-striped">
+        <tbody></tbody>
+    </table>
+</section>
+<script type="text/javascript">
+    var userlistTable;
+    $(function () {
+        var yxz = $("#yxz");
+        userlistTable = $('#usersTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base + '/sysAccount/grid',
+                type: 'POST',
+                data: function (data) {
+                    data.status = $("#status").val();
+                    data.name = $("#name").val();
+                }
+            },
+            "columns": [
+                {
+                    "data": "id",
+                    width: "30px",
+                    "title": "<div style='width: 55px;'><label for='ck_all'>全选</label><input type='checkbox' class='flat-red' id='ck_all'></div>",
+                    "render": function (data, type, row) {
+                        var yxzArr = yxz.val().split(",");
+                        var checked="";
+                        if(itemIsCk(yxzArr, data)){
+                            checked="checked";
+                        }
+                        var html = "";
+                        html += "<input type='checkbox' name='userdatacheckbox' class='flat-red' "+ checked+" value='" + data + "'>";
+                        return "<div style='text-align: center'>" + html + "</div>";
+                    }
+                },
+                {"data": "userName", "title": "用户名"},
+                {
+                    "data": "locked", "title": "状态", "render": function (data, type, row) {
+                    return row.locked ? "<span style='color: orangered'>已禁用</span>" : "启用中";
+                }
+                }
+            ],
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true,
+            language: {url: base + '/static/plugins/datatables/chinese.json'}
+        }).on('processing.dt', function () {
+            setiCheckAll();
+            $("#ck_all").iCheck('uncheck');
+            $("#ck_all").on('ifChanged', function () {
+                if ($(this).prop("checked")) {
+                    $('input[name="userdatacheckbox"]').each(function () {
+                        $(this).iCheck('check');
+                        ckUser($(this), true);
+                    });
+                } else {
+                    $('input[name="userdatacheckbox"]').each(function () {
+                        $(this).iCheck('uncheck');
+                        ckUser($(this), false);
+                    });
+                }
+            });
+            $('input[name="userdatacheckbox"]').on('ifChanged', function () {
+                if ($(this).prop("checked")) {
+                    $(this).iCheck('check');
+                    ckUser($(this), true);
+                } else {
+                    $(this).iCheck('uncheck');
+                    ckUser($(this), false);
+                }
+            });
+        });
+
+        $("#search").click(function () {
+            userlistTable.ajax.reload(null, false);
+        });
+    });
+
+    /**
+     * 去掉重复
+     * @param arr
+     * @param item
+     * @returns {Array}
+     */
+    function removeItem(arr, item) {
+        var newArr = new Array();
+        for (var i = 0, len = arr.length; i < len; i++) {
+            if (arr[i] !== item) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * 判断是否选中
+     * @param arr
+     * @param item
+     * @returns {Array}
+     */
+    function itemIsCk(arr, item) {
+        for (var i = 0, len = arr.length; i < len; i++) {
+            if (arr[i] == item) {
+               return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 添加一个，避免重复
+     * @param arr
+     * @param item
+     * @returns {*}
+     */
+    function addItem(arr, item) {
+        var newArr = new Array();
+        for (var i = 0, len = arr.length; i < len; i++) {
+            if (arr[i] == item) {
+                return arr;
+            } else {
+                newArr.push(arr[i]);
+            }
+        }
+        newArr.push(item);
+        return newArr;
+    }
+
+    function ckUser($el, flag) {
+        var el = $("#yxz");
+        var yxzArr = el.val().split(",");
+        var newArr = new Array();
+        if (flag) {//选中
+            newArr = addItem(yxzArr, $el.val());
+        } else { //取消
+            newArr = removeItem(yxzArr, $el.val());
+        }
+        el.val(newArr.join(","));
+    }
+</script>
+<%}%>

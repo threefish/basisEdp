@@ -8,13 +8,12 @@ import com.sgaop.basis.dao.Pager;
 import com.sgaop.basis.dao.entity.Record;
 import com.sgaop.basis.trans.TransAop;
 import com.sgaop.basis.util.RecordUtil;
+import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.util.Tree;
-import com.sgaop.entity.sys.Menu;
-import com.sgaop.entity.sys.Role;
-import com.sgaop.entity.sys.RoleMenus;
+import com.sgaop.entity.sys.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.util.ArrayList;
@@ -203,16 +202,124 @@ public class RoleAction extends BaseAction {
         if (role == null) {
             return Result.error("角色不存在");
         }
-        List<RoleMenus> oldRolelist = dao.query(RoleMenus.class, "role_id", roleId);
         Condition cnd = new Condition();
         cnd.and("role_id", "=", roleId);
         dao.delete(RoleMenus.class, cnd);
+
         List<RoleMenus> newRolelist = new ArrayList<>();
         for (int i = 0, len = ids.length; i < len; i++) {
             newRolelist.add(new RoleMenus(roleId, ids[i]));
         }
         dao.insert(newRolelist);
         return Result.sucess("操作成功");
+    }
+
+    /**
+     * 为角色添加用户
+     *
+     * @return
+     */
+    @OK("json")
+    @POST
+    @Path("/roleUsers/addUser")
+    @Aop(TransAop.READ_UNCOMMITTED)
+    public Result roleUsersAddUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
+        Role role = dao.fetch(Role.class, roleId);
+        if (role == null) {
+            return Result.error("角色不存在");
+        }
+        Condition cnd = new Condition();
+        cnd.and("role_id", "=", roleId);
+        List<UserAccountRole> oldRoleUsers = dao.query(UserAccountRole.class, cnd);
+        List<Integer> integers = new ArrayList<>();
+        for (int i = 0, len = ids.length; i < len; i++) {
+            boolean b = true;
+            sw:
+            for (UserAccountRole accountRole : oldRoleUsers) {
+                if (accountRole.getUserId() == ids[i]) {
+                    b = false;
+                    break sw;
+                }
+            }
+            if (b) {
+                integers.add(ids[i]);
+            }
+        }
+        List<UserAccountRole> newRoleUsers = new ArrayList<>();
+        for (int i = 0, len = integers.size(); i < len; i++) {
+            newRoleUsers.add(new UserAccountRole(roleId, integers.get(i)));
+        }
+        dao.insert(newRoleUsers);
+        return Result.sucess("添加成功");
+    }
+    /**
+     * 为角色添加用户
+     *
+     * @return
+     */
+    @OK("json")
+    @POST
+    @Path("/roleUsers/delUser")
+    @Aop(TransAop.READ_UNCOMMITTED)
+    public Result roleUsersDelUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
+        Role role = dao.fetch(Role.class, roleId);
+        if (role == null) {
+            return Result.error("角色不存在");
+        }
+        List<UserAccountRole> accountRoles = new ArrayList<>();
+        for (int i = 0, len = ids.length; i < len; i++) {
+            accountRoles.add(new UserAccountRole(roleId, ids[i]));
+        }
+        dao.delete(accountRoles);
+        return Result.sucess("删除成功");
+    }
+
+    /**
+     * 按角色分配人员
+     *
+     * @return
+     */
+    @OK("btl:sys.role.privileges")
+    @GET
+    @Path("/roleMenus/privileges")
+    public void privileges(@Parameter("id") int roleId) {
+        Role role = dao.fetch(Role.class, roleId);
+        request.setAttribute("role", role);
+    }
+
+    /**
+     * 按角色查询已分配人员
+     *
+     * @return
+     */
+    @OK("json:{locked:'userPass|salt',ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
+    @POST
+    @Path("/roleUsers/RoleUsersGrid")
+    public DataTableResult RoleUsersGrid(@Parameter("roleId") int roleId, @Parameter("name") String name, @Parameter("status") int status) {
+        DataTablePager dataTablePager = DataTablePager.CreateDataTablePager(request);
+        Pager pager = new Pager(dataTablePager.getPageNumber(), dataTablePager.getPageSize());
+        List<Record> records = dao.query("SELECT user_id FROM sys_useraccount_role WHERE role_id=?", roleId);
+        String userids = "";
+        for (Record record : records) {
+            userids += record.getInt("user_id") + ",";
+        }
+        Condition cnd = new Condition();
+        cnd.strs("where FIND_IN_SET(id,?)", userids);
+
+        if (!StringsTool.isNullorEmpty(name)) {
+            cnd.and("userName", "like", "%" + name + "%");
+        }
+        if (status != -1) {
+            cnd.and("locked", "=", status);
+        }
+        List<UserAccount> userAccounts = dao.query(UserAccount.class, pager, cnd);
+        int count = dao.count(UserAccount.class, cnd);
+        DataTableResult dataResult = new DataTableResult();
+        dataResult.setRecordsTotal(count);
+        dataResult.setRecordsFiltered(count);
+        dataResult.setDraw(Integer.valueOf(request.getParameter("draw")));
+        dataResult.setData(userAccounts);
+        return dataResult;
     }
 
 }
