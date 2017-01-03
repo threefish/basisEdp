@@ -1,0 +1,156 @@
+	.edui-box{
+		line-height: 1.77777em;
+	}
+	.uebox {
+		position: relative;
+		padding-left: 20px;
+		padding-top: 20px;
+	}
+	
+	#edui2.edui-toolbar .edui-box {
+		border: 0px solid transparent;
+	}
+	
+	div {
+		transition: all 0s ease .0s;
+		-o-transition: all 0s ease .0s;
+		-ms-transition: all 0s ease .0s;
+		-moz-transition: all 0s ease .0s;
+		-webkit-transition: all 0s ease .0s;
+	}
+	
+	#edui1_bottombar {
+		display: none;
+	}
+
+	#container #edui1_message_holder {
+		top: 0 !important;
+		right: -150px;
+	}
+	
+	#container #edui1_message_holder div {
+		border: none;
+		background-color: transparent;
+		color: #777;
+		font-size: 12px;
+	}
+	
+	.edui-default .edui-message .edui-message-closer {
+		color: transparent !important;
+		background-color: transparent !important;
+	}
+	
+	#edui1 {
+		border-radius: 0;
+	}
+	
+	.edui-default .edui-editor-toolbarbox {
+		box-shadow: none !important;
+	}
+	
+	#container .edui-default .edui-editor-toolbarboxouter {
+		background-image: linear-gradient(to bottom, #ffffff, #ffffff);
+		box-shadow: none;
+	}
+	
+	#container #edui2 {
+		padding: 0;
+	}
+	/*#container #edui1_toolbarbox{
+		position: absolute;
+		bottom: 10px;
+		z-index: 100000;
+		left: 200px;
+	}*/
+	
+	.uebox #btn {
+		cursor: pointer;
+		position: absolute;
+		bottom: 10px;
+		z-index: 1000;
+		left: 40px;
+		box-sizing: border-box;
+		height: 32px;
+		line-height: 32px;
+		padding: 0 25px;
+		background-color: #198FFF;
+		color: #fff;
+		box-shadow: 0 2px #063A93;
+		border-radius: 3px;
+		font-weight: 400;
+		border: 2px solid transparent;
+	}
+	
+	.uebox #btn:hover {
+		background-color: #0A80E3;
+	}
+	
+	#edui23_state,
+	#edui10_state {
+		padding-top: 2px;
+	}
+	
+	.edui-default .edui-popup-content {
+		padding: 0 !important;
+	}
+	
+	#container .edui-default .edui-toolbar .edui-button .edui-icon,
+	#container .edui-default .edui-toolbar .edui-menubutton .edui-icon,
+	#container .edui-default .edui-toolbar .edui-splitbutton .edui-icon {
+		background-image: none !important;
+		height: 2em !important;
+		width: 2em !important;
+		line-height: 2em;
+		text-align: center;
+	}
+	
+	#container .edui-default .edui-toolbar .edui-button .edui-icon i:hover,
+	#container .edui-default .edui-toolbar .edui-menubutton .edui-icon i:hover,
+	#container .edui-default .edui-toolbar .edui-splitbutton .edui-icon i:hover {
+		color: #000 !important;
+	}
+	
+	#container .edui-default .edui-toolbar .edui-combox .edui-combox-body,
+	.edui-default .edui-popup-content {
+		border-radius: 0 !important;
+	}
+	
+	.edui-default .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap {
+		background-color: transparent !important;
+		border: 1px solid transparent !important;
+	}
+	
+	.edui-default .edui-toolbar .edui-splitbutton .edui-state-checked .edui-splitbutton-body,
+	.edui-default .edui-toolbar .edui-menubutton .edui-state-checked .edui-menubutton-body {
+		background-color: transparent !important;
+		border: 1px solid transparent !important;
+	}
+	
+	.edui-default .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap i {
+		color: #000 !important;
+	}
+	
+	.edui-listitem.edui-default.edui-state-hover,
+	.edui-menuitem.edui-default.edui-state-hover {
+		border: 1px solid transparent !important;
+		background-color: #E5DAF2 !important;
+	}
+	
+	#edui40 .edui-colorpicker-topbar .edui-colorpicker-nocolor {
+		/*height: 20px;*/
+	}
+	
+	#edui39_colorlump.edui-colorlump,
+	#edui36_colorlump.edui-colorlump {
+		left: 4px;
+		bottom: -1px;
+	}
+	.edui-default .edui-anchor-topleft .edui-bordereraser{
+		top: -3px !important;
+	}
+	#edui41{
+		top: 100px;
+	}
+	.edui-default .edui-toolbar .edui-colorbutton .edui-colorlump{
+		width: 26px !important;
+	}

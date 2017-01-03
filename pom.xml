@@ -117,6 +117,11 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
         <!--CGLib动态代理-->
         <dependency>
             <groupId>cglib</groupId>
@@ -128,6 +133,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/org.json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>org.json</artifactId>
+            <version>2.0</version>
         </dependency>
         <!--日志-->
         <dependency>

@@ -17,4 +17,10 @@ public class Cons {
 
     public static final String CAPTCHA_ATTR = "CAPTCHA_ATTR";
 
+    /***
+     * UEDITOR 富文本编辑工具栏配置
+     */
+    public final static String UE_ALL_TOOL = "['undo', 'redo', 'bold', 'indent', 'italic', 'underline', 'strikethrough', 'subscript', 'fontborder', 'superscript', 'formatmatch', 'blockquote', 'pasteplain', 'selectall', 'horizontal', 'removeformat', 'unlink', 'cleardoc', 'fontfamily', 'fontsize', 'paragraph', 'edittable', 'edittd', 'link', 'emotion', 'spechars', 'searchreplace', 'map', 'justifyleft','justifyright', 'justifycenter', 'justifyjustify', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'fullscreen', 'directionalityltr', 'directionalityrtl', 'pagebreak',  'imagecenter', 'lineheight', 'edittip ', 'background', 'inserttable', 'print', 'preview', 'help']";
+
+
 }
