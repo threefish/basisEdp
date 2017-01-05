@@ -32,4 +32,34 @@ public class BaseAction {
         return (UserAccount) session.getAttribute(Cons.SESSION_USER);
     }
 
+
+    /**
+     * 给request设置临时值
+     *
+     * @param requestAttr
+     * @param val
+     */
+    protected void setAtrr(String requestAttr, Object val) {
+        request.setAttribute(requestAttr, val);
+    }
+
+    /**
+     * 给session设置值
+     *
+     * @param sessionAttr
+     * @param val
+     */
+    protected void setSessionAtrr(String sessionAttr, Object val) {
+        request.getSession().setAttribute(sessionAttr, val);
+    }
+
+    /**
+     * 获取session值
+     *
+     * @param sessionAttr
+     */
+    protected Object getSessionAtrr(String sessionAttr) {
+        return request.getSession().getAttribute(sessionAttr);
+    }
+
 }

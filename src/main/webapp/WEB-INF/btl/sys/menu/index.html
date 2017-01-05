@@ -87,7 +87,6 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <input type="text" class="form-control input-sm"  name="data.id" value="arg{data.id}">
             <input type="text" class="form-control input-sm" id="menuPid" name="data.pid" value="arg{data.pid}">
             <input type="text" class="form-control input-sm" name="data.shortNo" value="arg{data.shortNo}">
-            <input type="text" class="form-control input-sm" name="data.menuType" value="arg{data.menuType}">
         </div>
         <div class="form-grou" id="menuPName" style="display:arg{(data.menuPName==""?"none":"initial")};">
             <label>上级菜单</label>
@@ -145,19 +144,6 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <div class="btn btn-success" id="ok">${i18n.submit}</div>
         </div>
     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 <script type="text/javascript">
     var selectId;
@@ -266,7 +252,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
         if (pnode) {
             data.menuPName = pnode.menuName;
         }
-        new jsTpl({
+        core.Tpl({
             temlplateSrc: 'menuFormTpl',
             viewTarget: 'menuBox',
             arg: 'arg',
@@ -303,7 +289,7 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             data.pid = 0;
         }
 
-        new jsTpl({
+        core.Tpl({
             temlplateSrc: 'menuFormTpl',
             viewTarget: 'menuBox',
             arg: 'arg',

@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 2016/11/11 0011
  * To change this template use File | Settings | File Templates.
  */
-public class Tree {
+public class MenuTree {
 
     /**
      * 迭代ID,PID树
@@ -27,7 +27,7 @@ public class Tree {
             int id = c.getId();
             int pid = c.getPid();
             if (parentId == pid) {
-                List<Menu> childs = Tree.createTree(menus, id);
+                List<Menu> childs = MenuTree.createTree(menus, id);
                 c.setChildren(childs);
                 childList.add(c);
             }
@@ -68,8 +68,8 @@ public class Tree {
      * @param parentId
      * @return
      */
-    public static List<HashMap> createHasMap(List<Menu> menus, int parentId) {
-        menus = Tree.createTree(menus, parentId);
+    public static List<HashMap> createHashMap(List<Menu> menus, int parentId) {
+        menus = MenuTree.createTree(menus, parentId);
         List<HashMap> list = new ArrayList<>();
         for (Menu menu : menus) {
             HashMap map = new HashMap();

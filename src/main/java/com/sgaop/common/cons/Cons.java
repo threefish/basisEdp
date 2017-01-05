@@ -13,10 +13,15 @@ public class Cons {
 
     public static final String SESSION_USER = "me";
 
+    public static final String UTF8 = "utf-8";
+
     public static final String SESSION_MENUS = "sessionMenus";
 
     public static final String CAPTCHA_ATTR = "CAPTCHA_ATTR";
 
+    public final static String FILE_EXTENSIONS = "pic,tif,gif,jpg,jpeg,bmp,png,rar,zip,7z,gz,wav,mp3,ram,wma,mmf,amr,aac,flac,avi,mpg,mov,pdf,wps,doc,docx,docm,pptx,pptm,potx,potm,ppsx,ppsm,xlsb,xlsx,xlsm,xltx,xltm,xls,ppt,wpt,ett";
+
+    public final static String PHOTO_EXTENSIONS = "gif,jpg,jpeg,bmp,png";
     /***
      * UEDITOR 富文本编辑工具栏配置
      */

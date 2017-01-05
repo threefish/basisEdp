@@ -9,7 +9,7 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
-import com.sgaop.common.util.Tree;
+import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.Menu;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
@@ -39,7 +39,7 @@ public class MenuAction extends BaseAction {
         Condition condition = new Condition();
         condition.asc("short_no");
         List<Menu> menus = dao.query(Menu.class, condition);
-        return Tree.createHasMap(menus, 0);
+        return MenuTree.createHashMap(menus, 0);
     }
 
     @OK("btl:sys.menu.child")
@@ -49,7 +49,7 @@ public class MenuAction extends BaseAction {
         Condition condition = new Condition();
         condition.asc("short_no");
         List<Menu> menus = dao.query(Menu.class, condition);
-        return Tree.createHasMap(menus, pid);
+        return MenuTree.createHashMap(menus, pid);
     }
 
 

@@ -12,7 +12,7 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
-import com.sgaop.common.util.Tree;
+import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
@@ -151,7 +151,7 @@ public class RoleAction extends BaseAction {
         condition.and("locked", "=", false);
         condition.asc("short_no");
         List<Menu> menus = dao.query(Menu.class, condition);
-        return Tree.createTree(menus, 0);
+        return MenuTree.createTree(menus, 0);
     }
 
     /**
@@ -181,7 +181,7 @@ public class RoleAction extends BaseAction {
         try {
             List<Record> records = dao.query("SELECT * from sys_menu m,sys_role_menu r WHERE r.menu_id=m.id and r.role_id=?", roleId);
             menus = RecordUtil.toEntity(Menu.class, records);
-            menus = Tree.createTree(menus, 0);
+            menus = MenuTree.createTree(menus, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }

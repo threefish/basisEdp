@@ -344,6 +344,8 @@ var core = {
                 }
                 if (opt.onOk) {
                     opt.onOk(data, index);
+                }else{
+                    layer.close(index);
                 }
             }, cancel: function (index) {
             }, success: function (layero, index) {
@@ -380,9 +382,111 @@ var core = {
                     option.onSuccess(index);
                 }
             }
-        })
+        });
     }
 
 };
+!(function (win, doc) {
+    var HUCuploadFile = new Object();
+    var cong = {
+        url: "",
+        title: "文件上传",
+        w: "660px",
+        h: "430px",
+        type: 'file', // 标志 是 文件(file) 还是图片(img)
+        fun: function () {
+        }
+    };
+    HUCuploadFile.layerIndex;
+    HUCuploadFile.formData = {};
+    HUCuploadFile.prototype = {
+        version: '1.0.0',
+        _init: function () {
+            this.layerIndex = layer.open({
+                type: 2,
+                shade: 0.4,
+                area: [cong.w, cong.h],
+                shadeClose: false,
+                title: cong.title,
+                content: [base + cong.url, 'no']
+            });
+        },
+        ok: function (attachList) {
+            cong.fun(this.layerIndex, attachList);
+        }
+    };
+
+    /**
+     * 多文件上传至数据库
+     * 兼容老版本方法
+     * @param url
+     * @param fileExtensions
+     * @param fun
+     */
+    HUCuploadFile.open = function (module, fun, type) {
+        if (type && type === "cutimg") {
+            cong.url = '/File/cutimg?module=' + module;
+            cong.title = "封面图片上传";
+            cong.w = "1024px";
+            cong.h = "560px";
+        } else {
+            cong.url = '/File/page?module=' + module;
+        }
+        cong.fun = fun;
+        this.prototype._init();
+    }
+
+
+    /**
+     * 多文件上传至指定url
+     * 注意：formData 中不能使用id,name,file
+     * @param config
+        {
+             url:"",//文件接收地址
+             type:'',// 上传 文件还是 图片 (file ---- 文件  img ---- 图片)
+             fileExtensions:"", //文件过滤类型 如 exe,png,xls
+             title:"",  //弹窗标题
+             formData:{}, //文件上传时一起发送的参数  注意：formData 中不能使用id,name,file
+             ok:function(index,response){}  //上传完成后点击确定执行的事件 index表示layer窗口的标识，response是服务器返回的数据
+         }
+     *
+     */
+    HUCuploadFile.multiUpload = function (config) {
+        cong.url = '/File/multiUpload?url=' + config.url + '&fileExtensions=' + config.fileExtensions + '&module=' + config.module + '&fileType=' + (config.type == undefined ? cong.type : config.type );
+        cong.fun = config.ok;
+        cong.title = config.title;
+        HUCuploadFile.formData = config == undefined ? {} : config.formData;
+        this.prototype._init();
+    }
+
+    /**
+     * 单文件上传至指定url
+     * 注意：formData 中不能使用id,name,file
+     * @param config
+        {
+             url:"",//文件接收地址
+             fileExtensions:"", //文件过滤类型 如 exe,png,xls
+             title:"",  //弹窗标题
+             formData:{}, //文件上传时一起发送的参数  注意：formData 中不能使用id,name,file
+             ok:function(index,response){}  //上传完成后点击确定执行的事件 index表示layer窗口的标识，response是服务器返回的数据
+         }
+     *
+     */
+    HUCuploadFile.singleUpload = function (config) {
+        cong.url = '/File/singleUpload?url=' + config.url + '&fileExtensions=' + config.fileExtensions + '&module=' + config.module + '&fileType=' + (config.type == undefined ? cong.type : config.type );
+        cong.fun = config.ok;
+        cong.title = config.title;
+        cong.h = "320px";
+        HUCuploadFile.formData = config == undefined ? {} : config.formData;
+        this.prototype._init();
+    }
+
+    HUCuploadFile.ok = function (response) {
+        HUCuploadFile.prototype.ok(response);
+    }
+    win.HUCuploadFile = HUCuploadFile;
+}(window, document));
+
+
 
 
