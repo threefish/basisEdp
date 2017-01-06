@@ -11,7 +11,7 @@ import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.cons.Cons;
-import com.sgaop.common.util.Tree;
+import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.Menu;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -114,7 +114,7 @@ public class AccountAction extends BaseAction {
             if (menus == null) {
                 return Result.error("没有菜单权限");
             }
-            menus = Tree.createTree(menus, 0);
+            menus = MenuTree.createTree(menus, 0);
             session.setAttribute(Cons.SESSION_MENUS, menus);
         } catch (Exception e) {
             log.debug(e);

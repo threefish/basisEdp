@@ -1,0 +1,198 @@
+<%
+layout("/layouts/platform.html",{title:"新闻管理"}){
+%>
+<style type="text/css">
+    .dataTbleBox {
+        background: #ffffff;
+        margin: 15px 0px;
+        padding: 15px;
+    }
+
+    .searchBox {
+        margin-top: 10px;
+        width: 100%;
+    }
+</style>
+<section class="content-header">
+    <h1>
+        新闻管理
+        <small>${i18n.controlPanel}</small>
+    </h1>
+</section>
+<section class="content">
+    <div class="row dataTbleBox  box box-warning">
+        <div>
+            <button type="button" id="add" class="btn margin btn-danger">${i18n.add}</button>
+        </div>
+        <table class="searchBox">
+            <tr>
+                <td class="form-lable">
+                    标题
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="title" autocomplete="off" placeholder="支持模糊查询">
+                    </div>
+                </td>
+                <td class="form-lable">
+                    发布状态
+                </td>
+                <td>
+                    <div class="input-group">
+                        <select class="form-control" id="status">
+                            <option value="-1">请选择</option>
+                            <option value="0">未发布</option>
+                            <option value="1">已发布</option>
+                        </select>
+                    </div>
+                </td>
+                <td class="form-lable">
+                    是否置顶
+                </td>
+                <td>
+                    <div class="input-group">
+                        <select class="form-control" id="toped">
+                            <option value="-1">请选择</option>
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </div>
+                </td>
+                <td class="form-lable">
+                    新闻类型
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input type="hidden" class="form-control" id="typeId">
+                        <input type="text" class="form-control" id="typeDesc" placeholder="新闻类型" readonly
+                               onclick="showNewsType()">
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <button type="button" id="search" class="btn margin btn-primary">
+                            &nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table id="menusTable" class="table table-bordered table-striped">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script type="text/javascript">
+    var userlistTable;
+    $(function () {
+        userlistTable = $('#menusTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base + '/operation/news/manage/dataList',
+                type: 'POST',
+                data: function (data) {
+                    data.status = $("#status").val();
+                    data.title = $("#title").val();
+                    data.menuType = $("#typeId").val();
+                    data.toped = $("#toped").val();
+                }
+            },
+            "columns": [
+                {"data": "id", "title": "序号", width: "30px", "visible": false},
+                {"data": "title", "title": "标题"},
+                {
+                    "data": "toped", "title": "是否置顶", "render": function (data, type, row) {
+                    return row.toped ? "是" : "否";
+                }
+                },
+                {"data": "menuName", "title": "新闻类型"},
+                {"data": "form", "title": "来自"},
+                {"data": "createUser", "title": "发布人"},
+                {
+                    "data": "status", "title": "发布状态", "render": function (data, type, row) {
+                    return row.status == 0 ? "未发布" : "发布中";
+                }
+                },
+                {"data": "publishTime", "title": "发布时间", width: "180px"},
+                {
+                    "title": "操作", width: "100px", "render": function (data, type, row) {
+                    var html = "";
+                    html += '<button type="button" class="btn btn-xs btn-danger"   onclick="edit(' + row.id + ')">编辑</button>&nbsp;&nbsp;&nbsp;';
+                    html += '<button type="button" class="btn btn-xs btn-primary" onclick="del(' + row.id + ')">删除</button>';
+                    return html;
+                }
+                }
+            ],
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true,
+            language: {url: base + '/static/plugins/datatables/chinese.json'}
+        });
+
+
+        $("#search").click(function () {
+            userlistTable.ajax.reload(null, false);
+        });
+
+        $("#add").click(function () {
+            window.location.href = "${base!}/operation/news/manage/edit"
+        });
+
+
+    });
+    function del(id) {
+        layer.confirm("您确定删除该新闻吗？", {
+            btn: ['确定', '取消'] //按钮
+        }, function (index) {
+            $.post(base + "/operation/news/manage/del", {id: id}, function (data) {
+                core.msg(data);
+                if (data.ok) {
+                    userlistTable.ajax.reload(null, false);
+                }
+            }, "json")
+            layer.close(index);
+        });
+    }
+    function edit(id) {
+        window.location.href = "${base!}/operation/news/manage/edit?id=" + id;
+    }
+
+    function updateNewsInfo(data) {
+        $.ajax({
+            type: "post",
+            url: "${base}",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                if (data && data.ok) {
+                    layer.msg(data.data, {icon: 1});
+                    userlistTable.ajax.reload(null, false);
+                } else {
+                    layer.msg(data.msg, {icon: 7, time: 2000});
+                }
+            }, error: function (status) {
+                layer.msg("${i18n.AjaxNetworkError}", {icon: 5, time: 1000});
+                console.log(status);
+            }
+        });
+    }
+    function showNewsType() {
+        core.showMenusTree({
+            title: "选择类型",
+            url: "/operation/news/cktree",
+            isCheckbox: false,
+            w: 600, h: 600,
+            target: ['typeId', 'typeDesc'],
+            data: {id: "id", pid: "pid", name: "menuName"},
+            onOk: function (data, index) {
+                core.validate("#typeDesc")
+                layer.close(index);
+            }
+        });
+    }
+</script>
+<%}%>

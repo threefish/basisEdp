@@ -1,0 +1,41 @@
+<div class="header_bg">
+    <div class="header_title">
+        <div class="title_left " align="center">
+            <div><a href="${base!}/"> <img src="${base!}/static/news/img/logo.png"></a></div>
+            <div><img src="${base!}/static/news/img/chengdu.png"></div>
+        </div>
+        <div class="title_middle">
+            <a href="${base!}/" name="home"><img src="${base!}/static/news/img/international_logo.png"></a>
+        </div>
+        <div class="title_right" align="right">
+            <div style="height:30px;padding-right: 20px;font-size: 12px;"><span>
+                <a style="color: white;" href="http://iecd.cdedu.gov.cn">English</a></span>&nbsp;&nbsp;
+                <span><a style="color: white;" href="${base!}/account/login">登录</a></span></div>
+            <img src="${base!}/static/news/img/slogan.png">
+        </div>
+    </div>
+    <nav class="navbar navbar-default education" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="${base}/">首页</a></li>
+                    <%for(menu in session.indexMenu){%>
+                    <%if(menu.children.~size>0){%>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${menu.menuName}<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <%for(m2 in menu.children){%>
+                            <li><a href="${base}/news/newslist?id=${m2.id}">${m2.menuName}</a></li>
+                            <%}%>
+                        </ul>
+                    </li>
+                    <%}else{%>
+                    <li><a href="${base}/news/newslist?id=${menu.id}">${menu.menuName}</a></li>
+                    <%}%>
+                    <%}%>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

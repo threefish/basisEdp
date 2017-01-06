@@ -344,7 +344,7 @@ var core = {
                 }
                 if (opt.onOk) {
                     opt.onOk(data, index);
-                }else{
+                } else {
                     layer.close(index);
                 }
             }, cancel: function (index) {
@@ -383,8 +383,19 @@ var core = {
                 }
             }
         });
+    },
+    cutimg: function (module, success) {
+        HUCuploadFile.open(module, success, "cutimg");
+    },
+    uploadFile: function (module, success) {
+        HUCuploadFile.open(module, success);
+    },
+    multiUpload: function (opt) {
+        HUCuploadFile.multiUpload(opt);
+    },
+    singleUpload: function (opt) {
+        HUCuploadFile.singleUpload(opt);
     }
-
 };
 !(function (win, doc) {
     var HUCuploadFile = new Object();

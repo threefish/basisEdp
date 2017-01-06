@@ -1,0 +1,163 @@
+<%
+layout("/layouts/platform.html",{title:"新闻编辑"}){
+%>
+<style type="text/css">
+
+</style>
+<section class="content-header">
+    <h1>
+        新闻编辑
+        <small>${i18n.controlPanel}</small>
+    </h1>
+</section>
+<section class="content">
+    <div class="row" style="margin: 8px">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">添加</h3>
+            </div>
+            <form role="form" id="form1" method="post">
+                <div>
+                    <input type="hidden" value="${news.id!}" name="data.id">
+                    <input type="hidden" value="${news.menuid!}" id="typeId" name="data.menuid">
+                    <input type="hidden" value="${news.imgPath!}" id="imgPath" name="data.imgPath">
+                </div>
+                <div class="box-body">
+                    <div>
+                        <div class="form-group sm-validator">
+                            <label>标题</label>
+                            <input data-rule="required" type="text" value="${news.title!}" name="data.title"
+                                   class="form-control"
+                                   placeholder="标题">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>是否置顶</label>
+                            <select name="data.toped" class="form-control">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>封面图片</label>
+                            <div>
+                                <button type="button" class="btn btn-danger" id="addTopFile">上传图片</button>
+                                <img id="fengmian">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group sm-validator">
+                            <label>新闻类型</label>
+                            <input data-rule="required" value="${news.menuName!}" readonly id="typeDesc" type="text"
+                                   onfocus="showNewsType()"
+                                   name="data.menuName" class="form-control"
+                                   placeholder="新闻类型">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group sm-validator">
+                            <label>来自</label>
+                            <input data-rule="required" type="text" value="${news.form!}" name="data.form"
+                                   class="form-control"
+                                   placeholder="来自">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group sm-validator">
+                            <label>发布时间</label>
+                            <input data-rule="required" value="${news.publishTime!}" type="text" name="data.publishTime"
+                                   class="form-control"
+                                   placeholder="支持定时发布，默认立即发布">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group sm-validator">
+                            <label>内容</label>
+                            <script id="editor" name="data.content" style="width:100%;height:600px;"
+                                    type="text/plain">${news.content!}
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" style="text-align: center">
+                    <button type="button" id="submitBtn" class="btn btn-primary">提交</button>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <button type="button" onclick="history.back()" class="btn btn-primary">返回</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" charset="utf-8" src="${base}/static/plugins/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/static/plugins/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/static/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script>
+    var attachmodule = "news";
+    var ue;
+    $(function () {
+        ue = UE.getEditor('editor', {
+            toolbars: [${UE_ALL_TOOL}],
+            autoHeightEnabled: false,
+            autoFloatEnabled: true,
+            initialFrameWidth: "100%"
+        });
+        ue.ready(function () {
+            core.SMValidator("#form1");
+            if ("${news.toped!}" == "true") {
+                $("select[name='data.toped']").val(1);
+            }
+            if ("${news.imgPath!}" != "") {
+                $("#fengmian").attr("src", "${base!}/news/newsAttachAct?id=${news.imgPath!}");
+            }
+        });
+
+        $("#addTopFile").click(function () {
+            core.cutimg(attachmodule, function (layerIndex, data) {
+                $("#fengmian").attr("src", "${base!}/news/newsAttachAct?id=" + data.data);
+                $("#imgPath").val(data.data);
+                layer.close(layerIndex);
+            });
+        });
+
+
+        $("#submitBtn").click(function () {
+            if (core.validate("#form1")) {
+                $("#submitBtn").attr("disable", "");
+                $.post(base + "/operation/news/manage/addOrUpdate", $("#form1").serialize(), function (data) {
+                    core.msg(data);
+                    if (data.ok) {
+                        setTimeout(function () {
+                            history.back();
+                        }, 3000);
+                    } else {
+                        $("#submitBtn").removeAttr("disable");
+                    }
+                }, "json");
+            }
+            ;
+        });
+    });
+
+    function showNewsType() {
+        core.showMenusTree({
+            title: "选择类型",
+            url: "/operation/news/cktree",
+            isCheckbox: false,
+            w: 600, h: 600,
+            target: ['typeId', 'typeDesc'],
+            data: {id: "id", pid: "pid", name: "menuName"},
+            onOk: function (data, index) {
+                core.validate("#typeDesc")
+                layer.close(index);
+            }
+        });
+    }
+</script>
+<%}%>

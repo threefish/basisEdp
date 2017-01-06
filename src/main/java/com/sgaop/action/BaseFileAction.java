@@ -1,9 +1,11 @@
 package com.sgaop.action;
 
 import com.sgaop.basis.annotation.*;
+import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.upload.TempFile;
+import com.sgaop.basis.mvc.view.DownFile;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.common.util.Base64Tool;
@@ -180,4 +182,16 @@ public class BaseFileAction extends BaseAction {
             return Result.error("文件格式错误");
         }
     }
+
+
+    @Path("/attachAct")
+    @OK("raw")
+    @POST
+    @GET
+    public DownFile FileAct(@Parameter("id") int id) {
+        FileAttach attach = dao.fetch(FileAttach.class, id);
+        return new DownFile(attach.getAttachfilename(), new File(Mvcs.getServletContext().getRealPath("/") + attach.getSavedpath()));
+    }
+
+
 }
