@@ -1,5 +1,8 @@
 package com.sgaop.common.util;
 
+import com.sgaop.basis.util.Logs;
+import org.apache.log4j.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +13,9 @@ import java.io.*;
  * 图片水印
  */
 public class ImageUtil {
+
+    protected static final Logger log = Logs.get();
+    
     /**
      * @param args
      */
@@ -73,13 +79,13 @@ public class ImageUtil {
             // 生成图片
             ImageIO.write(buffImg, "JPG", os);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e);
         } finally {
             try {
                 if (null != os)
                     os.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.debug(e);
             }
         }
     }
@@ -98,7 +104,6 @@ public class ImageUtil {
     public static void waterMarkByText(String logoText, String srcImgPath, String targerPath, Integer degree, Integer width,
                                        Integer height, Float clarity) {
         // 主图片的路径
-        InputStream is = null;
         OutputStream os = null;
         try {
             Image srcImg = ImageIO.read(new File(srcImgPath));
@@ -125,19 +130,13 @@ public class ImageUtil {
             // 生成图片
             ImageIO.write(buffImg, "JPG", os);
         } catch (Exception e) {
-            e.printStackTrace();
+           log.debug(e);
         } finally {
-            try {
-                if (null != is)
-                    is.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             try {
                 if (null != os)
                     os.close();
             } catch (Exception e) {
-                e.printStackTrace();
+               log.debug(e);
             }
         }
     }
@@ -169,7 +168,7 @@ public class ImageUtil {
             graphics2D.dispose();
             ImageIO.write(destBufferedImage, "JPEG", new File(destPath));
         } catch (IOException e) {
-            e.printStackTrace();
+           log.debug(e);
         }
     }
 }

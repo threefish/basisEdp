@@ -1,11 +1,16 @@
 package com.sgaop.common.util;
 
+import com.sgaop.basis.util.Logs;
+import org.apache.log4j.Logger;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
 
 public class Base64Tool {
+
+    protected static final Logger log = Logs.get();
+
     // 加密  
     public static String getBase64(String str) {
         byte[] b = null;
@@ -13,7 +18,7 @@ public class Base64Tool {
         try {
             b = str.getBytes("utf-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            log.debug(e);
         }
         if (b != null) {
             s = new BASE64Encoder().encode(b);
@@ -31,7 +36,7 @@ public class Base64Tool {
                 b = decoder.decodeBuffer(s);
                 result = new String(b, "utf-8");
             } catch (Exception e) {
-                e.printStackTrace();
+                log.debug(e);
             }
         }
         return result;
@@ -45,13 +50,11 @@ public class Base64Tool {
      */
     public static String GetImageStr(String imgFilePath) {
         byte[] data = null;
-        try {
-            InputStream in = new FileInputStream(imgFilePath);
+        try (InputStream in = new FileInputStream(imgFilePath)) {
             data = new byte[in.available()];
             in.read(data);
-            in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.debug(e);
         }
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(data);
@@ -69,14 +72,13 @@ public class Base64Tool {
         String index = "data:image/png;base64,";
         imgStr = imgStr.replace(index, "");
         BASE64Decoder decoder = new BASE64Decoder();
-        try {
+        try (OutputStream out = new FileOutputStream(imgFilePath)) {
             byte[] bytes = decoder.decodeBuffer(imgStr);
             for (int i = 0; i < bytes.length; ++i) {
                 if (bytes[i] < 0) {// 调整异常数据
                     bytes[i] += 256;
                 }
             }
-            OutputStream out = new FileOutputStream(imgFilePath);
             out.write(bytes);
             out.flush();
             out.close();

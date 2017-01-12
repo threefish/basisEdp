@@ -1,5 +1,8 @@
 package com.sgaop.common.util;
 
+import com.sgaop.basis.util.Logs;
+import org.apache.log4j.Logger;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,6 +17,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class DateUtil {
+    protected static final Logger log = Logs.get();
 
     public static String createAt(Date date) {
         if (date == null)
@@ -364,7 +368,7 @@ public class DateUtil {
         try {
             date = new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS).parse(specifiedDay);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.debug(e); 
         }
         c.setTime(date);
         int day = c.get(Calendar.DATE);

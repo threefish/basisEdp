@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             position: relative;
-            height: 400px;
+            height: 600px;
             border: 2px dashed #e4e4e4;
             margin: 5px;
         }
@@ -105,11 +105,11 @@
         </div>
     </div>
     <div id="fileList" class="filelist">
-        <div class="cropper" style="height: 400px">
-            <img>
+        <div class="cropper" style="height: 600px">
+            <img  style="width: 100%">
         </div>
         <div class="prew">
-            <img style="width: 100%;">
+            <img style="max-height:250px;display: block;margin: 0 auto;">
         </div>
     </div>
     <div class="btns" style="text-align: center;">
@@ -144,7 +144,7 @@
 
         var options = {
                     zoomable: true,
-                    aspectRatio: 720 / 250,
+                    aspectRatio: '${ratio!}',
                     preview: '.img-preview'
                 };
         $image.cropper(options);
@@ -181,7 +181,7 @@
                 $.ajax({
                     url: base + '/File/uploadBase64Act',
                     type: "POST",
-                    data: {module: "${module}", filedate: data},
+                    data: {module: "${module!}", filedate: data},
                     error: function (request) {
                         layer.close(load);
                         layer.msg("网络连接出错", {icon: 5, time: 1000});

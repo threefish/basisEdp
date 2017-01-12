@@ -1,3 +1,3 @@
 <%
-    response.sendRedirect(request.getContextPath() + "/news/index.html");
+    response.sendRedirect(request.getContextPath() + "/main/index");
 %>

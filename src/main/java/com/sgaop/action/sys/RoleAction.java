@@ -121,11 +121,16 @@ public class RoleAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/del")
+    @Aop(TransAop.READ_UNCOMMITTED)
     public Result del(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
             return Result.error("角色不存在！");
         }
+        Condition condition = new Condition();
+        condition.and("role_id", "=", id);
+        List<RoleMenus> roleMenuses = dao.query(RoleMenus.class, condition);
+        dao.delete(roleMenuses);
         dao.delete(role);
         return Result.sucess("删除成功");
     }
@@ -252,6 +257,7 @@ public class RoleAction extends BaseAction {
         dao.insert(newRoleUsers);
         return Result.sucess("添加成功");
     }
+
     /**
      * 为角色添加用户
      *

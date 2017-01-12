@@ -117,7 +117,7 @@ public class BaseFileAction extends BaseAction {
     public Result FileUploadact(@Parameter("file") TempFile tf, @Parameter("module") String module) {
         try {
             String parentPath = Mvcs.getServletContext().getRealPath("/");
-            java.nio.file.Path newFile = FileUtil.getFilePath(tf.getName(), getUserAccount().getId());
+            java.nio.file.Path newFile = FileUtil.getFilePath(false,tf.getName(), getUserAccount().getId());
             String filePath = newFile.toAbsolutePath().toString().replace(parentPath, "");
             InputStream in = tf.getInputStream();
             Files.copy(in, newFile, StandardCopyOption.REPLACE_EXISTING);
@@ -159,7 +159,7 @@ public class BaseFileAction extends BaseAction {
     public Result uploadBase64File(@Parameter("module") String module, @Parameter("filedate") String filedate) {
         try {
             String oldName = RandomUtil.generateString(5) + ".jpg";
-            java.nio.file.Path newFile = FileUtil.getFilePath(oldName, getUserAccount().getId());
+            java.nio.file.Path newFile = FileUtil.getFilePath(false,oldName, getUserAccount().getId());
             String filePath = newFile.toAbsolutePath().toString().replace(Mvcs.getServletContext().getRealPath("/"), "");
             String relPath = newFile.toAbsolutePath().toString();
             if (Base64Tool.GenerateImage(filedate, relPath)) {

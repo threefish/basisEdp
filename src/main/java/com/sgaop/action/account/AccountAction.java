@@ -54,9 +54,9 @@ public class AccountAction extends BaseAction {
         Captcha captcha = new Captcha.Builder(w, h)
                 .addText()
                 .addBackground(new GradiatedBackgroundProducer())
-                .addNoise(new StraightLineNoiseProducer())
+//                .addNoise(new StraightLineNoiseProducer())
                 .addBorder()
-                .gimp(new FishEyeGimpyRenderer()).addBorder()
+//                .gimp(new FishEyeGimpyRenderer()).addBorder()
                 .build();
         session.setAttribute(Cons.CAPTCHA_ATTR, captcha.getAnswer());
         return captcha.getImage();

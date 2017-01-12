@@ -1,5 +1,8 @@
 package com.sgaop.common.cons;
 
+import com.sgaop.basis.annotation.Inject;
+import com.sgaop.basis.annotation.IocBean;
+
 /**
  * Created by IntelliJ IDEA.
  * User: 306955302@qq.com
@@ -7,6 +10,7 @@ package com.sgaop.common.cons;
  * To change this template use File | Settings | File Templates.
  * 已固定常量不允许修改，修改后会导致beetl错误
  */
+@IocBean
 public class Cons {
 
     public static final String AUTHORIZATION_INFO = "AUTHORIZATION_INFO";
@@ -19,9 +23,9 @@ public class Cons {
 
     public static final String CAPTCHA_ATTR = "CAPTCHA_ATTR";
 
-    public final static String FILE_EXTENSIONS = "pic,tif,gif,jpg,jpeg,bmp,png,rar,zip,7z,gz,wav,mp3,ram,wma,mmf,amr,aac,flac,avi,mpg,mov,pdf,wps,doc,docx,docm,pptx,pptm,potx,potm,ppsx,ppsm,xlsb,xlsx,xlsm,xltx,xltm,xls,ppt,wpt,ett";
+    @Inject("java:attach.extensions")
+    public static String FILE_EXTENSIONS ;
 
-    public final static String PHOTO_EXTENSIONS = "gif,jpg,jpeg,bmp,png";
     /***
      * UEDITOR 富文本编辑工具栏配置
      */

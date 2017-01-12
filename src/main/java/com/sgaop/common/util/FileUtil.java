@@ -37,10 +37,10 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public static Path getFilePath(String fileName, int userid) throws IOException {
+    public static Path getFilePath(boolean isPublic,String fileName, int userid) throws IOException {
         Date date = new Date();
         Path newFile = Paths.get(Mvcs.getServletContext().getRealPath("/"),
-                "upload",
+                (isPublic?"publiceupload": "privateupload"),
                 "web",
                 String.valueOf(userid),
                 DateUtil.getFullYear(date),

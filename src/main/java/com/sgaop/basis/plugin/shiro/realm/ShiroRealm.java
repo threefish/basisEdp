@@ -5,7 +5,10 @@ import com.sgaop.basis.dao.entity.Record;
 import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.ioc.Ioc;
 import com.sgaop.basis.mvc.Mvcs;
+import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.cons.Cons;
+import com.sgaop.common.util.MenuTree;
+import com.sgaop.entity.sys.Menu;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -17,6 +20,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,19 +45,34 @@ public class ShiroRealm extends AuthorizingRealm {
             if (user != null) {
                 Set<String> roles = new HashSet<>();
                 Set<String> permissions = new HashSet<>();
-                String sql = "SELECT r.id,r.role_name,r.role_code from sys_useraccount_role as ur,sys_role as r  WHERE ur.role_id=r.id and ur.user_id=?";
+                String sql = "SELECT r.id,r.role_name,r.role_code from sys_useraccount_role as ur,sys_role as r WHERE ur.role_id=r.id and ur.user_id=?";
                 List<Record> roleList = dao.query(sql, user.getId());
                 String roleids = "";
                 for (Record mapro : roleList) {
                     roles.add(mapro.getString("role_code"));
                     roleids += mapro.getInt("id") + ",";
                 }
-                sql = "SELECT r.id,r.role_name,r.role_code,p.id,p.permission_name from sys_role as r,sys_role_menu as rp,sys_permission as p ";
-                sql += "WHERE r.id=rp.role_id and rp.menu_id=p.id AND FIND_IN_SET(r.id,?);";
+                sql = "SELECT m.id,m.pid,r.role_name,r.role_code,m.menu_target,m.menu_icon,m.menu_type,m.menu_name,m.permission FROM sys_role AS r, sys_role_menu AS rm,sys_menu AS m WHERE r.id = rm.role_id AND m.id = rm.menu_id and m.locked=0 AND FIND_IN_SET(r.id, ?) group by m.id ORDER BY m.short_no asc";
                 List<Record> permissionList = dao.query(sql, roleids);
-                for (Record mappo : permissionList) {
-                    permissions.add(mappo.getString("permission_name"));
+                List<Menu> menus = new ArrayList<>();
+                for (Record r : permissionList) {
+                    String permission= r.getString("permission");
+                    if(!StringsTool.isNullorEmpty(permission)){
+                        permissions.add(r.getString("permission"));
+                    }
+                    if (r.getInt("menu_type")==0) {
+                        Menu menu = new Menu();
+                        menu.setMenuTarget(r.getString("menu_target"));
+                        menu.setMenuIcon(r.getString("menu_icon"));
+                        menu.setIconSkin(r.getString("menu_icon"));
+                        menu.setMenuName(r.getString("menu_name"));
+                        menu.setId(r.getInt("id"));
+                        menu.setPid(r.getInt("pid"));
+                        menus.add(menu);
+                    }
                 }
+                menus = MenuTree.createTree(menus, 0);
+                session.setAttribute(Cons.SESSION_MENUS, menus);
                 authorizationInfo.addRoles(roles);
                 authorizationInfo.addStringPermissions(permissions);
             }
