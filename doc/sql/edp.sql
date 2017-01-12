@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : 127.0.0.1
 Source Server Version : 50505
 Source Host           : localhost:3306
-Source Database       : basisedp
+Source Database       : edp
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-01-03 18:33:14
+Date: 2017-01-12 16:25:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,7 +52,7 @@ CREATE TABLE `sys_apm_alarm` (
   `alarmUsage` double DEFAULT NULL,
   `point` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8118 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8122 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_apm_alarm
@@ -288,6 +288,10 @@ INSERT INTO `sys_apm_alarm` VALUES ('8114', 'NetWork', '2016-12-30 20:55:10', '�
 INSERT INTO `sys_apm_alarm` VALUES ('8115', 'SWAP', '2016-12-30 20:56:30', '内存警告:当前 SWAP 使用率 81.00,高于预警值 80.00', '127.0.0.1', '内存警告', 'SWAP', '81', '80');
 INSERT INTO `sys_apm_alarm` VALUES ('8116', 'NetWork', '2016-12-30 20:59:35', '流量警告:当前 NetWork 使用率 2930.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '2930', '80');
 INSERT INTO `sys_apm_alarm` VALUES ('8117', 'NetWork', '2016-12-30 20:59:35', '流量警告:当前 NetWork 使用率 120.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '120', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8118', 'NetWork', '2017-01-12 16:19:00', '流量警告:当前 NetWork 使用率 281.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '281', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8119', 'NetWork', '2017-01-12 16:23:00', '流量警告:当前 NetWork 使用率 670.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '670', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8120', 'NetWork', '2017-01-12 16:23:10', '流量警告:当前 NetWork 使用率 125.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '125', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8121', 'NetWork', '2017-01-12 16:23:35', '流量警告:当前 NetWork 使用率 216.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '216', '80');
 
 -- ----------------------------
 -- Table structure for sys_department
@@ -322,6 +326,61 @@ INSERT INTO `sys_department` VALUES ('10', '0', '\0', '办公室', '1', '', 'fa-
 INSERT INTO `sys_department` VALUES ('11', '7', '\0', '测试部', '0', '', 'fa-file-o', '', '2016-12-27 10:04:38', null, '1', '0');
 
 -- ----------------------------
+-- Table structure for sys_file_attach
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_file_attach`;
+CREATE TABLE `sys_file_attach` (
+  `attachid` int(11) NOT NULL AUTO_INCREMENT,
+  `attachtype` varchar(255) DEFAULT NULL,
+  `attachfilename` varchar(255) DEFAULT NULL,
+  `savedfilename` varchar(255) DEFAULT NULL,
+  `savedpath` varchar(255) DEFAULT NULL,
+  `filesize` bigint(20) DEFAULT NULL,
+  `adduser` varchar(255) DEFAULT NULL,
+  `addtime` datetime DEFAULT NULL,
+  PRIMARY KEY (`attachid`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of sys_file_attach
+-- ----------------------------
+INSERT INTO `sys_file_attach` VALUES ('1', '', 'TMPSNAPSHOT1479895941382.jpg', 'B0I9pCX7Bi_TMPSNAPSHOT1479895941382.jpg', 'upload\\web\\1\\2017\\0105\\1410\\B0I9pCX7Bi_1483596624775.jpg', '0', 'admin', '2017-01-05 14:10:24');
+INSERT INTO `sys_file_attach` VALUES ('2', '', '1.png', 'mLxuVYB2HE_1.png', 'upload\\web\\1\\2017\\0105\\1412\\mLxuVYB2HE_1483596753292.png', '0', 'admin', '2017-01-05 14:12:33');
+INSERT INTO `sys_file_attach` VALUES ('3', '', 'destination_1.png', 'LzXsPu2JD1_destination_1.png', 'upload\\web\\1\\2017\\0105\\1413\\LzXsPu2JD1_destination_1483596810093.png', '0', 'admin', '2017-01-05 14:13:30');
+INSERT INTO `sys_file_attach` VALUES ('4', '', 'logo.png', 'Ic2o12QRw1_logo.png', 'upload\\web\\1\\2017\\0105\\1423\\Ic2o12QRw1_1483597437430.png', '0', 'admin', '2017-01-05 14:23:57');
+INSERT INTO `sys_file_attach` VALUES ('5', '', '操.png', 'LhsmbT3V5b_map1.png', 'upload\\web\\1\\2017\\0105\\1423\\LhsmbT3V5b_1483597437435.png', '0', 'admin', '2017-01-05 14:23:57');
+INSERT INTO `sys_file_attach` VALUES ('6', '', 'map2.png', 'sAWEi9ADCL_map2.png', 'upload\\web\\1\\2017\\0105\\1423\\sAWEi9ADCL_1483597437434.png', '0', 'admin', '2017-01-05 14:23:57');
+INSERT INTO `sys_file_attach` VALUES ('7', '', '1.png', 'u1s1RKqOrZ_1.png', 'upload\\web\\1\\2017\\0105\\1429\\u1s1RKqOrZ_1483597794314.png', '0', 'admin', '2017-01-05 14:29:54');
+INSERT INTO `sys_file_attach` VALUES ('8', '', '1.png', 'bV4WdOxPYH_1.png', 'upload\\web\\1\\2017\\0105\\1436\\bV4WdOxPYH_1483598165468.png', '0', 'admin', '2017-01-05 14:36:05');
+INSERT INTO `sys_file_attach` VALUES ('9', 'news', '5.png', 'oW5oXd9i5P_5.png', 'upload\\web\\1\\2017\\0105\\1440\\oW5oXd9i5P_1483598448806.png', '0', 'admin', '2017-01-05 14:40:48');
+INSERT INTO `sys_file_attach` VALUES ('10', '', '4qa6g.jpg', 'zjfA7iflzZ_4qa6g.jpg', 'upload\\web\\1\\2017\\0105\\1526\\zjfA7iflzZ_4qa6g.jpg', '0', 'admin', '2017-01-05 15:26:26');
+INSERT INTO `sys_file_attach` VALUES ('11', '', 'zMyrp.jpg', 'drGSHRk7UC_zMyrp.jpg', 'upload\\web\\1\\2017\\0105\\1526\\drGSHRk7UC_zMyrp.jpg', '0', 'admin', '2017-01-05 15:26:26');
+INSERT INTO `sys_file_attach` VALUES ('12', '', 'Wdfd4.jpg', 'Xg5O73YVd5_Wdfd4.jpg', 'upload\\web\\1\\2017\\0105\\1527\\Xg5O73YVd5_Wdfd4.jpg', '0', 'admin', '2017-01-05 15:27:36');
+INSERT INTO `sys_file_attach` VALUES ('13', 'news', '7y4Yj.jpg', 'JTcc3h7fqd_7y4Yj.jpg', 'upload\\web\\1\\2017\\0105\\1529\\JTcc3h7fqd_7y4Yj.jpg', '2173', 'admin', '2017-01-05 15:29:57');
+INSERT INTO `sys_file_attach` VALUES ('14', 'news', 'i7E6W.jpg', 'k9y7dMmooy_i7E6W.jpg', 'upload\\web\\1\\2017\\0105\\1610\\k9y7dMmooy_i7E6W.jpg', '32158', 'admin', '2017-01-05 16:10:45');
+INSERT INTO `sys_file_attach` VALUES ('15', 'news', 'ICeiV.jpg', '8Lzew9Vncr_ICeiV.jpg', 'upload\\web\\1\\2017\\0105\\1614\\8Lzew9Vncr_ICeiV.jpg', '33866', 'admin', '2017-01-05 16:14:53');
+INSERT INTO `sys_file_attach` VALUES ('16', 'news', 'AAt1X.jpg', 'nCaFVsNfao_AAt1X.jpg', 'upload\\web\\1\\2017\\0106\\1915\\4tJgPZNJG7_kih2j.jpg', '33866', 'admin', '2017-01-05 16:17:32');
+INSERT INTO `sys_file_attach` VALUES ('17', '', 'Jj63o.jpg', 'wB04hK4ceO_Jj63o.jpg', 'privateupload\\web\\1\\2017\\0110\\1438\\wB04hK4ceO_Jj63o.jpg', '0', 'admin', '2017-01-10 14:38:27');
+INSERT INTO `sys_file_attach` VALUES ('18', '', 'KLREA.jpg', 'LGvFph93r8_KLREA.jpg', 'privateupload\\web\\1\\2017\\0110\\1438\\LGvFph93r8_KLREA.jpg', '0', 'admin', '2017-01-10 14:38:49');
+INSERT INTO `sys_file_attach` VALUES ('19', '', 'qbHDe.jpg', 'GYXrr0iqXR_qbHDe.jpg', 'privateupload\\web\\1\\2017\\0110\\1440\\GYXrr0iqXR_qbHDe.jpg', '0', 'admin', '2017-01-10 14:40:59');
+INSERT INTO `sys_file_attach` VALUES ('20', 'news', 'x.png', '60CBHmFw30_x.png', 'publiceupload\\web\\1\\2017\\0112\\1422\\60CBHmFw30_1484202169872.png', '0', 'admin', '2017-01-12 14:22:49');
+INSERT INTO `sys_file_attach` VALUES ('21', 'news', 'x1.png', 'iR4YLIZAmT_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1425\\iR4YLIZAmT_1484202320131.png', '0', 'admin', '2017-01-12 14:25:20');
+INSERT INTO `sys_file_attach` VALUES ('22', 'news', 'x1.png', 'kbCJMNotS7_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1426\\kbCJMNotS7_1484202382409.png', '0', 'admin', '2017-01-12 14:26:22');
+INSERT INTO `sys_file_attach` VALUES ('23', 'news', 'x1.png', '8pmJSrK1kk_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1427\\8pmJSrK1kk_1484202421218.png', '0', 'admin', '2017-01-12 14:27:01');
+INSERT INTO `sys_file_attach` VALUES ('24', 'news', 'x1.png', 'u6M709wrUH_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1427\\u6M709wrUH_1484202452126.png', '0', 'admin', '2017-01-12 14:27:32');
+INSERT INTO `sys_file_attach` VALUES ('25', 'news', 'x1.png', 'AFClPO5WQT_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1427\\AFClPO5WQT_1484202469573.png', '0', 'admin', '2017-01-12 14:27:49');
+INSERT INTO `sys_file_attach` VALUES ('26', 'news', 'x1.png', 'jtlkTtjFl9_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1429\\jtlkTtjFl9_1484202692200.png', '0', 'admin', '2017-01-12 14:31:32');
+INSERT INTO `sys_file_attach` VALUES ('27', 'news', 'x1.png', 'gpnTi3QQCd_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1431\\gpnTi3QQCd_1484202724212.png', '14149', 'admin', '2017-01-12 14:32:07');
+INSERT INTO `sys_file_attach` VALUES ('28', 'news', 'x.png', '5sepTFfGbK_x.png', 'publiceupload\\web\\1\\2017\\0112\\1432\\5sepTFfGbK_1484202775937.png', '0', 'admin', '2017-01-12 14:32:55');
+INSERT INTO `sys_file_attach` VALUES ('29', 'news', 'x1.png', 'KqMo2ByWao_x1.png', 'publiceupload\\web\\1\\2017\\0112\\1433\\KqMo2ByWao_1484202794816.png', '14149', 'admin', '2017-01-12 14:33:14');
+INSERT INTO `sys_file_attach` VALUES ('30', 'news', 'demo.zip', 'qkbG0AqWit_demo.zip', 'publiceupload\\web\\1\\2017\\0112\\1433\\qkbG0AqWit_1484202836164.zip', '0', 'admin', '2017-01-12 14:33:56');
+INSERT INTO `sys_file_attach` VALUES ('31', 'news', 'VID_20170111_131252.mp4', 'q7Pt5sjwuv_VID_20170111_131252.mp4', 'publiceupload\\web\\1\\2017\\0112\\1451\\q7Pt5sjwuv_VID_20170111_1484203873317.mp4', '0', 'admin', '2017-01-12 14:51:13');
+INSERT INTO `sys_file_attach` VALUES ('32', 'news', 'VID_20170111_131252.mp4', 'FkVdwEbQr4_VID_20170111_131252.mp4', 'publiceupload\\web\\1\\2017\\0112\\1451\\FkVdwEbQr4_VID_20170111_1484203901069.mp4', '0', 'admin', '2017-01-12 14:51:41');
+INSERT INTO `sys_file_attach` VALUES ('33', 'news', 'VID_20170111_131252.mp4', 'SCx2EFDcmp_VID_20170111_131252.mp4', 'publiceupload\\web\\1\\2017\\0112\\1500\\SCx2EFDcmp_VID_20170111_1484204437616.mp4', '0', 'admin', '2017-01-12 15:00:37');
+INSERT INTO `sys_file_attach` VALUES ('34', 'news', 'VID_20170111_131252.mp4', '7Y0l539HL3_VID_20170111_131252.mp4', 'publiceupload\\web\\1\\2017\\0112\\1504\\7Y0l539HL3_VID_20170111_1484204641298.mp4', '0', 'admin', '2017-01-12 15:04:01');
+INSERT INTO `sys_file_attach` VALUES ('35', 'news', 'VID_20170111_131252.mp4', 'MHJ0FTT6Ux_VID_20170111_131252.mp4', 'publiceupload\\web\\1\\2017\\0112\\1505\\MHJ0FTT6Ux_VID_20170111_1484204736422.mp4', '0', 'admin', '2017-01-12 15:05:36');
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -340,7 +399,7 @@ CREATE TABLE `sys_menu` (
   `ct` datetime DEFAULT NULL,
   `ut` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -354,13 +413,6 @@ INSERT INTO `sys_menu` VALUES ('12', '8', '菜单管理', '/sysMenu/index', null
 INSERT INTO `sys_menu` VALUES ('14', '8', '组织架构管理', '/sysOrg/index', null, 'fa-users', '\0', '0', '0', '组织机构管理', '\0', null, '2016-12-26 21:46:50');
 INSERT INTO `sys_menu` VALUES ('15', '1', '定时任务管理', '/sysJobs/index', null, 'fa-tasks', '\0', '0', '2', '任务监控', '\0', '2016-11-25 17:14:47', '2016-12-26 20:20:55');
 INSERT INTO `sys_menu` VALUES ('16', '1', 'Druid 监控', '/monitor/db/dashboard', null, 'fa-hdd-o', '\0', '0', '1', '', '\0', '2016-12-08 10:35:13', '2016-12-23 15:18:46');
-INSERT INTO `sys_menu` VALUES ('18', '26', '测试1', '', null, 'fa-th-large', '\0', '1', '0', '', '', '2016-12-21 13:44:52', '2016-12-22 17:15:42');
-INSERT INTO `sys_menu` VALUES ('19', '26', '测试2', '', null, 'fa-star', '\0', '1', '0', '', '', '2016-12-21 13:44:57', '2016-12-26 22:51:17');
-INSERT INTO `sys_menu` VALUES ('20', '21', '测试3', '', null, 'fa-th-large', '', '1', '0', '', '', '2016-12-21 13:45:03', '2016-12-22 17:16:17');
-INSERT INTO `sys_menu` VALUES ('21', '18', '测试1.1', '', null, 'fa-film', '\0', '1', '0', '', '', '2016-12-21 14:47:35', '2016-12-22 14:50:44');
-INSERT INTO `sys_menu` VALUES ('24', '18', '测试1.4', '', null, null, '\0', '1', '3', '', '', '2016-12-22 14:23:43', null);
-INSERT INTO `sys_menu` VALUES ('25', '18', '测试1.5', '', null, null, '\0', '1', '4', '', '', '2016-12-22 14:23:49', null);
-INSERT INTO `sys_menu` VALUES ('26', '0', '测试菜单', '', null, 'fa-glass', '', '0', '2', '', '', '2016-12-22 17:15:12', '2016-12-22 17:15:31');
 INSERT INTO `sys_menu` VALUES ('28', '8', '部门管理', '/sysDept/index', null, 'fa-users', '\0', '0', '1', '', '\0', '2016-12-27 09:59:40', null);
 INSERT INTO `sys_menu` VALUES ('29', '2', '调整告警监控', '', 'sys.yw.apm.update', 'fa-pencil-square-o', '\0', '1', '0', '', '\0', null, '2016-12-29 19:09:26');
 
@@ -382,7 +434,7 @@ CREATE TABLE `sys_organization` (
   `create_userid` int(11) DEFAULT NULL,
   `update_userid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_organization
@@ -431,8 +483,8 @@ CREATE TABLE `sys_quartzjob` (
 -- ----------------------------
 -- Records of sys_quartzjob
 -- ----------------------------
-INSERT INTO `sys_quartzjob` VALUES ('1', '测试任务', 'com.sgaop.task.TestJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NONE', '1', '6da64b5bd2ee-f0586baf-791d-4f76-a496-0e0e127a959a');
-INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-54fb6882-92d1-4826-8f24-1e5d38d33bd2');
+INSERT INTO `sys_quartzjob` VALUES ('1', '测试任务', 'com.sgaop.task.TestJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NONE', '1', '6da64b5bd2ee-6f830c9a-871c-40df-bd85-6b8c8d854b69');
+INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-f9f73ba9-c558-4f67-97a3-9d6e7f341e0c');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -445,12 +497,12 @@ CREATE TABLE `sys_role` (
   `short_no` int(11) DEFAULT NULL,
   `locked` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '超级管理员', 'admin', '2', '\0');
+INSERT INTO `sys_role` VALUES ('1', '超级管理员', 'admin', '1', '\0');
 INSERT INTO `sys_role` VALUES ('2', '普通用户', 'user', '2', '\0');
 
 -- ----------------------------
@@ -475,8 +527,13 @@ INSERT INTO `sys_role_menu` VALUES ('1', '12');
 INSERT INTO `sys_role_menu` VALUES ('1', '14');
 INSERT INTO `sys_role_menu` VALUES ('1', '15');
 INSERT INTO `sys_role_menu` VALUES ('1', '16');
+INSERT INTO `sys_role_menu` VALUES ('1', '18');
+INSERT INTO `sys_role_menu` VALUES ('1', '19');
+INSERT INTO `sys_role_menu` VALUES ('1', '26');
 INSERT INTO `sys_role_menu` VALUES ('1', '28');
 INSERT INTO `sys_role_menu` VALUES ('1', '29');
+INSERT INTO `sys_role_menu` VALUES ('1', '30');
+INSERT INTO `sys_role_menu` VALUES ('1', '31');
 INSERT INTO `sys_role_menu` VALUES ('2', '8');
 INSERT INTO `sys_role_menu` VALUES ('2', '14');
 INSERT INTO `sys_role_menu` VALUES ('2', '28');
@@ -493,33 +550,13 @@ CREATE TABLE `sys_useraccount` (
   `createTime` datetime DEFAULT NULL,
   `salt` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_useraccount
 -- ----------------------------
-INSERT INTO `sys_useraccount` VALUES ('1', 'admin', 'f316dd0616a0a35c7298c8d2638269f98e32de74bc304928ce7bcd9b4cbc6914', '\0', '2016-11-09 15:23:12', 'd533301091f141cfabb4034886fe10f2');
-INSERT INTO `sys_useraccount` VALUES ('2', 'test', '12285290907b0f3ffd0123ab9f6812e998016e3ed4034f1b7ffed46739fc5c5d', '\0', '2016-11-24 17:38:13', '599a94e620194aeeb4139d807cf65a5c');
-INSERT INTO `sys_useraccount` VALUES ('3', '123', '9fdb97ac315249213c606d156ab5930615cf8841752e900bda43868e2ad10ca4', '\0', '2016-12-16 16:56:57', '2bc5d58736c941e7a636e0046194783b');
-INSERT INTO `sys_useraccount` VALUES ('4', '呵呵', 'be73df764d9ca804259dc44bdab37afb8b3a7390d475dd9bcaf0e18f11db4290', '', '2016-12-16 16:57:19', '0c8c7f5b0904413497cdf68b181d3ab5');
-INSERT INTO `sys_useraccount` VALUES ('5', '1231424', 'ef667be84a9e2fcdfa54b2e6248e94950b295da81d81c26f8dc00ecc6a72cda6', '\0', '2016-12-29 19:33:33', '4530ffba1ed44cf48ba73c8c83125ee9');
-INSERT INTO `sys_useraccount` VALUES ('6', '12442', 'cc95c29b1ecccf9ccc30ae67f06729fa732b5ec6b2fcc382d087a20e69276eb1', '\0', '2017-01-03 16:08:41', '8b9fb2d3a0b841e9a686cc19091df9a8');
-INSERT INTO `sys_useraccount` VALUES ('7', '23423', '6481034f3eefca13a39659103eae660bfb52cc28fb196d8c499377db5dc49cf3', '\0', '2017-01-03 16:08:44', '5a065308d83944028f9b997a3e5cb179');
-INSERT INTO `sys_useraccount` VALUES ('8', '523523', '033ad44e92ae9867920099cd14441d81b1737081a78b64edabe666f0024516e8', '\0', '2017-01-03 16:08:47', 'c6236c1ed5c44de7bbe08cf6393da9b0');
-INSERT INTO `sys_useraccount` VALUES ('9', '2342341', '9780c1bf96e63ee9cb43a8aa72a6d3df5460851fa214c53d8b6c88b8447d6246', '\0', '2017-01-03 16:08:49', '6b763135b89d4d7cb83c50044362bcf0');
-INSERT INTO `sys_useraccount` VALUES ('10', 'dfg234', 'f8148b5a41162a8dff93b38053abe9c14b78a5cc27cfd56e36b107dec0b29a5c', '\0', '2017-01-03 16:08:51', '0ab2f3efa0284cf78a7c6d430dc60327');
-INSERT INTO `sys_useraccount` VALUES ('11', '23523', 'f2192463a53af000e37844362e9b82c76d11a66ba2176878bea5d0870427c341', '\0', '2017-01-03 16:08:54', '2d842f3c39c04d6989fb820facc178a7');
-INSERT INTO `sys_useraccount` VALUES ('12', '23521362', '8b838346fbc2752943b5294234335132c7680271edadcb9e499cb82df86fa5a5', '\0', '2017-01-03 16:08:57', '6d51d1f41e6e416b8c71b8d1403078b8');
-INSERT INTO `sys_useraccount` VALUES ('13', '5aaa23523', 'fce02e4a6b28c0e8e59dfd481afeb3b9baf37dfd7f89f6e47d667f1d9c76b56d', '\0', '2017-01-03 16:09:04', '0923d7610ab145db87c8eb1d61e3d705');
-INSERT INTO `sys_useraccount` VALUES ('14', '345645', '08455fe60d1203241be62f6a0d3ea5d41849ae6dd4aeb483de5f7469a1bec038', '\0', '2017-01-03 16:09:06', '7e7ba8539dc74a2b93fb5d3a58ea54e1');
-INSERT INTO `sys_useraccount` VALUES ('15', '645645643', '36dce2875f30ae7d9d37069f7cc3df3c87442506e8022ee42f524d94daa92e37', '\0', '2017-01-03 16:09:08', '7384e0a33fbf44ab8b1889d50a3b6216');
-INSERT INTO `sys_useraccount` VALUES ('16', '745745', '126002c74853fd2cbea392cb01694ce326576e747261cd23a947a391725062c2', '\0', '2017-01-03 16:09:10', '3bee5e8abe1f4ca4bf58a8cfb397804b');
-INSERT INTO `sys_useraccount` VALUES ('17', '7567567', 'b300b349a28e23eabd43add785f73ed681b0f7a78734ac219a27a1a6f289d615', '\0', '2017-01-03 16:09:12', '2452cda1f8864173ba74ab43b3981024');
-INSERT INTO `sys_useraccount` VALUES ('18', '756745', '64cbf660b4a5be3c19baf403e83f921bcffd64ab3ac1daef5879bc39699df942', '\0', '2017-01-03 16:09:15', 'c3faef7b3ac44f1da4e38fe367dc6a17');
-INSERT INTO `sys_useraccount` VALUES ('19', '75674', 'b781b514b142790ddf090851a149c0c8880c065fe377c526770b330bf7d8c3fd', '\0', '2017-01-03 16:09:18', '898aa55d214a427393f9077c92ed41fe');
-INSERT INTO `sys_useraccount` VALUES ('20', '34563464', '3b4fe4ad1ab43959bbb4a9e61c03a0b626652dc7a1eee548b2e98b5c5ecfd813', '\0', '2017-01-03 16:09:24', '114aa5dc4ad24937980e78357af2cbc2');
-INSERT INTO `sys_useraccount` VALUES ('21', '6456457', '838a2c3177c5353d327cb8285a8e553945c6e73c1ebc909e655e0c254b0ac37f', '\0', '2017-01-03 16:09:26', '67698432c44a4795a3cb3ae973dad5ba');
-INSERT INTO `sys_useraccount` VALUES ('22', '4567657', 'ebccb83a1befe5c4804ff53c8f62afad066a168374df72fb10382220aa77bda8', '\0', '2017-01-03 16:09:29', 'e796784e364c427db72da28fad13caf2');
+INSERT INTO `sys_useraccount` VALUES ('1', 'admin', '676f115f130fafbb34beabb6f0d22e2f82574fa9b828237f978e4dfeb4db6737', '\0', '2016-11-09 15:23:12', 'd6185bb2174f4a15b7ee911397824755');
+INSERT INTO `sys_useraccount` VALUES ('23', 'newsadmin', 'a2eb727e55ce73ac2e2d68ca7081295f1750da6021cb0516175635f307a6f0fa', '\0', '2017-01-10 14:51:02', '30d8cc0be3604229bdf399354fe4cbcd');
 
 -- ----------------------------
 -- Table structure for sys_useraccount_role
@@ -535,36 +572,4 @@ CREATE TABLE `sys_useraccount_role` (
 -- Records of sys_useraccount_role
 -- ----------------------------
 INSERT INTO `sys_useraccount_role` VALUES ('1', '1');
-INSERT INTO `sys_useraccount_role` VALUES ('1', '2');
-INSERT INTO `sys_useraccount_role` VALUES ('2', '2');
-INSERT INTO `sys_useraccount_role` VALUES ('3', '2');
-INSERT INTO `sys_useraccount_role` VALUES ('4', '2');
-INSERT INTO `sys_useraccount_role` VALUES ('10', '2');
-
--- ----------------------------
--- Table structure for tb_user
--- ----------------------------
-DROP TABLE IF EXISTS `tb_user`;
-CREATE TABLE `tb_user` (
-  `uid` int(11) NOT NULL,
-  `nickName` varchar(255) NOT NULL COMMENT '昵称',
-  `realName` varchar(255) DEFAULT NULL COMMENT '真实姓名',
-  `age` int(3) DEFAULT NULL,
-  `sex` int(1) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL COMMENT '头像',
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `qq` varchar(255) DEFAULT NULL,
-  `sign` varchar(255) DEFAULT NULL COMMENT '签名',
-  `adderess` varchar(255) DEFAULT NULL COMMENT '地址',
-  `birthday` date DEFAULT NULL COMMENT '生日',
-  `score` int(11) DEFAULT NULL COMMENT '积分',
-  `last_login_ip` varchar(50) DEFAULT NULL COMMENT '最后登录IP',
-  `last_login_time` date DEFAULT NULL COMMENT '最后登录时间',
-  PRIMARY KEY (`uid`),
-  CONSTRAINT `pk_userid` FOREIGN KEY (`uid`) REFERENCES `sys_useraccount` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of tb_user
--- ----------------------------
+INSERT INTO `sys_useraccount_role` VALUES ('23', '3');
