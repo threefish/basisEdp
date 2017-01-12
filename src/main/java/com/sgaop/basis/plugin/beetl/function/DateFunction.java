@@ -1,4 +1,4 @@
-package com.sgaop.common.beetl.function;
+package com.sgaop.basis.plugin.beetl.function;
 
 import org.beetl.core.Context;
 import org.beetl.core.Function;

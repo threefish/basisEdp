@@ -1,11 +1,12 @@
 package com.sgaop.basis.plugin.beetl;
 
+import com.sgaop.basis.cache.PropertiesManager;
 import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.basis.plugin.shiro.beetl.ShiroExt;
 import com.sgaop.basis.util.Logs;
-import com.sgaop.common.beetl.function.DateFunction;
+import com.sgaop.basis.plugin.beetl.function.DateFunction;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -49,6 +50,16 @@ public class BeetlView implements View {
             resourceLoader.setRoot(session.getServletContext().getRealPath("/"));
             cfg.add(Paths.get(classLoader.getResource("/view/beetl.properties").toURI()).toFile());
             gt = new GroupTemplate(resourceLoader, cfg);
+
+            // 添加全局变量
+            Map<String, Object> share = gt.getSharedVars();
+            if (share == null) {
+                share = PropertiesManager.getConf();
+                HashMap conf = new HashMap();
+                conf.put("conf", share);
+                gt.setSharedVars(conf);
+            }
+
             gt.registerFunctionPackage("so", new ShiroExt());
             gt.registerFunction("dateTime", new DateFunction());
         } catch (IOException e) {
