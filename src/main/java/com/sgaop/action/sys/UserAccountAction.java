@@ -45,6 +45,7 @@ public class UserAccountAction extends BaseAction {
     @OK("btl:sys.user.manager")
     @GET
     @Path("/manager")
+    @RequiresPermissions("sys.yw.account.manager")
     public void manager() {
         request.setAttribute("defaultAdmin", defaultAdmin);
     }

@@ -29,6 +29,7 @@ public class ApmAction extends BaseAction {
     @OK("btl:sys.apm.index")
     @GET
     @Path("/dashboard")
+
     public void dashboard() {
     }
 

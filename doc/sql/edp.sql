@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-01-12 16:25:19
+Date: 2017-01-13 15:32:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,7 +52,7 @@ CREATE TABLE `sys_apm_alarm` (
   `alarmUsage` double DEFAULT NULL,
   `point` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8122 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8132 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_apm_alarm
@@ -292,6 +292,16 @@ INSERT INTO `sys_apm_alarm` VALUES ('8118', 'NetWork', '2017-01-12 16:19:00', '�
 INSERT INTO `sys_apm_alarm` VALUES ('8119', 'NetWork', '2017-01-12 16:23:00', '流量警告:当前 NetWork 使用率 670.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '670', '80');
 INSERT INTO `sys_apm_alarm` VALUES ('8120', 'NetWork', '2017-01-12 16:23:10', '流量警告:当前 NetWork 使用率 125.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '125', '80');
 INSERT INTO `sys_apm_alarm` VALUES ('8121', 'NetWork', '2017-01-12 16:23:35', '流量警告:当前 NetWork 使用率 216.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '216', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8122', 'NetWork', '2017-01-13 11:24:20', '流量警告:当前 NetWork 使用率 101.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '101', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8123', 'NetWork', '2017-01-13 11:25:05', '流量警告:当前 NetWork 使用率 651.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '651', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8124', 'NetWork', '2017-01-13 11:25:15', '流量警告:当前 NetWork 使用率 122.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '122', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8125', 'NetWork', '2017-01-13 11:26:25', '流量警告:当前 NetWork 使用率 97.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '97', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8126', 'NetWork', '2017-01-13 11:27:10', '流量警告:当前 NetWork 使用率 737.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '737', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8127', 'NetWork', '2017-01-13 11:27:15', '流量警告:当前 NetWork 使用率 98.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '98', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8128', 'NetWork', '2017-01-13 11:28:10', '流量警告:当前 NetWork 使用率 116.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '116', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8129', 'NetWork', '2017-01-13 14:10:15', '流量警告:当前 NetWork 使用率 744.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '744', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8130', 'NetWork', '2017-01-13 15:21:10', '流量警告:当前 NetWork 使用率 174.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '174', '80');
+INSERT INTO `sys_apm_alarm` VALUES ('8131', 'NetWork', '2017-01-13 15:21:15', '流量警告:当前 NetWork 使用率 100.00,高于预警值 80.00', '127.0.0.1', '流量警告', 'NetWork', '100', '80');
 
 -- ----------------------------
 -- Table structure for sys_department
@@ -399,22 +409,47 @@ CREATE TABLE `sys_menu` (
   `ct` datetime DEFAULT NULL,
   `ut` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES ('1', '0', '运维监控', '', 'sys.yw', 'fa-television', '\0', '0', '0', '服务器监控', '\0', null, '2016-12-27 12:52:23');
 INSERT INTO `sys_menu` VALUES ('2', '1', '主机性能监控', '/monitor/apm/dashboard', 'sys.yw.apm', 'fa-dashboard', '\0', '0', '0', '主机性能监控', '\0', null, '2016-12-27 12:52:47');
-INSERT INTO `sys_menu` VALUES ('5', '8', '用户管理', '/sysAccount/manager', null, 'fa-user', '\0', '0', '3', '消息类型', '\0', null, '2016-12-27 11:05:33');
-INSERT INTO `sys_menu` VALUES ('6', '8', '角色管理', '/sysRole/manager', null, 'fa-lock', '\0', '0', '4', '角色管理', '\0', null, '2016-12-27 11:08:24');
+INSERT INTO `sys_menu` VALUES ('5', '8', '用户管理', '/sysAccount/manager', 'sys.yw.account.manager', 'fa-user', '\0', '0', '3', '消息类型', '\0', null, '2016-12-27 11:05:33');
+INSERT INTO `sys_menu` VALUES ('6', '8', '角色管理', '/sysRole/manager', 'sys.yw.role.manager', 'fa-lock', '\0', '0', '4', '角色管理', '\0', null, '2016-12-27 11:08:24');
 INSERT INTO `sys_menu` VALUES ('8', '0', '系统控制', '', null, 'fa-cogs', '\0', '0', '1', '新闻类型', '\0', null, '2016-12-22 14:44:44');
-INSERT INTO `sys_menu` VALUES ('12', '8', '菜单管理', '/sysMenu/index', null, 'fa-eye', '\0', '0', '2', '菜单管理', '\0', null, '2016-12-27 11:00:57');
+INSERT INTO `sys_menu` VALUES ('12', '8', '菜单管理', '/sysMenu/index', 'sys.yw.menu.manager', 'fa-eye', '\0', '0', '2', '菜单管理', '\0', null, '2016-12-27 11:00:57');
 INSERT INTO `sys_menu` VALUES ('14', '8', '组织架构管理', '/sysOrg/index', null, 'fa-users', '\0', '0', '0', '组织机构管理', '\0', null, '2016-12-26 21:46:50');
-INSERT INTO `sys_menu` VALUES ('15', '1', '定时任务管理', '/sysJobs/index', null, 'fa-tasks', '\0', '0', '2', '任务监控', '\0', '2016-11-25 17:14:47', '2016-12-26 20:20:55');
-INSERT INTO `sys_menu` VALUES ('16', '1', 'Druid 监控', '/monitor/db/dashboard', null, 'fa-hdd-o', '\0', '0', '1', '', '\0', '2016-12-08 10:35:13', '2016-12-23 15:18:46');
+INSERT INTO `sys_menu` VALUES ('15', '1', '定时任务管理', '/sysJobs/index', 'sys.task.manager', 'fa-tasks', '\0', '0', '2', '任务监控', '\0', '2016-11-25 17:14:47', '2016-12-26 20:20:55');
+INSERT INTO `sys_menu` VALUES ('16', '1', 'Druid 监控', '/monitor/db/dashboard', 'sys.db.dashboard', 'fa-hdd-o', '\0', '0', '1', '', '\0', '2016-12-08 10:35:13', '2016-12-23 15:18:46');
 INSERT INTO `sys_menu` VALUES ('28', '8', '部门管理', '/sysDept/index', null, 'fa-users', '\0', '0', '1', '', '\0', '2016-12-27 09:59:40', null);
 INSERT INTO `sys_menu` VALUES ('29', '2', '调整告警监控', '', 'sys.yw.apm.update', 'fa-pencil-square-o', '\0', '1', '0', '', '\0', null, '2016-12-29 19:09:26');
+INSERT INTO `sys_menu` VALUES ('32', '0', '测试菜单', '', '', '', '\0', '0', '2', '', '\0', '2017-01-13 10:50:21', null);
+INSERT INTO `sys_menu` VALUES ('33', '32', '测试菜单', '', '', '', '\0', '0', '0', '', '\0', '2017-01-13 10:50:31', null);
+INSERT INTO `sys_menu` VALUES ('34', '33', '测试菜单', '/main/test', '', '', '\0', '0', '0', '', '\0', '2017-01-13 10:50:35', '2017-01-13 10:52:54');
+INSERT INTO `sys_menu` VALUES ('35', '34', '测试菜单', '', '', '', '\0', '0', '0', '', '\0', '2017-01-13 10:50:38', null);
+INSERT INTO `sys_menu` VALUES ('36', '35', '测试菜单', '', '', '', '\0', '0', '0', '', '\0', '2017-01-13 10:50:42', null);
+INSERT INTO `sys_menu` VALUES ('37', '36', '测试菜单', '', '', '', '\0', '0', '0', '', '\0', '2017-01-13 10:50:47', null);
+INSERT INTO `sys_menu` VALUES ('38', '15', '添加', '', 'sys.yw.task.add', 'fa-music', '\0', '1', '0', '', '\0', '2017-01-13 14:24:12', '2017-01-13 15:30:44');
+INSERT INTO `sys_menu` VALUES ('39', '5', '添加用户', '', 'sys.yw.account.add', '', '\0', '1', '0', '', '\0', '2017-01-13 14:28:22', '2017-01-13 14:35:39');
+INSERT INTO `sys_menu` VALUES ('40', '6', '添加角色', '', 'sys.yw.role.add', '', '\0', '1', '0', '', '\0', '2017-01-13 14:30:43', '2017-01-13 14:35:34');
+INSERT INTO `sys_menu` VALUES ('41', '5', '重置密码及启停', '', 'sys.yw.account.update', '', '\0', '1', '0', '', '\0', '2017-01-13 14:33:14', '2017-01-13 14:35:43');
+INSERT INTO `sys_menu` VALUES ('42', '6', '修改角色', '', 'sys.yw.role.update', '', '\0', '1', '0', '', '\0', '2017-01-13 14:34:06', '2017-01-13 14:35:30');
+INSERT INTO `sys_menu` VALUES ('43', '6', '启用禁用', '', 'sys.yw.role.changelock', '', '\0', '1', '0', '', '\0', '2017-01-13 14:35:25', null);
+INSERT INTO `sys_menu` VALUES ('44', '6', '删除角色', '', 'sys.yw.role.del', '', '\0', '1', '0', '', '\0', '2017-01-13 14:36:21', '2017-01-13 15:06:53');
+INSERT INTO `sys_menu` VALUES ('45', '6', '分配权限', '', 'sys.yw.role.authorization', '', '\0', '1', '0', '', '\0', '2017-01-13 14:37:46', '2017-01-13 14:38:07');
+INSERT INTO `sys_menu` VALUES ('46', '6', '分配人员', '', 'sys.yw.role.authuser', '', '\0', '1', '0', '', '\0', '2017-01-13 14:38:35', '2017-01-13 15:06:43');
+INSERT INTO `sys_menu` VALUES ('47', '12', '菜单修改', '', 'sys.yw.menu.update', '', '\0', '1', '1', '', '\0', '2017-01-13 14:41:35', '2017-01-13 14:42:06');
+INSERT INTO `sys_menu` VALUES ('48', '12', '启用禁用', '', 'sys.yw.menu.modify', '', '\0', '1', '2', '', '\0', '2017-01-13 14:42:22', '2017-01-13 14:42:27');
+INSERT INTO `sys_menu` VALUES ('49', '12', '菜单排序', '', 'sys.yw.menu.short', '', '\0', '1', '3', '', '\0', '2017-01-13 14:42:55', null);
+INSERT INTO `sys_menu` VALUES ('50', '12', '添加菜单', '', 'sys.yw.menu.add', '', '\0', '1', '0', '', '\0', '2017-01-13 14:43:16', null);
+INSERT INTO `sys_menu` VALUES ('51', '12', '菜单删除', '', 'sys.yw.menu.del', '', '\0', '1', '0', '', '\0', '2017-01-13 14:43:46', null);
+INSERT INTO `sys_menu` VALUES ('52', '15', '启用', '', 'sys.yw.task.start', '', '\0', '1', '0', '', '\0', '2017-01-13 15:16:20', '2017-01-13 15:30:03');
+INSERT INTO `sys_menu` VALUES ('53', '15', '停止', '', 'sys.yw.task.stop', '', '\0', '1', '0', '', '\0', '2017-01-13 15:16:42', null);
+INSERT INTO `sys_menu` VALUES ('54', '15', '执行一次', '', 'sys.yw.task.atonce', '', '\0', '1', '0', '', '\0', '2017-01-13 15:17:03', '2017-01-13 15:17:36');
+INSERT INTO `sys_menu` VALUES ('55', '15', '暂停', '', 'sys.yw.task.pause', '', '\0', '1', '0', '', '\0', '2017-01-13 15:17:28', null);
+INSERT INTO `sys_menu` VALUES ('56', '15', '恢复', '', 'sys.yw.task.resum', '', '\0', '1', '0', '', '\0', '2017-01-13 15:28:49', null);
 
 -- ----------------------------
 -- Table structure for sys_organization
@@ -484,7 +519,7 @@ CREATE TABLE `sys_quartzjob` (
 -- Records of sys_quartzjob
 -- ----------------------------
 INSERT INTO `sys_quartzjob` VALUES ('1', '测试任务', 'com.sgaop.task.TestJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NONE', '1', '6da64b5bd2ee-6f830c9a-871c-40df-bd85-6b8c8d854b69');
-INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-f9f73ba9-c558-4f67-97a3-9d6e7f341e0c');
+INSERT INTO `sys_quartzjob` VALUES ('2', 'APM任务', 'com.sgaop.task.ApmJob', '*/5 * * * * ?', '系统默认任务', '1', 'DEFAULT', 'NORMAL', '0', '6da64b5bd2ee-1a9e67b7-c1cd-45eb-bbea-9bfed9d2661f');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -497,7 +532,7 @@ CREATE TABLE `sys_role` (
   `short_no` int(11) DEFAULT NULL,
   `locked` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role
@@ -534,6 +569,26 @@ INSERT INTO `sys_role_menu` VALUES ('1', '28');
 INSERT INTO `sys_role_menu` VALUES ('1', '29');
 INSERT INTO `sys_role_menu` VALUES ('1', '30');
 INSERT INTO `sys_role_menu` VALUES ('1', '31');
+INSERT INTO `sys_role_menu` VALUES ('1', '32');
+INSERT INTO `sys_role_menu` VALUES ('1', '33');
+INSERT INTO `sys_role_menu` VALUES ('1', '34');
+INSERT INTO `sys_role_menu` VALUES ('1', '35');
+INSERT INTO `sys_role_menu` VALUES ('1', '36');
+INSERT INTO `sys_role_menu` VALUES ('1', '37');
+INSERT INTO `sys_role_menu` VALUES ('1', '38');
+INSERT INTO `sys_role_menu` VALUES ('1', '39');
+INSERT INTO `sys_role_menu` VALUES ('1', '40');
+INSERT INTO `sys_role_menu` VALUES ('1', '41');
+INSERT INTO `sys_role_menu` VALUES ('1', '42');
+INSERT INTO `sys_role_menu` VALUES ('1', '43');
+INSERT INTO `sys_role_menu` VALUES ('1', '44');
+INSERT INTO `sys_role_menu` VALUES ('1', '45');
+INSERT INTO `sys_role_menu` VALUES ('1', '46');
+INSERT INTO `sys_role_menu` VALUES ('1', '47');
+INSERT INTO `sys_role_menu` VALUES ('1', '48');
+INSERT INTO `sys_role_menu` VALUES ('1', '49');
+INSERT INTO `sys_role_menu` VALUES ('1', '50');
+INSERT INTO `sys_role_menu` VALUES ('1', '51');
 INSERT INTO `sys_role_menu` VALUES ('2', '8');
 INSERT INTO `sys_role_menu` VALUES ('2', '14');
 INSERT INTO `sys_role_menu` VALUES ('2', '28');

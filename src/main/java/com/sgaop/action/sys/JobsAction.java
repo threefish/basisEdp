@@ -8,6 +8,7 @@ import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.QuartzJob;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.quartz.*;
 
@@ -36,6 +37,7 @@ public class JobsAction extends BaseAction {
     @OK("btl:sys.jobs.manager")
     @GET
     @Path("/index")
+    @RequiresPermissions("sys.task.manager")
     public void index() {
 
     }
@@ -64,6 +66,7 @@ public class JobsAction extends BaseAction {
     @Path("/pauseJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.pause")
     public Result pauseJob(@Parameter("id") int id) {
         try {
             //列出当前任务
@@ -88,6 +91,7 @@ public class JobsAction extends BaseAction {
     @Path("/resumJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.resum")
     public Result resumJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -109,6 +113,7 @@ public class JobsAction extends BaseAction {
     @Path("/atOnceJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.atonce")
     public Result atOnceJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -132,6 +137,7 @@ public class JobsAction extends BaseAction {
     @Path("/startJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.start")
     public Result startJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -166,6 +172,7 @@ public class JobsAction extends BaseAction {
     @Path("/stopJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.stop")
     public Result delJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -191,6 +198,7 @@ public class JobsAction extends BaseAction {
     @Path("/addJob")
     @OK("json")
     @POST
+    @RequiresPermissions("sys.yw.task.add")
     public Result addJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);

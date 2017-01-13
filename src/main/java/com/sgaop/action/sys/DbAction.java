@@ -2,6 +2,7 @@ package com.sgaop.action.sys;
 
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
 /**
@@ -18,6 +19,7 @@ public class DbAction extends BaseAction {
     @OK("btl:sys.db.index")
     @GET
     @Path("/dashboard")
+    @RequiresPermissions("sys.db.dashboard")
     public void dashboard() {
     }
 

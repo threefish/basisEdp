@@ -37,6 +37,7 @@ public class RoleAction extends BaseAction {
     @OK("btl:sys.role.manager")
     @GET
     @Path("/manager")
+    @RequiresPermissions("sys.yw.role.manager")
     public void manager() {
     }
 

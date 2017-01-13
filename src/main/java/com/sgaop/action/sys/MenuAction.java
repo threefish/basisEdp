@@ -36,6 +36,7 @@ public class MenuAction extends BaseAction {
     @OK("btl:sys.menu.index")
     @GET
     @Path("/index")
+    @RequiresPermissions("sys.yw.menu.manager")
     public List<HashMap> index() {
         Condition condition = new Condition();
         condition.asc("short_no");
