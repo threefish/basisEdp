@@ -23,7 +23,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysOrg")
-@RequiresRoles("admin")
+@RequiresRoles("admin") //只有admin角色组才能访问本模块
 public class OrganizationAction extends BaseAction {
 
     @Inject("dao")

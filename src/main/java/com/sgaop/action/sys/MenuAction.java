@@ -11,6 +11,7 @@ import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.Menu;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.sql.Timestamp;
@@ -25,7 +26,7 @@ import java.util.*;
  */
 @IocBean
 @Action("/sysMenu")
-@RequiresRoles("admin")
+@RequiresRoles("admin") //只有admin角色组才能访问本模块
 public class MenuAction extends BaseAction {
 
 
@@ -91,6 +92,7 @@ public class MenuAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/modify")
+    @RequiresPermissions("sys.yw.menu.modify")
     public Result modify(@Parameter("id") int id, @Parameter("action") String action) {
         Menu uMenu = dao.fetch(Menu.class, id);
         try {
@@ -114,6 +116,7 @@ public class MenuAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/update")
+    @RequiresPermissions("sys.yw.menu.update")
     public Result update(@Parameter("data>>") Menu menu) {
         if (menu.getPid() != 0 && menu.getId() == menu.getPid()) {
             return Result.error("不能选择自己作为自己的上级菜单");
@@ -139,6 +142,7 @@ public class MenuAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/move")
+    @RequiresPermissions("sys.yw.menu.short")
     public Result move(@Parameter("id") int id, @Parameter("type") String type) {
         if (!StringsTool.isNullorEmpty(type)) {
             Menu uMenu = dao.fetch(Menu.class, id);
@@ -209,6 +213,7 @@ public class MenuAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/add")
+    @RequiresPermissions("sys.yw.menu.add")
     public Result add(@Parameter("data>>") Menu menu) {
         try {
             menu.setCreateTime(new Timestamp(new Date().getTime()));
@@ -227,6 +232,7 @@ public class MenuAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/del")
+    @RequiresPermissions("sys.yw.menu.del")
     public Result del(@Parameter("data>>") Menu menu) {
         try {
             Menu uMenu = dao.fetch(Menu.class, menu.getId());

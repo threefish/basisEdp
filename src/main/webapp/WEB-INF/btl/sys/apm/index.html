@@ -136,10 +136,12 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                 </tbody>
             </table>
         </div>
+        <%if(so.hasPermission("sys.yw.apm.update")){%>
         <div class="box-footer clearfix">
             <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left updatealarm"
                style="display: none;">保存修改</a>
         </div>
+        <%}%>
     </div>
 </section>
 <script type="text/plain" id="alarmTableTpl">
@@ -168,6 +170,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
         <td class="textCenter">arg{data[i].listeners}</td>
     </tr>
     }@/for}
+
 
 
 </script>
@@ -265,23 +268,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             };
             line.setOption(option);
         }, 'json');
-
         updateTableDashboard();
-
-    }
-
-    function updateTableDashboard() {
-        $.post('${base!}/monitor/apm/tableDashboard', {}, function (result) {
-            if (tableDashboardInit && result.ok) {
-                var data = result.data;
-                reSetTr($("[code='CPU']"), data['CPU']);
-                reSetTr($("[code='JVM']"), data['JVM']);
-                reSetTr($("[code='RAM']"), data['RAM']);
-                reSetTr($("[code='SWAP']"), data['SWAP']);
-                reSetTr($("[code='DISK']"), data['DISK']);
-                reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'], data['NoNetWork']);
-            }
-        }, 'json');
     }
 
 
@@ -333,6 +320,25 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
             line.resize();
         });
 
+        showAlarmOptions();
+    });
+    function updateTableDashboard() {
+        $.post('${base!}/monitor/apm/tableDashboard', {}, function (result) {
+            if (tableDashboardInit && result.ok) {
+                var data = result.data;
+                reSetTr($("[code='CPU']"), data['CPU']);
+                reSetTr($("[code='JVM']"), data['JVM']);
+                reSetTr($("[code='RAM']"), data['RAM']);
+                reSetTr($("[code='SWAP']"), data['SWAP']);
+                reSetTr($("[code='DISK']"), data['DISK']);
+                reSetTrNetWork($("[code='NetWork']"), data['NiNetWork'], data['NoNetWork']);
+            }
+        }, 'json');
+    }
+</script>
+<%if (so.hasPermission("sys.yw.apm.update")) {%>
+<script>
+    $(function () {
         $(".updatealarm").on("click", function () {
             $("[code]").each(function () {
                 var t = $(this);
@@ -362,7 +368,7 @@ layout("/layouts/platform.html",{title:"主机状态监控"}){
                 });
             });
         });
-        showAlarmOptions();
     });
 </script>
+<%}%>
 <%}%>

@@ -62,14 +62,24 @@ layout("/layouts/platform.html",{title:"系统菜单管理"}){
             <div role="tabpanel" class="tab-pane " id="tabTree">
                 <div class="row" style="margin: 15px">
                     <div style="margin: 5px">
+                        <%if(so.hasPermission("sys.yw.menu.add")){%>
                         <button class="btn btn-danger btn-sm " disabled id="add"><i class="fa fa-plus"></i>${i18n.add}
                         </button>
+                        <%}%>
+                        <%if(so.hasPermission("sys.yw.menu.update")){%>
                         <button class="btn btn-info btn-sm " disabled id="update">${i18n.modify }</button>
+                        <%}%>
+                        <%if(so.hasPermission("sys.yw.menu.del")){%>
                         <button class="btn btn-warning btn-sm " disabled id="del">${i18n.del}</button>
-                        <button class="btn btn-warning btn-sm " disabled id="MoveUp">${i18n.MoveUp}</button>
-                        <button class="btn btn-warning btn-sm " disabled id="MoveDown">${i18n.MoveDown}</button>
+                        <%}%>
+                        <%if(so.hasPermission("sys.yw.menu.modify")){%>
                         <button class="btn btn-warning btn-sm " disabled id="enable">${i18n.enable}</button>
                         <button class="btn btn-warning btn-sm " disabled id="disable">${i18n.disable}</button>
+                        <%}%>
+                        <%if(so.hasPermission("sys.yw.menu.short")){%>
+                        <button class="btn btn-warning btn-sm " disabled id="MoveUp">${i18n.MoveUp}</button>
+                        <button class="btn btn-warning btn-sm " disabled id="MoveDown">${i18n.MoveDown}</button>
+                        <%}%>
                     </div>
                     <div class="leftBox">
                         <div id="menusTree" class="ztree"></div>

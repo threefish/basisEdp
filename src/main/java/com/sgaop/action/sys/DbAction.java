@@ -12,7 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
  */
 @IocBean
 @Action("/monitor/db")
-@RequiresRoles("admin")
+@RequiresRoles("admin") //只有admin角色组才能访问本模块
 public class DbAction extends BaseAction {
 
     @OK("btl:sys.db.index")

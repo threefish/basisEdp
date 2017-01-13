@@ -21,7 +21,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysJobs")
-@RequiresRoles("admin")
+@RequiresRoles("admin")//只有admin角色组才能访问本模块
 public class JobsAction extends BaseAction {
 
     private final String JOB_GROUP = "DEFAULT";

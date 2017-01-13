@@ -8,6 +8,7 @@ import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.gather.*;
 import com.sgaop.entity.sys.AlarmOption;
 import com.sgaop.task.ApmJob;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.hyperic.sigar.Sigar;
 
@@ -21,7 +22,7 @@ import java.util.HashMap;
  */
 @IocBean
 @Action("/monitor/apm")
-@RequiresRoles("admin")
+@RequiresRoles("admin")//只有admin角色组才能访问本模块
 public class ApmAction extends BaseAction {
 
 
@@ -97,6 +98,7 @@ public class ApmAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/updateAlarmOption")
+    @RequiresPermissions("sys.yw.apm.update")
     public Result updateAlarmOptions(@Parameter("alarmType") String alarmType,
                                      @Parameter("percent") double percent,
                                      @Parameter("listenerTypes") String listenerTypes) {

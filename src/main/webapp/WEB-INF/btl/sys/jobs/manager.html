@@ -17,8 +17,10 @@ layout("/layouts/platform.html",{title:"定时任务管理"}){
 <section class="content">
     <div class="row dataTbleBox  box box-warning">
         <div>
+            <%if(so.hasPermission("sys.yw.task.add")){%>
             <button type="button" id="adduser" onclick="core.showMsg('尚未开发!!!')" class="btn margin btn-danger">添加任务
             </button>
+            <%}%>
         </div>
         <table id="quartzJobTable" class="table table-bordered table-striped">
             <tbody>

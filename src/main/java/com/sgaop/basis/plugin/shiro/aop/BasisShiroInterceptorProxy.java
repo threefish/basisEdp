@@ -174,7 +174,7 @@ public class BasisShiroInterceptorProxy extends InterceptorProxy {
         String[] permissionName = hasPermissions.value();
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isPermittedAll(permissionName)) {
-            throw new ShiroAutcException("当前用户权限不符", unauthorizedUrl);
+            throw new ShiroAutcException("当前用户没有该操作权限", unauthorizedUrl);
         }
     }
 

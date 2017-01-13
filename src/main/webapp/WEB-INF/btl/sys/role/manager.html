@@ -17,7 +17,9 @@ layout("/layouts/platform.html",{title:"角色管理"}){
 <section class="content">
     <div class="row dataTbleBox  box box-warning">
         <div>
+            <%if(so.hasPermission("sys.yw.role.add")){%>
             <button type="button" id="add" class="btn margin btn-danger">${i18n.add}</button>
+            <%}%>
         </div>
         <table id="menusTable" class="table table-bordered table-striped">
             <tbody>
@@ -63,12 +65,6 @@ layout("/layouts/platform.html",{title:"角色管理"}){
             </div>
         </form>
     </div>
-
-
-
-
-
-
 </script>
 
 <script type="text/javascript">
@@ -102,11 +98,6 @@ layout("/layouts/platform.html",{title:"角色管理"}){
         },
     };
     $(function () {
-
-        $("#add").click(function () {
-            core.openTpl(rolesetting, "新增角色", {action: "${base!}/sysRole/add"});
-        });
-
         userlistTable = $('#menusTable').DataTable({
             serverSide: true,
             processing: true,
@@ -268,4 +259,13 @@ layout("/layouts/platform.html",{title:"角色管理"}){
         }
     }
 </script>
+<%if(so.hasPermission("sys.yw.role.add")){%>
+<script>
+    $(function () {
+        $("#add").click(function () {
+            core.openTpl(rolesetting, "新增角色", {action: "${base!}/sysRole/add"});
+        });
+    });
+</script>
+<%}%>
 <%}%>

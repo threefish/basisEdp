@@ -12,6 +12,7 @@ import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.entity.sys.UserAccount;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
@@ -28,7 +29,7 @@ import java.util.UUID;
  */
 @IocBean
 @Action("/sysAccount")
-@RequiresRoles("admin")
+@RequiresRoles("admin")  //只有admin角色组才能访问本模块
 public class UserAccountAction extends BaseAction {
 
 
@@ -87,6 +88,7 @@ public class UserAccountAction extends BaseAction {
     @OK("json:{ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
     @POST
     @Path("/update")
+    @RequiresPermissions("sys.yw.account.update")
     public Result update(@Parameter("id") int id, @Parameter("action") String action) {
         UserAccount account = dao.fetch(UserAccount.class, id);
         if (account == null) {
@@ -123,6 +125,7 @@ public class UserAccountAction extends BaseAction {
     @OK("json:{ignoreNull:false,DateFormat:'yyyy-MM-dd HH:mm:ss'}")
     @POST
     @Path("/add")
+    @RequiresPermissions("sys.yw.account.add")
     public Result add(@Parameter("userName") String UserName) {
         UserAccount account = dao.fetch(UserAccount.class, "userName", UserName);
         if (account != null) {

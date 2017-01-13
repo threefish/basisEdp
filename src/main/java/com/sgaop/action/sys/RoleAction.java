@@ -14,6 +14,7 @@ import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
 import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @IocBean
 @Action("/sysRole")
-@RequiresRoles("admin")
+@RequiresRoles("admin")//只有admin角色组才能访问本模块
 public class RoleAction extends BaseAction {
 
     @Inject("dao")
@@ -59,6 +60,7 @@ public class RoleAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/add")
+    @RequiresPermissions("sys.yw.role.add")
     public Result add(@Parameter("data>>") Role role) {
         Condition cnd = new Condition();
         cnd.and("role_name", "=", role.getRoleName());
@@ -74,6 +76,7 @@ public class RoleAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/update")
+    @RequiresPermissions("sys.yw.role.update")
     public Result update(@Parameter("data>>") Role role) {
         Condition cnd = new Condition();
         cnd.and("id", "!=", role.getId());
@@ -94,6 +97,7 @@ public class RoleAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/unlock")
+    @RequiresPermissions("sys.yw.role.changelock")
     public Result unlock(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
@@ -108,6 +112,7 @@ public class RoleAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/lock")
+    @RequiresPermissions("sys.yw.role.changelock")
     public Result lock(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
@@ -122,10 +127,14 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/del")
     @Aop(TransAop.READ_UNCOMMITTED)
+    @RequiresPermissions("sys.yw.role.del")
     public Result del(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
             return Result.error("角色不存在！");
+        }
+        if ("admin".equals(role.getRoleCode())) {
+            return Result.error("admin管理员组不能删除");
         }
         Condition condition = new Condition();
         condition.and("role_id", "=", id);
@@ -202,6 +211,7 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/roleMenus/update")
     @Aop(TransAop.READ_UNCOMMITTED)
+    @RequiresPermissions("sys.yw.role.authorization")
     public Result roleMenusUpdate(@Parameter("id") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {
@@ -228,6 +238,7 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/roleUsers/addUser")
     @Aop(TransAop.READ_UNCOMMITTED)
+    @RequiresPermissions("sys.yw.role.authuser")
     public Result roleUsersAddUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {
@@ -259,7 +270,7 @@ public class RoleAction extends BaseAction {
     }
 
     /**
-     * 为角色添加用户
+     * 为角色删除用户
      *
      * @return
      */
@@ -267,6 +278,7 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/roleUsers/delUser")
     @Aop(TransAop.READ_UNCOMMITTED)
+    @RequiresPermissions("sys.yw.role.delauthuser")
     public Result roleUsersDelUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {
