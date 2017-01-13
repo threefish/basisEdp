@@ -13,8 +13,8 @@ public class HtmlEscapeFormat implements Format {
             switch (jsonFormat.getType()) {
                 case "delHtmlTag":
                     dataHtml = StringsTool.delHTMLTag(dataHtml);
-                    if (jsonFormat.getLength() != 0 || dataHtml.length() > jsonFormat.getLength()) {
-                        dataHtml = dataHtml.substring(0, jsonFormat.getLength())+"......";
+                    if (jsonFormat.getLength() != 0 && dataHtml.length() > jsonFormat.getLength()) {
+                        dataHtml = dataHtml.substring(0, jsonFormat.getLength()) + "......";
                     }
                     return dataHtml;
             }

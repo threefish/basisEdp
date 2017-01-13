@@ -240,6 +240,20 @@
             }
             window.location.reload();
         }
+
+        var menuHasActive = $(".sidebar-menu li[class='active']");
+        if (menuHasActive.length == 0) {
+            var pathname = window.location.pathname;
+            $(".sidebar-menu li").each(function () {
+                var that = $(this);
+                var _a = that.find("a");
+                if (_a.attr("href") == pathname) {
+                    that.addClass("active");
+                    that.parents("li").addClass("active");
+                }
+            });
+        }
+        ;
     });
 </script>
 </html>

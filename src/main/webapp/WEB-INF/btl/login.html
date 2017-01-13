@@ -29,7 +29,38 @@
         .lang li a{
             cursor: default;
         }
+        .old-browser-v{
+            text-align: center;
+            color: #FFF;
+            background-color: #828888;
+            height: 100%;
+            border: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1234;
+            font-family: "微软雅黑";
+            text-anchor: 1px;
+            letter-spacing: 2px;
+        }
     </style>
+    <script>
+        (function (window) {
+            var theUA = window.navigator.userAgent.toLowerCase();
+            if ((theUA.match(/msie\s\d+/) && theUA.match(/msie\s\d+/)[0]) || (theUA.match(/trident\s?\d+/) && theUA.match(/trident\s?\d+/)[0])) {
+                var ieVersion = theUA.match(/msie\s\d+/)[0].match(/\d+/)[0] || theUA.match(/trident\s?\d+/)[0];
+                if (ieVersion < 9) {
+                    var str = "您的浏览器版本太低了\n已经和时代脱轨了 :(";
+                    var str2 = "推荐使用:<a href='https://www.baidu.com/s?ie=UTF-8&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8' target='_blank' style='color:#cc0'>谷歌</a>,"
+                            + "<a href='https://www.baidu.com/s?ie=UTF-8&wd=360%E6%B5%8F%E8%A7%88%E5%99%A8' target='_blank' style='color:#cc0'>360浏览器</a>,或其他双核急速模式";
+                    document.writeln("<pre class='old-browser-v'><h2 style='padding-top:200px;margin:0'><strong>" + str + "<br/></strong></h2><h3>" +
+                            str2 + "</h3><h2 style='margin:0'><strong>如果你的使用的是双核浏览器,请切换到极速模式访问<br/></strong></h2></pre>");
+                    document.execCommand("Stop");
+                };
+            }
+        })(window);
+    </script>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -76,7 +107,7 @@
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <button type="submit" class="btn loginBtn btn-primary btn-block btn-flat">${i18n.loginBtn}</button>
+                    <button type="button" class="btn loginBtn btn-primary btn-block btn-flat">${i18n.loginBtn}</button>
                 </div>
             </div>
         </form>

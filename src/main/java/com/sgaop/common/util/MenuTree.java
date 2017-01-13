@@ -3,6 +3,7 @@ package com.sgaop.common.util;
 import com.sgaop.entity.sys.Menu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +36,25 @@ public class MenuTree {
         return childList;
     }
 
+    /**
+     * 排序ID,PID树
+     *
+     * @param oldMenu
+     * @return
+     */
+    public static List<Menu> ShortTree(List<Menu> oldMenu) {
+        List<Menu> shortMenu = new ArrayList<>();
+        for (Menu c : oldMenu) {
+            if(c.getChildren().size()>0){
+                List<Menu> nenuChilds=  c.getChildren();
+                Collections.sort(nenuChilds, new Menu());
+                nenuChilds= ShortTree(nenuChilds);
+                c.setChildren(nenuChilds);
+            }
+            shortMenu.add(c);
+        }
+        return shortMenu;
+    }
 
     /**
      * 取得子菜单

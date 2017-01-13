@@ -52,7 +52,7 @@ public class ShiroRealm extends AuthorizingRealm {
                     roles.add(mapro.getString("role_code"));
                     roleids += mapro.getInt("id") + ",";
                 }
-                sql = "SELECT m.id,m.pid,r.role_name,r.role_code,m.menu_target,m.menu_icon,m.menu_type,m.menu_name,m.permission FROM sys_role AS r, sys_role_menu AS rm,sys_menu AS m WHERE r.id = rm.role_id AND m.id = rm.menu_id and m.locked=0 AND FIND_IN_SET(r.id, ?) group by m.id ORDER BY m.short_no asc";
+                sql = "SELECT m.id,m.pid,r.role_name,r.role_code,m.menu_target,m.short_no,m.menu_icon,m.menu_type,m.menu_name,m.permission FROM sys_role AS r, sys_role_menu AS rm,sys_menu AS m WHERE r.id = rm.role_id AND m.id = rm.menu_id and m.locked=0 AND FIND_IN_SET(r.id, ?) group by m.id";
                 List<Record> permissionList = dao.query(sql, roleids);
                 List<Menu> menus = new ArrayList<>();
                 for (Record r : permissionList) {
@@ -66,12 +66,13 @@ public class ShiroRealm extends AuthorizingRealm {
                         menu.setMenuIcon(r.getString("menu_icon"));
                         menu.setIconSkin(r.getString("menu_icon"));
                         menu.setMenuName(r.getString("menu_name"));
+                        menu.setShortNo(r.getInt("short_no"));
                         menu.setId(r.getInt("id"));
                         menu.setPid(r.getInt("pid"));
                         menus.add(menu);
                     }
                 }
-                menus = MenuTree.createTree(menus, 0);
+                menus = MenuTree.ShortTree(MenuTree.createTree(menus,0));
                 session.setAttribute(Cons.SESSION_MENUS, menus);
                 authorizationInfo.addRoles(roles);
                 authorizationInfo.addStringPermissions(permissions);
