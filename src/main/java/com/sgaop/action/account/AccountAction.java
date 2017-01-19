@@ -2,8 +2,6 @@ package com.sgaop.action.account;
 
 import cn.apiclub.captcha.Captcha;
 import cn.apiclub.captcha.backgrounds.GradiatedBackgroundProducer;
-import cn.apiclub.captcha.gimpy.FishEyeGimpyRenderer;
-import cn.apiclub.captcha.noise.StraightLineNoiseProducer;
 import com.sgaop.action.BaseAction;
 import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Condition;
@@ -93,7 +91,10 @@ public class AccountAction extends BaseAction {
     public Result doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("captcha") String captcha, @Parameter("rememberMe") boolean isRememberMe) {
         if (isCaptcha) {
             String _captcha = (String) session.getAttribute(Cons.CAPTCHA_ATTR);
-            if (StringsTool.isNullorEmpty(captcha) || StringsTool.isNullorEmpty(_captcha)) {
+            if (StringsTool.isNullorEmpty(_captcha)) {
+                return Result.error("验证码已过期！");
+            }
+            if (StringsTool.isNullorEmpty(captcha)) {
                 return Result.error("验证码不能为空！");
             }
             if (!_captcha.equalsIgnoreCase(captcha)) {

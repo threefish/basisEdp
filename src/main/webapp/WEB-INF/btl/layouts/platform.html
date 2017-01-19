@@ -6,6 +6,19 @@
     <meta name="description" content="${title!}">
     <title>${title!}</title>
     <%include("/inc/header.html"){}%>
+    <script>
+        if (!String.prototype.endsWith) {
+            String.prototype.endsWith = function (searchString, position) {
+                var subjectString = this.toString();
+                if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+                    position = subjectString.length;
+                }
+                position -= searchString.length;
+                var lastIndex = subjectString.lastIndexOf(searchString, position);
+                return lastIndex !== -1 && lastIndex === position;
+            };
+        }
+    </script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini ${layBoxed!}"> <!--layout-boxed 添加该属性改为盒子布局-->
 <div class="wrapper">
@@ -247,13 +260,12 @@
             $(".sidebar-menu li").each(function () {
                 var that = $(this);
                 var _a = that.find("a");
-                if (_a.attr("href") == pathname) {
+                if ((_a.attr("href") + "").endsWith(pathname)) {
                     that.addClass("active");
                     that.parents("li").addClass("active");
                 }
             });
-        }
-        ;
+        };
     });
 </script>
 </html>
