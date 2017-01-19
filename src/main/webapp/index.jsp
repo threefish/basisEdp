@@ -1,3 +1,4 @@
+<%@ page import="com.sgaop.basis.plugin.beetl.BeetlView" %>
 <%
-    response.sendRedirect(request.getContextPath() + "/main/index");
+    response.sendRedirect(BeetlView.basePath + "/main/index");
 %>

@@ -39,7 +39,7 @@ public class BeetlView implements View {
     private static final Logger logger = Logs.get();
     private final static String _suffix = ".html";
     private static GroupTemplate gt = null;
-    private static String basePath;
+    public static String basePath;
 
     static {
         try {
@@ -60,7 +60,11 @@ public class BeetlView implements View {
                 conf.put("conf", share);
                 gt.setSharedVars(conf);
             }
-            basePath= PropertiesManager.getCacheStr("basePath");
+            if("".equals(PropertiesManager.getCacheStr("basePath").trim())){
+                basePath=Mvcs.getServletContext().getContextPath();
+            }else{
+                basePath = PropertiesManager.getCacheStr("basePath");
+            }
             gt.registerFunctionPackage("so", new ShiroExt());
             gt.registerFunction("dateTime", new DateFunction());
         } catch (IOException e) {
@@ -97,11 +101,8 @@ public class BeetlView implements View {
             tpl.binding("servlet", webVariable);
             tpl.binding("request", request);
             tpl.binding("ctxPath", request.getContextPath());
-
             tpl.binding("base", basePath);
 
-            //针对Ngxin二级目录映射
-            //tpl.binding("base", "//" + request.getServerName() + ":" + request.getServerPort());
             OutputStream out = response.getOutputStream();
             tpl.renderTo(out);
             out.flush();

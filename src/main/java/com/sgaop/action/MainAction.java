@@ -2,6 +2,8 @@ package com.sgaop.action;
 
 import com.sgaop.basis.annotation.*;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 /**
  * Created by IntelliJ IDEA.
