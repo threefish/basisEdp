@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Date: 2016/11/15 0015
  * To change this template use File | Settings | File Templates.
  */
-@Table("sys_QuartzJob")
+@Table("sys_quartzjob")
 public class QuartzJob implements Serializable {
 
     private static final long serialVersionUID = 1L;
