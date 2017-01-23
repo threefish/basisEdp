@@ -9,6 +9,7 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.Menu;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -94,6 +95,7 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/modify")
     @RequiresPermissions("sys.yw.menu.modify")
+    @LogsAop.Slog(tag = "after", msg = "{1}  ID=[{0}]的菜单!")
     public Result modify(@Parameter("id") int id, @Parameter("action") String action) {
         Menu uMenu = dao.fetch(Menu.class, id);
         try {
@@ -118,7 +120,8 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/update")
     @RequiresPermissions("sys.yw.menu.update")
-    public Result update(@Parameter("data>>") Menu menu) {
+    @LogsAop.Slog(tag = "after", msg = "修改菜单:{1}  ID=[{2}]!")
+    public Result update(@Parameter("data>>") Menu menu, @Parameter("data.menuName")String menuname, @Parameter("data.id") int id) {
         if (menu.getPid() != 0 && menu.getId() == menu.getPid()) {
             return Result.error("不能选择自己作为自己的上级菜单");
         }
@@ -144,6 +147,7 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/move")
     @RequiresPermissions("sys.yw.menu.short")
+    @LogsAop.Slog(tag = "after", msg = "{1}菜单 ID=[{0}]!")
     public Result move(@Parameter("id") int id, @Parameter("type") String type) {
         if (!StringsTool.isNullorEmpty(type)) {
             Menu uMenu = dao.fetch(Menu.class, id);
@@ -215,7 +219,8 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/add")
     @RequiresPermissions("sys.yw.menu.add")
-    public Result add(@Parameter("data>>") Menu menu) {
+    @LogsAop.Slog(tag = "after", msg = "添加菜单：{1}!")
+    public Result add(@Parameter("data>>") Menu menu, @Parameter("data.menuName") String menuname) {
         try {
             menu.setCreateTime(new Timestamp(new Date().getTime()));
             int id = dao.insert(menu);
@@ -234,7 +239,8 @@ public class MenuAction extends BaseAction {
     @POST
     @Path("/del")
     @RequiresPermissions("sys.yw.menu.del")
-    public Result del(@Parameter("data>>") Menu menu) {
+    @LogsAop.Slog(tag = "after", msg = "删除菜单：{1}! id=[{2}]")
+    public Result del(@Parameter("data>>") Menu menu, @Parameter("data.menuName") String menuname, @Parameter("data.id")int id) {
         try {
             Menu uMenu = dao.fetch(Menu.class, menu.getId());
             if (uMenu.isCanDelect()) {

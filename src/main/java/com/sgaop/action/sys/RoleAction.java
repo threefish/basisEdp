@@ -12,6 +12,7 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -62,7 +63,9 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/add")
     @RequiresPermissions("sys.yw.role.add")
-    public Result add(@Parameter("data>>") Role role) {
+    @LogsAop.Slog(tag = "after", msg = "添加角色：[{1}]!")
+    public Result add(@Parameter("data>>") Role role,
+                      @Parameter("data.roleName")String roleName) {
         Condition cnd = new Condition();
         cnd.and("role_name", "=", role.getRoleName());
         cnd.or("role_code", "=", role.getRoleCode());
@@ -78,7 +81,11 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/update")
     @RequiresPermissions("sys.yw.role.update")
-    public Result update(@Parameter("data>>") Role role) {
+    @LogsAop.Slog(tag = "after", msg = "修改角色：[{1}]!ID=[{2}] ")
+    public Result update(@Parameter("data>>") Role role,
+                         @Parameter("data.roleName") String roleName,
+                         @Parameter("data.id") int id
+    ) {
         Condition cnd = new Condition();
         cnd.and("id", "!=", role.getId());
 
@@ -99,6 +106,7 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/unlock")
     @RequiresPermissions("sys.yw.role.changelock")
+    @LogsAop.Slog(tag = "after", msg = "启用角色：ID=[{0}] ")
     public Result unlock(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
@@ -114,6 +122,7 @@ public class RoleAction extends BaseAction {
     @POST
     @Path("/lock")
     @RequiresPermissions("sys.yw.role.changelock")
+    @LogsAop.Slog(tag = "after", msg = "禁用角色：ID=[{0}] ")
     public Result lock(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
@@ -129,6 +138,7 @@ public class RoleAction extends BaseAction {
     @Path("/del")
     @Aop(TransAop.READ_UNCOMMITTED)
     @RequiresPermissions("sys.yw.role.del")
+    @LogsAop.Slog(tag = "after", msg = "删除角色：ID=[{0}] ")
     public Result del(@Parameter("id") int id) {
         Role role = dao.fetch(Role.class, id);
         if (role == null) {
@@ -213,6 +223,7 @@ public class RoleAction extends BaseAction {
     @Path("/roleMenus/update")
     @Aop(TransAop.READ_UNCOMMITTED)
     @RequiresPermissions("sys.yw.role.authorization")
+    @LogsAop.Slog(tag = "after", msg = "更新角色：ID=[{0}] ")
     public Result roleMenusUpdate(@Parameter("id") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {
@@ -240,6 +251,7 @@ public class RoleAction extends BaseAction {
     @Path("/roleUsers/addUser")
     @Aop(TransAop.READ_UNCOMMITTED)
     @RequiresPermissions("sys.yw.role.authuser")
+    @LogsAop.Slog(tag = "after", msg = "为ID=[{0}]的角色添加[{1}]用户")
     public Result roleUsersAddUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {
@@ -280,6 +292,7 @@ public class RoleAction extends BaseAction {
     @Path("/roleUsers/delUser")
     @Aop(TransAop.READ_UNCOMMITTED)
     @RequiresPermissions("sys.yw.role.delauthuser")
+    @LogsAop.Slog(tag = "after", msg = "为ID=[{0}]的角色删除[{1}]用户")
     public Result roleUsersDelUser(@Parameter("roleId") int roleId, @Parameter("ids") int[] ids) {
         Role role = dao.fetch(Role.class, roleId);
         if (role == null) {

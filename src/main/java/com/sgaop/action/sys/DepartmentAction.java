@@ -6,6 +6,7 @@ import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.entity.sys.Department;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 
@@ -57,7 +58,8 @@ public class DepartmentAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/update")
-    public Result update(@Parameter("data>>") Department dept) {
+    @LogsAop.Slog(tag = "after", msg = "更新[{2}]部门信息,ID=[{1}]!")
+    public Result update(@Parameter("data>>") Department dept, @Parameter("data.id") int id, @Parameter("data.name") String name) {
         if (dept.getPid() != 0 && dept.getId() == dept.getPid()) {
             return Result.error("不能选择自己作为自己的上级单位");
         }
@@ -90,6 +92,7 @@ public class DepartmentAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/move")
+    @LogsAop.Slog(tag = "after", msg = "[{1}]移动部门,ID=[{0}]!")
     public Result move(@Parameter("id") int id, @Parameter("type") String type) {
         if (!StringsTool.isNullorEmpty(type)) {
             Department uDepartment = dao.fetch(Department.class, id);
@@ -160,7 +163,8 @@ public class DepartmentAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/add")
-    public Result add(@Parameter("data>>") Department dept) {
+    @LogsAop.Slog(tag = "after", msg = "添加[{1}]部门!")
+    public Result add(@Parameter("data>>") Department dept, @Parameter("data.name") String name) {
         try {
             if (StringsTool.isNullorEmpty(dept.getName())) {
                 return Result.error("部门名称不能为空！");
@@ -186,7 +190,8 @@ public class DepartmentAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/del")
-    public Result del(@Parameter("data>>") Department org) {
+    @LogsAop.Slog(tag = "after", msg = "删除部门：[{1}] ID=[{2}]!")
+    public Result del(@Parameter("data>>") Department org, @Parameter("data.name") String name, @Parameter("data.id") int id) {
         try {
             Department organization = dao.fetch(Department.class, org.getId());
             boolean flag = dao.delete(organization);

@@ -8,6 +8,7 @@ import com.sgaop.basis.dao.Condition;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.common.util.MenuTree;
 import com.sgaop.entity.sys.Menu;
@@ -63,7 +64,8 @@ public class AccountAction extends BaseAction {
     @OK("btl:login")
     @GET
     @Path("/logout")
-    public void logout() {
+    @LogsAop.Slog(tag = "before", module = "logout", msg = "用户{0}登出系统!")
+    public void logout(@Attr(Cons.SESSION_USER_NAME) String userName) {
         Subject user = SecurityUtils.getSubject();
         user.logout();
         try {
@@ -88,6 +90,7 @@ public class AccountAction extends BaseAction {
     @OK("json")
     @POST
     @Path("/login")
+    @LogsAop.Slog(tag = "after", module = "login", msg = "用户{0}登录系统!")
     public Result doLogin(@Parameter("username") String username, @Parameter("password") String password, @Parameter("captcha") String captcha, @Parameter("rememberMe") boolean isRememberMe) {
         if (isCaptcha) {
             String _captcha = (String) session.getAttribute(Cons.CAPTCHA_ATTR);

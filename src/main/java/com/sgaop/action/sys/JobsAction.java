@@ -7,6 +7,7 @@ import com.sgaop.basis.dao.Pager;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.entity.sys.QuartzJob;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -67,6 +68,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.pause")
+    @LogsAop.Slog(tag = "after", msg = "暂停ID=[{0}]的任务!")
     public Result pauseJob(@Parameter("id") int id) {
         try {
             //列出当前任务
@@ -92,6 +94,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.resum")
+    @LogsAop.Slog(tag = "after", msg = "恢复ID=[{0}]的任务!")
     public Result resumJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -114,6 +117,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.atonce")
+    @LogsAop.Slog(tag = "after", msg = "立即执行一次ID=[{0}]的任务!")
     public Result atOnceJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -138,6 +142,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.start")
+    @LogsAop.Slog(tag = "after", msg = "启动ID=[{0}]的任务!")
     public Result startJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -173,6 +178,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.stop")
+    @LogsAop.Slog(tag = "after", msg = "停止/删除ID=[{0}]的任务!")
     public Result delJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);
@@ -199,6 +205,7 @@ public class JobsAction extends BaseAction {
     @OK("json")
     @POST
     @RequiresPermissions("sys.yw.task.add")
+    @LogsAop.Slog(tag = "after", msg = "添加ID=[{0}]的任务!")
     public Result addJob(@Parameter("id") int id) {
         try {
             QuartzJob qjob = dao.fetch(QuartzJob.class, id);

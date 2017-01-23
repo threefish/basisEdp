@@ -1,0 +1,126 @@
+<%
+layout("/layouts/platform.html",{title:"日志查看"}){
+%>
+<style type="text/css">
+    .dataTbleBox {
+        background: #ffffff;
+        margin: 15px 0px;
+        padding: 15px;
+    }
+
+    .searchBox {
+        margin-top: 10px;
+    }
+</style>
+<section class="content-header">
+    <h1>
+        日志查看
+        <small>${i18n.controlPanel}</small>
+    </h1>
+</section>
+<section class="content">
+    <div class="row dataTbleBox  box box-warning">
+        <table class="searchBox">
+            <tr>
+                <td class="form-lable">
+                    模块
+                </td>
+                <td >
+                    <div class="input-group">
+                    <input type="text" class="form-control" id="name" placeholder="支持模糊查询">
+                    </div>
+                </td>
+                <td class="form-lable">
+                    用户
+                </td>
+                <td >
+                    <div class="input-group">
+                    <input type="text" class="form-control" id="account" placeholder="支持模糊查询">
+                    </div>
+                </td>
+                <td class="form-lable">
+                    状&nbsp;&nbsp;态
+                </td>
+                <td >
+                    <div class="input-group">
+                        <select class="form-control" id="status">
+                            <option value="-1">请选择</option>
+                            <option value="0">失败</option>
+                            <option value="1">成功</option>
+                            <option value="9">异常</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <button type="button" id="search" class="btn margin btn-primary">
+                            &nbsp;&nbsp;查询&nbsp;&nbsp;</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table id="menusTable" class="table table-bordered table-striped">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script type="text/javascript">
+    var logsTable;
+    $(function () {
+        logsTable = $('#menusTable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: base + '/sys/logs/grid',
+                type: 'POST',
+                data: function (data) {
+                    data.status = $("#status").val();
+                    data.account = $("#account").val();
+                    data.module = $("#name").val();
+                }
+            },
+            "columns": [
+                {"data": "id", "title": "序号",  "visible": false},
+                {"data": "account", "title": "操作用户"},
+                {"data": "module", "title": "模块"},
+                {"data": "tag", "title": "标签"},
+                {"data": "src", "title": "执行类"},
+                {"data": "method", "title": "执行方法"},
+                {
+                    "data": "status", "title": "状态", "render": function (data, type, row) {
+                    var html="";
+                    switch  (row.status){
+                        case 0:
+                            html= "<span style='color: orangered'>失败</span>";
+                            break;
+                        case 1:
+                            html = "<span style='color:#666666'>成功</span>";
+                            break;
+                        case 9:
+                            html = "<span style='color:red'>异常</span>";
+                            break;
+                    }
+                    return html ;
+                }
+                },
+                {"data": "accessTime", "title": "访问时间", width: "180px"},
+                {"data": "ip", "title": "ip"},
+                {"data": "msg", "title": "日志内容"},
+            ],
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "autoWidth": true,
+            language: {url: base + '/static/plugins/datatables/chinese.json'}
+        });
+
+        $("#search").click(function () {
+            logsTable.ajax.reload(null, false);
+        });
+
+    });
+</script>
+<%}%>

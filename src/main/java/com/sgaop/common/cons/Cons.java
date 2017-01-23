@@ -17,6 +17,8 @@ public class Cons {
 
     public static final String SESSION_USER = "me";
 
+    public static final String SESSION_USER_NAME = "me_name";
+
     public static final String UTF8 = "utf-8";
 
     public static final String SESSION_MENUS = "sessionMenus";

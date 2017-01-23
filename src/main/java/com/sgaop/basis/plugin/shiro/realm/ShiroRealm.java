@@ -105,6 +105,7 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException(LanguageManager.get("loginPassError"));
         } else {
             Mvcs.getSession().setAttribute(Cons.SESSION_USER, userAccount);
+            Mvcs.getSession().setAttribute(Cons.SESSION_USER_NAME, userAccount.getUserName());
         }
         upToken.setPassword(password.toCharArray());
         return new SimpleAuthenticationInfo(upToken, password, getClass().getName());

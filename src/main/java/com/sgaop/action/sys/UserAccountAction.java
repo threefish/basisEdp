@@ -11,6 +11,7 @@ import com.sgaop.basis.util.StringsTool;
 import com.sgaop.common.WebPojo.DataTablePager;
 import com.sgaop.common.WebPojo.DataTableResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -90,6 +91,7 @@ public class UserAccountAction extends BaseAction {
     @POST
     @Path("/update")
     @RequiresPermissions("sys.yw.account.update")
+    @LogsAop.Slog(tag = "after", msg = "修改账号{1} (ID=[{0}])")
     public Result update(@Parameter("id") int id, @Parameter("action") String action) {
         UserAccount account = dao.fetch(UserAccount.class, id);
         if (account == null) {
@@ -127,6 +129,7 @@ public class UserAccountAction extends BaseAction {
     @POST
     @Path("/add")
     @RequiresPermissions("sys.yw.account.add")
+    @LogsAop.Slog(tag = "after", msg = "添加账号:{0}")
     public Result add(@Parameter("userName") String UserName) {
         UserAccount account = dao.fetch(UserAccount.class, "userName", UserName);
         if (account != null) {

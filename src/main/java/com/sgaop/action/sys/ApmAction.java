@@ -5,6 +5,8 @@ import com.sgaop.basis.annotation.*;
 import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.mvc.AjaxResult;
 import com.sgaop.common.WebPojo.Result;
+import com.sgaop.common.aop.LogsAop;
+import com.sgaop.common.cons.Cons;
 import com.sgaop.common.gather.*;
 import com.sgaop.entity.sys.AlarmOption;
 import com.sgaop.task.ApmJob;
@@ -100,6 +102,7 @@ public class ApmAction extends BaseAction {
     @POST
     @Path("/updateAlarmOption")
     @RequiresPermissions("sys.yw.apm.update")
+    @LogsAop.Slog(tag = "after", msg = "更新【主机性能监控】[{0}]为{1}方式为{2}!")
     public Result updateAlarmOptions(@Parameter("alarmType") String alarmType,
                                      @Parameter("percent") double percent,
                                      @Parameter("listenerTypes") String listenerTypes) {
