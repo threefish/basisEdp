@@ -5,7 +5,7 @@ import com.sgaop.basis.i18n.LanguageManager;
 import com.sgaop.basis.mvc.Mvcs;
 import com.sgaop.basis.mvc.view.View;
 import com.sgaop.basis.plugin.shiro.beetl.ShiroExt;
-import com.sgaop.basis.util.Logs;
+import com.sgaop.basis.log.Logs;
 import com.sgaop.basis.plugin.beetl.function.DateFunction;
 import org.apache.log4j.Logger;
 import org.beetl.core.Configuration;

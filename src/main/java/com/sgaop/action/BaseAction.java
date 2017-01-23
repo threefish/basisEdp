@@ -1,6 +1,6 @@
 package com.sgaop.action;
 
-import com.sgaop.basis.util.Logs;
+import com.sgaop.basis.log.Logs;
 import com.sgaop.common.cons.Cons;
 import com.sgaop.entity.sys.UserAccount;
 import org.apache.log4j.Logger;

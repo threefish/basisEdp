@@ -7,7 +7,7 @@ import com.sgaop.basis.dao.Dao;
 import com.sgaop.basis.dao.impl.DaoImpl;
 import com.sgaop.basis.plugin.beetl.BeetlView;
 import com.sgaop.basis.register.Registers;
-import com.sgaop.basis.util.Logs;
+import com.sgaop.basis.log.Logs;
 import com.sgaop.basis.web.WebSetup;
 import com.sgaop.entity.sys.QuartzJob;
 import org.apache.log4j.Logger;
@@ -27,8 +27,6 @@ import java.util.Properties;
  */
 @Setup
 public class WebMainSetup implements WebSetup {
-
-    private static final Logger log = Logs.get();
 
     private Dao dao;
 
@@ -85,7 +83,7 @@ public class WebMainSetup implements WebSetup {
                 if (qjob.getJobType() == 0) {
                     String jobKlass = qjob.getJobKlass();
                     String jobCron = qjob.getJobCorn();
-                    log.debug(String.format("job define jobKlass=%s jobCron=%s", jobKlass, jobCron));
+                    Logs.debug(String.format("job define jobKlass=%s jobCron=%s", jobKlass, jobCron));
                     Class<?> klass = Class.forName(jobKlass);
                     JobDetail job = JobBuilder.newJob((Class<? extends Job>) klass).build();
                     CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobKlass)
@@ -112,7 +110,7 @@ public class WebMainSetup implements WebSetup {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.debug(e);
+            Logs.error(e);
         }
     }
 
